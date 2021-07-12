@@ -65,9 +65,8 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
         public void bind(Event event) {
             tvTitle.setText(event.getTitle());
             tvLocation.setText(event.getLocation());
-            // TODO: update Event.java to return dates as strings
-            tvStart.setText("8:00 AM");
-            tvEnd.setText("11:00 AM");
+            tvStart.setText(event.getStart());
+            tvEnd.setText(event.getEnd());
         }
 
         @Override

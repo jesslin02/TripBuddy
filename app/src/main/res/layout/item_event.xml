@@ -36,7 +36,7 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvTitle"
-        tools:text="8:00 AM"/>
+        tools:text="June 2 8:00 AM"/>
 
     <TextView
         android:id="@+id/tvEnd"
@@ -46,6 +46,6 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/tvLocation"
-        tools:text="11:00 AM"/>
+        tools:text="June 2 11:00 AM"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,8 +36,7 @@ public class EventDetailActivity extends AppCompatActivity {
     private void displayDetails() {
         binding.tvTitle.setText(event.getTitle());
         binding.tvLocation.setText(event.getLocation());
-        // TODO: update Event.java to return date as string
-        binding.tvDate.setText("June 2");
-        binding.tvTime.setText("8:00 AM - 11:00 AM");
+        binding.tvStart.setText(event.getStart());
+        binding.tvEnd.setText(event.getEnd());
     }
 }

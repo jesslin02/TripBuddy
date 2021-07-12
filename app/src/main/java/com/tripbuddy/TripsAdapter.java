@@ -64,8 +64,8 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         public void bind(Trip trip) {
             tvTitle.setText(trip.getTitle());
             tvDestination.setText(trip.getDestination());
-            // TODO: update Trip.java to return date as string
-            tvDate.setText("June 1 - June 8");
+            String fullDate = trip.getStart() + " - " + trip.getEnd();
+            tvDate.setText(fullDate);
         }
 
         @Override

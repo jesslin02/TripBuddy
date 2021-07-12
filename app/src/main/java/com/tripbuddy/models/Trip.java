@@ -2,6 +2,8 @@ package com.tripbuddy.models;
 
 import org.parceler.Parcel;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 @Parcel
@@ -25,16 +27,29 @@ public class Trip {
 
     // simplified constructor for testing purposes
     public Trip(String title, String destination) {
-        this(title, null, destination, null, null, null);
+        this(title, null, destination);
     }
 
-    public Trip(String title, User user, String destination, Date start, Date end, String notes) {
+    public Trip(String title, User user, String destination) {
         this.title = title;
         this.user = user;
         this.destination = destination;
-        this.start = start;
-        this.end = end;
-        this.notes = notes;
+    }
+
+    private static Date newDate(int year, int month, int date) {
+        // REMINDER: month value is 0 indexed (0 for january, 1 for february, etc)
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(year, month, date);
+        return cal.getTime();
+    }
+
+    public void setStart(int year, int month, int date) {
+        this.start = newDate(year, month, date);
+    }
+
+    public void setEnd(int year, int month, int date) {
+        this.end = newDate(year, month, date);
     }
 
     public String getTitle() {
@@ -49,12 +64,18 @@ public class Trip {
         return destination;
     }
 
-    public Date getStart() {
-        return start;
+    public String getStart() {
+        return formatDate(start);
     }
 
-    public Date getEnd() {
-        return end;
+    public String getEnd() {
+        return formatDate(end);
+    }
+
+    private static String formatDate(Date date) {
+        String pattern = "MMMM d";
+        SimpleDateFormat sdFormat = new SimpleDateFormat(pattern);
+        return sdFormat.format(date);
     }
 
     public String getNotes() {

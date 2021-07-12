@@ -46,8 +46,14 @@ public class ItineraryActivity extends AppCompatActivity {
         // TODO: add trips
 
         // sample data to verify recycler view
-        allEvents.add(new Event("ferry ride", "Statue of Liberty"));
-        allEvents.add(new Event("shopping spree", "5th Avenue"));
+        Event statue = new Event("ferry ride", "Statue of Liberty");
+        statue.setStart(2021, 6, 2, 8, 0);
+        statue.setEnd(2021, 6, 2, 11, 0);
+        allEvents.add(statue);
+        Event shop = new Event("shopping spree", "5th Avenue");
+        shop.setStart(2021, 6, 2, 15, 0);
+        shop.setEnd(2021, 6, 2, 19, 0);
+        allEvents.add(shop);
         adapter.notifyDataSetChanged();
     }
 }

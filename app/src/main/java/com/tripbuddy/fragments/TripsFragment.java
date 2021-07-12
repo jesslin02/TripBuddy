@@ -97,8 +97,14 @@ public class TripsFragment extends Fragment {
         // TODO: add trips
 
         // sample data to verify recycler view
-        allTrips.add(new Trip("graduation trip", "New York City"));
-        allTrips.add(new Trip("weekend getaway", "Boston"));
+        Trip grad = new Trip("graduation trip", "New York City");
+        grad.setStart(2021, 6, 2);
+        grad.setEnd(2021, 6, 8);
+        allTrips.add(grad);
+        Trip weekend = new Trip("weekend getaway", "Boston");
+        weekend.setStart(2021, 6, 10);
+        weekend.setEnd(2021, 6, 11);
+        allTrips.add(weekend);
         adapter.notifyDataSetChanged();
     }
 }

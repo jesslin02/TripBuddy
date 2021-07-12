@@ -35,8 +35,8 @@ public class TripDetailActivity extends AppCompatActivity {
     private void displayDetails() {
         binding.tvTitle.setText(trip.getTitle());
         binding.tvDestination.setText(trip.getDestination());
-        // TODO: update Trip.java to return date as string
-        binding.tvDate.setText("June 1 - June 8");
+        String fullDate = trip.getStart() + " - " + trip.getEnd();
+        binding.tvDate.setText(fullDate);
 
         binding.btnItinerary.setOnClickListener(new View.OnClickListener() {
             @Override
