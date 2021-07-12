@@ -16,6 +16,20 @@ public class Trip {
     /* OPTIONAL: short notes about trip */
     String notes;
 
+    // simplified constructor for testing purposes
+    public Trip(String title, String destination) {
+        this(title, null, destination, null, null, null);
+    }
+
+    public Trip(String title, User user, String destination, Date start, Date end, String notes) {
+        this.title = title;
+        this.user = user;
+        this.destination = destination;
+        this.start = start;
+        this.end = end;
+        this.notes = notes;
+    }
+
     public String getTitle() {
         return title;
     }

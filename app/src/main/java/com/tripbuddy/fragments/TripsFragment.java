@@ -90,6 +90,14 @@ public class TripsFragment extends Fragment {
         llManager = new LinearLayoutManager(getContext());
         rvTrips.setLayoutManager(llManager);
 
-        // TODO: add trips to recycler view
+        getTrips();
+    }
+
+    private void getTrips() {
+        // TODO: add trips
+
+        // sample data to verify recycler view
+        allTrips.add(new Trip("graduation trip", "New York City"));
+        allTrips.add(new Trip("weekend getaway", "Boston"));
     }
 }
