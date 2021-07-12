@@ -6,4 +6,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_profile_fragment">Hello profile fragment</string>
     <string name="hello_trips_fragment">Hello trips fragment</string>
+    <string name="next_up">Next Up</string>
+    <string name="add_event">Add Event</string>
+    <string name="view_itinerary">View Itinerary</string>
 </resources>
