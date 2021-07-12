@@ -15,4 +15,28 @@ public class Trip {
     Date end;
     /* OPTIONAL: short notes about trip */
     String notes;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
 }
