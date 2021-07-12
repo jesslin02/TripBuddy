@@ -1,5 +1,8 @@
 package com.tripbuddy.models;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class User {
     /* user's display name */
     String name;
@@ -7,6 +10,10 @@ public class User {
     String username;
     /* strong password for login */
     String password;
+
+    public User() {
+        // empty constructor for parceler
+    }
 
     public User(String name, String username, String password) {
         this.name = name;

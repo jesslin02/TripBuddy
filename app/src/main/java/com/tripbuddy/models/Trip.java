@@ -1,7 +1,10 @@
 package com.tripbuddy.models;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 
+@Parcel
 public class Trip {
     /* title of trip */
     String title;
@@ -15,6 +18,10 @@ public class Trip {
     Date end;
     /* OPTIONAL: short notes about trip */
     String notes;
+
+    public Trip() {
+        // empty constructor for parceler
+    }
 
     // simplified constructor for testing purposes
     public Trip(String title, String destination) {
