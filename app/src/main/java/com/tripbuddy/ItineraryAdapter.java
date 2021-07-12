@@ -75,11 +75,10 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             int position = getAdapterPosition();
             Log.i(TAG, "item clicked at position " + Integer.toString(position));
             if (position != RecyclerView.NO_POSITION) {
-                // TODO: event detail activity
-//                Event selected = events.get(position);
-//                Intent i = new Intent(context, EventDetailActivity.class);
-//                i.putExtra(Event.class.getSimpleName(), Parcels.wrap(selected));
-//                context.startActivity(i);
+                Event selected = events.get(position);
+                Intent i = new Intent(context, EventDetailActivity.class);
+                i.putExtra(Event.class.getSimpleName(), Parcels.wrap(selected));
+                context.startActivity(i);
             }
         }
     }
