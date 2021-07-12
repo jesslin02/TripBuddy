@@ -143,8 +143,8 @@ Input locations, dates, events, hotels, and transportation to help plan your tri
 | ---------- | --------------- | ------------------------- |
 | User       | Pointer to User | user who created the trip |
 | Name       | String          | title of trip             |
-| Start date | Date? / int?    | start date of trip        |
-| End date   | Date? / int?    | end date of trip          |
+| Start date | Date            | start date of trip        |
+| End date   | Date            | end date of trip          |
 | Destination| String          | city where trip is located|
 | Description| String          | short notes about trip    |
 
@@ -155,10 +155,8 @@ Input locations, dates, events, hotels, and transportation to help plan your tri
 | Trip       | Pointer to Trip | trip that event is part of |
 | User       | Pointer to User | user who created the trip  |
 | Name       | String          | title of event             |
-| Start date | Date? / int?    | start date of event        |
-| Start time | Date? / int?    | start time of event        |
-| End date   | Date? / int?    | end date of event          |
-| End time   | Date? / int?    | end time of event          |
+| Start date | Date            | start date of event        |
+| End date   | Date            | end date of event          |
 | Location   | String          | where event is located     |
 | Phone      | long            | phone number of venue      |
 | Website    | String          | website of venue           |
