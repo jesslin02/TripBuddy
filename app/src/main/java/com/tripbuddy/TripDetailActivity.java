@@ -2,6 +2,7 @@ package com.tripbuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,5 +37,14 @@ public class TripDetailActivity extends AppCompatActivity {
         binding.tvDestination.setText(trip.getDestination());
         // TODO: update Trip.java to return date as string
         binding.tvDate.setText("June 1 - June 8");
+
+        binding.btnItinerary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TripDetailActivity.this, ItineraryActivity.class);
+                i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+                startActivity(i);
+            }
+        });
     }
 }

@@ -99,5 +99,6 @@ public class TripsFragment extends Fragment {
         // sample data to verify recycler view
         allTrips.add(new Trip("graduation trip", "New York City"));
         allTrips.add(new Trip("weekend getaway", "Boston"));
+        adapter.notifyDataSetChanged();
     }
 }
