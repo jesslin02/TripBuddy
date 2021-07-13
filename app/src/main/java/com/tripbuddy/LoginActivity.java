@@ -46,5 +46,13 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser(String username, String password) {
         Log.i(TAG, "Attempting to login user " + username);
         // TODO: implement login
+        goMainActivity();
+    }
+
+    private void goMainActivity() {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        // so that pressing the back button on the MainActivity doesn't go back to the login screen
+        finish();
     }
 }

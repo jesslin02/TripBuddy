@@ -45,5 +45,13 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void signUpUser(String username, String password) {
         // TODO: implement sign up
+        goMainActivity();
+    }
+
+    private void goMainActivity() {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        // so that pressing the back button on the MainActivity doesn't go back to the login screen
+        finish();
     }
 }
