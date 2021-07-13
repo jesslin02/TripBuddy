@@ -27,9 +27,15 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick signup button");
+                String name = binding.etName.getText().toString();
                 String username = binding.etUsername.getText().toString();
                 String password = binding.etPassword.getText().toString();
-                signUpUser(username, password);
+                String passwordConfirm = binding.etPasswordConfirm.getText().toString();
+                if (!password.equals(passwordConfirm)) {
+                    Toast.makeText(SignUpActivity.this, "Passwords must match", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                signUpUser(name, username, password);
             }
         });
 
@@ -43,7 +49,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void signUpUser(String username, String password) {
+    private void signUpUser(String name, String username, String password) {
         // TODO: implement sign up
         goMainActivity();
     }
