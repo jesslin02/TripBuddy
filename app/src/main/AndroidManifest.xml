@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripBuddy">
-        <activity android:name=".EventDetailActivity"></activity>
+        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".EventDetailActivity" />
         <activity android:name=".ItineraryActivity" />
         <activity android:name=".TripDetailActivity" />
         <activity android:name=".MainActivity">
