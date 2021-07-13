@@ -64,26 +64,26 @@ Input locations, dates, events, hotels, and transportation to help plan your tri
     * user can view list of trips
 * trip creation
     * user can create a new trip with title and dates
-* trip stream
+* trip detail
     * user can see overview of a single trip
     * includes buttons to navigate to:
         * itinerary
         * map
-        * different types of activities
-        * activity create screen
-* activity creation
-    * user can add a new activity with start/end date & time, location, website, notes
-    * activity creation choice (stretch ?)
-        * user chooses which type of activity they want to create
-        * app will ask for different details in activity creation depending on type of activity
+        * different types of events
+        * event creation screen
+* event creation
+    * user can add a new event with start/end date & time, location, website, notes
+    * event creation choice (stretch ?)
+        * user chooses which type of event they want to create
+        * app will ask for different details in event creation depending on type of event
             * for hotels, will ask for check-in / check-out
             * for flights, will ask for flight number, departure/arrival locations & times
 * itinerary stream
     * user can view a schedule of events in a list view
 * map view
     * user can visualize trip on a map
-* activity detail
-    * user can view start/end date & time, location, website, notes of a single activity
+* event detail
+    * user can view start/end date & time, location, website, notes of a single event
 
 
 ### 3. Navigation
@@ -92,7 +92,7 @@ Input locations, dates, events, hotels, and transportation to help plan your tri
 
 * home stream
 * alerts (?)
-* settings
+* profile
 
 **Flow Navigation** (Screen to Screen)
 
@@ -102,21 +102,21 @@ Input locations, dates, events, hotels, and transportation to help plan your tri
   --> home stream
 * home stream
   --> trip creation
-  --> trip stream
+  --> trip detail
 * trip creation
-  --> trip stream
-* trip stream
+  --> trip detail
+* trip detail
   --> activity creation
   --> itinerary stream
   --> map view
-* activity creation
-  --> multiple screens for creation process (activity choice, location?)
+* event creation
+  --> multiple screens for creation process (event choice, location?)
   --> trip stream
 * itinerary stream
-  --> activity detail
+  --> event detail
 * map view
-  --> activity detail
-* activity detail
+  --> event detail
+* event detail
   --> none 
 
 ## Wireframes
@@ -163,7 +163,21 @@ Input locations, dates, events, hotels, and transportation to help plan your tri
 | Notes      | String          | short notes about event    |
 
 
-[//]: <> (### Networking)
-[//]: <> (- [Add list of network requests by screen ])
+### Networking
+#### Home Stream Screen
+* (Read/GET) query all trips where the current user is creator
+* (Update/PUT) update trip details
+* (Delete) delete existing trip
+#### Trip Creation Screen
+* (Create/POST) create a new trip object
+#### Itinerary Screen
+* (Read/GET) query all events that are part of the current trip
+* (Update/PUT) update event details
+* (Delete) delete existing event
+#### Event Creation Screen
+* (Create/POST) create a new event object
+#### Profile Screen
+* (Read/GET) query logged in user object
+
 [//]: <> (- [Create basic snippets for each Parse network request])
 [//]: <> (- [OPTIONAL: List endpoints if using existing API such as Yelp])

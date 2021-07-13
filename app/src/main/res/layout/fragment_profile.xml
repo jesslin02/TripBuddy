@@ -12,11 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:textSize="40sp"
-        android:text="[Username here]"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        tools:text="Jessica"/>
 
     <Button
         android:id="@+id/btnSettings"
