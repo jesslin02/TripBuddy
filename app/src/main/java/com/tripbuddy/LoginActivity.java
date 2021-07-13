@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.tripbuddy.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -18,6 +21,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setContentView(R.layout.activity_login);
+
+        if (ParseUser.getCurrentUser() != null) {
+            goMainActivity();
+        }
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -45,8 +52,19 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String username, String password) {
         Log.i(TAG, "Attempting to login user " + username);
-        // TODO: implement login
-        goMainActivity();
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e != null) {
+                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Issue with login", e);
+                    return;
+                }
+                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                // navigate to the main activity if the user has signed in properly
+                goMainActivity();
+            }
+        });
     }
 
     private void goMainActivity() {

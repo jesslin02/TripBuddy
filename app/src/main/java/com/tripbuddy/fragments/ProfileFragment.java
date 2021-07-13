@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.parse.ParseUser;
 import com.tripbuddy.LoginActivity;
 import com.tripbuddy.R;
 
@@ -21,6 +23,7 @@ import com.tripbuddy.R;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
+    TextView tvName;
     Button btnLogout;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -73,11 +76,15 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        tvName = view.findViewById(R.id.tvName);
         btnLogout = view.findViewById(R.id.btnLogout);
+
+        tvName.setText(ParseUser.getCurrentUser().getUsername());
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ParseUser.logOut();
                 Intent i = new Intent(getActivity(), LoginActivity.class);
                 startActivity(i);
                 getActivity().finish();

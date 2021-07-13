@@ -9,4 +9,10 @@
     <string name="next_up">Next Up</string>
     <string name="add_event">Add Event</string>
     <string name="view_itinerary">View Itinerary</string>
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+
+    <!-- Change the following strings as required -->
+    <string name="back4app_app_id">snXIjMUOp4bhWmLsiEWX0IYtCuxOLARY4xumpCJA</string>
+    <string name="back4app_client_key">gYkCYZ47Pdgln4fdHeOwBaZBZEyxvyn5urVENvZ4</string>
+
 </resources>

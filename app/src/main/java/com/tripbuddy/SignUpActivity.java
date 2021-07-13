@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 import com.tripbuddy.databinding.ActivitySignUpBinding;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -50,8 +53,23 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUpUser(String name, String username, String password) {
-        // TODO: implement sign up
-        goMainActivity();
+        // Create the ParseUser
+        ParseUser user = new ParseUser();
+        // Set core properties
+        user.setUsername(username);
+        user.setPassword(password);
+        // Invoke signUpInBackground
+        user.signUpInBackground(new SignUpCallback() {
+            public void done(ParseException e) {
+                if (e != null) {
+                    Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Issue with signup", e);
+                    return;
+                }
+                Toast.makeText(SignUpActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                goMainActivity();
+            }
+        });
     }
 
     private void goMainActivity() {
