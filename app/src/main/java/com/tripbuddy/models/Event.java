@@ -1,5 +1,7 @@
 package com.tripbuddy.models;
 
+import com.parse.ParseUser;
+
 import org.parceler.Parcel;
 
 import java.text.SimpleDateFormat;
@@ -13,7 +15,7 @@ public class Event {
     /* pointer to trip that contains this event */
     Trip trip;
     /* pointer to user who created the trip */
-    User user;
+    ParseUser user;
     /* start date/time of trip */
     Date start;
     /* end date/time of trip */
@@ -33,13 +35,12 @@ public class Event {
 
     // simplified constructor for testing purposes
     public Event(String title, String location) {
-        this(title, null, null, location);
+        this(title, null, location);
     }
 
-    public Event(String title, Trip trip, User user, String location) {
+    public Event(String title, Trip trip, String location) {
         this.title = title;
         this.trip = trip;
-        this.user = user;
         this.location = location;
     }
 

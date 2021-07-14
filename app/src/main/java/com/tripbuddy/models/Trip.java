@@ -1,5 +1,7 @@
 package com.tripbuddy.models;
 
+import com.parse.ParseUser;
+
 import org.parceler.Parcel;
 
 import java.text.SimpleDateFormat;
@@ -11,7 +13,7 @@ public class Trip {
     /* title of trip */
     String title;
     /* pointer to user who created the trip */
-    User user;
+    ParseUser user;
     /* city where trip is located */
     String destination;
     /* start date of trip */
@@ -25,14 +27,8 @@ public class Trip {
         // empty constructor for parceler
     }
 
-    // simplified constructor for testing purposes
     public Trip(String title, String destination) {
-        this(title, null, destination);
-    }
-
-    public Trip(String title, User user, String destination) {
         this.title = title;
-        this.user = user;
         this.destination = destination;
     }
 
@@ -54,10 +50,6 @@ public class Trip {
 
     public String getTitle() {
         return title;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public String getDestination() {
