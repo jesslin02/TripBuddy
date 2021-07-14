@@ -57,9 +57,14 @@ public class CreateTripActivity extends AppCompatActivity {
                 String start = binding.etStart.getText().toString();
                 String end = binding.etEnd.getText().toString();
                 String notes = binding.etNotes.getText().toString();
-                if (checkInput(title, dest, start, end)) {
-                    ParseUser currentUser = ParseUser.getCurrentUser();
-                    saveTrip(currentUser, title, dest, start, end, notes);
+                if (checkRequiredInput(title, dest, start, end)) {
+                    if (checkDates(start,end)) {
+                        ParseUser currentUser = ParseUser.getCurrentUser();
+                        saveTrip(currentUser, title, dest, start, end, notes);
+                    } else {
+                        Toast.makeText(CreateTripActivity.this,
+                                "Start date must be before end date", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(CreateTripActivity.this,
                             "Please fill out all required fields", Toast.LENGTH_SHORT).show();
@@ -108,7 +113,7 @@ public class CreateTripActivity extends AppCompatActivity {
      * checks if all required fields are filled out
      * if a required field isn't filled out, changes background color to red
      */
-    private boolean checkInput(String title, String dest, String start, String end) {
+    private boolean checkRequiredInput(String title, String dest, String start, String end) {
         boolean validInput = true;
         if (title.isEmpty()) {
             binding.etTitle.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
@@ -129,6 +134,30 @@ public class CreateTripActivity extends AppCompatActivity {
         return validInput;
     }
 
+    /**
+     * checks if start date and end date of trip are valid
+     * (start date must be before end date)
+     * @param start string in format mm/dd/yyyy
+     * @param end string in format mm/dd/yyyy
+     */
+    private boolean checkDates(String start, String end) {
+        List<Integer> startList = convertToDateList(start);
+        List<Integer> endList = convertToDateList(end);
+        // making sure to go from largest to smallest unit of time
+        int[] yearMonthDay = new int[]{2, 0, 1};
+        for (int i : yearMonthDay) {
+            if (startList.get(i) > endList.get(i)) {
+                return false;
+            } else if (startList.get(i) < endList.get(i)) {
+                return true;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * creates and saves trip to Parse
+     */
     private void saveTrip(ParseUser user, String title, String dest, String start, String end, String notes) {
         Trip trip = new Trip();
         trip.setUser(user);
