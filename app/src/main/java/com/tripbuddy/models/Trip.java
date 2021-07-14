@@ -9,6 +9,7 @@ import org.parceler.Parcel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Parcel(analyze = {Trip.class})
 @ParseClassName("Trip")
@@ -56,21 +57,21 @@ public class Trip extends ParseObject {
         return sdFormat.format(date);
     }
 
-    private static Date newDate(int year, int month, int date) {
+    private static Date newDate(int month, int date, int year) {
         // REMINDER: month value is 0 indexed (0 for january, 1 for february, etc)
         Calendar cal = Calendar.getInstance();
         cal.clear();
-        cal.set(year, month, date);
+        cal.set(year, month - 1, date);
         return cal.getTime();
     }
 
-    public void setStart(int year, int month, int date) {
-        Date start = newDate(year, month, date);
+    public void setStart(List<Integer> dateList) {
+        Date start = newDate(dateList.get(0), dateList.get(1), dateList.get(2));
         put(KEY_START, start);
     }
 
-    public void setEnd(int year, int month, int date) {
-        Date end = newDate(year, month, date);
+    public void setEnd(List<Integer> dateList) {
+        Date end = newDate(dateList.get(0), dateList.get(1), dateList.get(2));
         put(KEY_END, end);
     }
 
