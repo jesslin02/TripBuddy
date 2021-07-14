@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -44,54 +45,10 @@ public class CreateTripActivity extends AppCompatActivity {
         setContentView(view);
 
         binding.etStart.setInputType(InputType.TYPE_NULL);
-        binding.etStart.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    hideKeyboard(CreateTripActivity.this);
-                    final Calendar cldr = Calendar.getInstance();
-                    int day = cldr.get(Calendar.DAY_OF_MONTH);
-                    int month = cldr.get(Calendar.MONTH);
-                    int year = cldr.get(Calendar.YEAR);
-                    // date picker dialog
-                    DatePickerDialog picker = new DatePickerDialog(CreateTripActivity.this,
-                            new DatePickerDialog.OnDateSetListener() {
-                                @Override
-                                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                    binding.etStart.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
-                                }
-                            }, year, month, day);
-                    picker.show();
-                    return true;
-                }
-                return false;
-            }
-        });
+        binding.etStart.setOnTouchListener(new dateTouchListener(binding.etStart));
 
         binding.etEnd.setInputType(InputType.TYPE_NULL);
-        binding.etEnd.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    hideKeyboard(CreateTripActivity.this);
-                    final Calendar cldr = Calendar.getInstance();
-                    int day = cldr.get(Calendar.DAY_OF_MONTH);
-                    int month = cldr.get(Calendar.MONTH);
-                    int year = cldr.get(Calendar.YEAR);
-                    // date picker dialog
-                    DatePickerDialog picker = new DatePickerDialog(CreateTripActivity.this,
-                            new DatePickerDialog.OnDateSetListener() {
-                                @Override
-                                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                    binding.etEnd.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
-                                }
-                            }, year, month, day);
-                    picker.show();
-                    return true;
-                }
-                return false;
-            }
-        });
+        binding.etEnd.setOnTouchListener(new dateTouchListener(binding.etEnd));
 
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,9 +61,47 @@ public class CreateTripActivity extends AppCompatActivity {
                 if (checkInput(title, dest, start, end)) {
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     saveTrip(currentUser, title, dest, start, end, notes);
+                } else {
+                    Toast.makeText(CreateTripActivity.this,
+                            "Please fill out all required fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    /**
+     * used as onTouchListener for inputting the start date and end date
+     * allows popup calendar date picker
+     */
+    class dateTouchListener implements View.OnTouchListener {
+        EditText etDate;
+
+        public dateTouchListener(EditText etDate) {
+            super();
+            this.etDate = etDate;
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                hideKeyboard(CreateTripActivity.this);
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                DatePickerDialog picker = new DatePickerDialog(CreateTripActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                etDate.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                            }
+                        }, year, month, day);
+                picker.show();
+                return true;
+            }
+            return false;
+        }
     }
 
     /**
@@ -117,22 +112,18 @@ public class CreateTripActivity extends AppCompatActivity {
         boolean validInput = true;
         if (title.isEmpty()) {
             binding.etTitle.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            // binding.etTitle.setBackgroundColor(ContextCompat.getColor(CreateTripActivity.this, R.color.light_red));
             validInput = false;
         }
         if (dest.isEmpty()) {
             binding.etDestination.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            //binding.etDestination.setBackgroundColor(ContextCompat.getColor(CreateTripActivity.this, R.color.light_red));
             validInput = false;
         }
         if (start.isEmpty()) {
             binding.etStart.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            //binding.etStart.setBackgroundColor(ContextCompat.getColor(CreateTripActivity.this, R.color.light_red));
             validInput = false;
         }
         if (end.isEmpty()) {
             binding.etEnd.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            //binding.etEnd.setBackgroundColor(ContextCompat.getColor(CreateTripActivity.this, R.color.light_red));
             validInput = false;
         }
         return validInput;
