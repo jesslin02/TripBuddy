@@ -15,6 +15,7 @@ import com.tripbuddy.databinding.ActivitySignUpBinding;
 
 public class SignUpActivity extends AppCompatActivity {
     public static final String TAG = "SignUpActivity";
+    public static final String KEY_NAME = "name";
     ActivitySignUpBinding binding;
 
     @Override
@@ -56,6 +57,7 @@ public class SignUpActivity extends AppCompatActivity {
         // Create the ParseUser
         ParseUser user = new ParseUser();
         // Set core properties
+        user.put(KEY_NAME, name);
         user.setUsername(username);
         user.setPassword(password);
         // Invoke signUpInBackground

@@ -23,6 +23,7 @@ import com.tripbuddy.R;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
+    public static final String KEY_NAME = "name";
     TextView tvName;
     Button btnLogout;
 
@@ -79,7 +80,7 @@ public class ProfileFragment extends Fragment {
         tvName = view.findViewById(R.id.tvName);
         btnLogout = view.findViewById(R.id.btnLogout);
 
-        tvName.setText(ParseUser.getCurrentUser().getUsername());
+        tvName.setText(ParseUser.getCurrentUser().getString(KEY_NAME));
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
