@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     BottomNavigationView bottomNavigation;
     FragmentManager fragmentManager;
+    MenuItem addTrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,4 +54,27 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigation.setSelectedItemId(R.id.action_home);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
+        Log.d(TAG, "onPrepareOptionsMenu");
+        addTrip = menu.findItem(R.id.add);
+        addTrip.setVisible(false);
+        return super.onPrepareOptionsMenu(menu);
+    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.id.add) {
+//            return false;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 }

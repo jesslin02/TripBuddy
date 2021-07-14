@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ public class CreateTripActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        // binding.etStart.setInputType(InputType.TYPE_NULL);
+        binding.etStart.setInputType(InputType.TYPE_NULL);
         binding.etStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,14 +51,14 @@ public class CreateTripActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                binding.etStart.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                binding.etStart.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
                             }
                         }, year, month, day);
                 picker.show();
             }
         });
 
-        // binding.etEnd.setInputType(InputType.TYPE_NULL);
+        binding.etEnd.setInputType(InputType.TYPE_NULL);
         binding.etEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +143,7 @@ public class CreateTripActivity extends AppCompatActivity {
                 }
                 Log.i(TAG, "Trip creation was successful!");
                 resetInput();
+                goMainActivity();
             }
         });
     }
@@ -175,5 +177,12 @@ public class CreateTripActivity extends AppCompatActivity {
         binding.etEnd.setText("");
         binding.etEnd.getBackground().clearColorFilter();
         binding.etNotes.setText("");
+    }
+
+    private void goMainActivity() {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        // so that pressing the back button on the MainActivity doesn't go back to the login screen
+        finish();
     }
 }

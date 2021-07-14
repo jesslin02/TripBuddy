@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.tripbuddy.models.Event;
+import com.tripbuddy.models.Trip;
 
 public class ParseApplication extends Application {
     /**
@@ -14,8 +16,8 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         // register parse models BEFORE initializing
-        //ParseObject.registerSubclass(Trip.class);
-        //ParseObject.registerSubclass(Event.class);
+        ParseObject.registerSubclass(Trip.class);
+        // ParseObject.registerSubclass(Event.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("snXIjMUOp4bhWmLsiEWX0IYtCuxOLARY4xumpCJA")
