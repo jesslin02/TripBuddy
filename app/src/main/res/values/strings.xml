@@ -6,7 +6,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_profile_fragment">Hello profile fragment</string>
     <string name="hello_trips_fragment">Hello trips fragment</string>
-    <string name="next_up">Next Up</string>
+    <string name="next_up">Next Up:\nvisiting the statue of liberty</string>
     <string name="add_event">Add Event</string>
     <string name="view_itinerary">View Itinerary</string>
     <string name="back4app_server_url">https://parseapi.back4app.com/</string>

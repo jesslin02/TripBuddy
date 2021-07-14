@@ -34,7 +34,6 @@ public class CreateTripActivity extends AppCompatActivity {
     public static final String TAG = "CreateTripActivity";
     ActivityCreateTripBinding binding;
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +71,7 @@ public class CreateTripActivity extends AppCompatActivity {
     /**
      * used as onTouchListener for inputting the start date and end date
      * allows popup calendar date picker
+     * https://www.tutlane.com/tutorial/android/android-datepicker-with-examples
      */
     class dateTouchListener implements View.OnTouchListener {
         EditText etDate;
@@ -194,6 +194,7 @@ public class CreateTripActivity extends AppCompatActivity {
 
     /**
      * for use when inputting start and end dates
+     * https://stackoverflow.com/questions/1109022/how-do-you-close-hide-the-android-soft-keyboard-programmatically
      */
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);

@@ -111,6 +111,7 @@ public class TripsFragment extends Fragment {
         ParseQuery<Trip> query = ParseQuery.getQuery(Trip.class);
         // include data referred by user key
         query.include(Trip.KEY_USER);
+        query.whereEqualTo(Trip.KEY_USER, ParseUser.getCurrentUser());
         query.setLimit(10);
         query.findInBackground(new FindCallback<Trip>() {
             @Override
