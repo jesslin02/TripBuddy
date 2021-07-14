@@ -3,6 +3,8 @@ package com.tripbuddy;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,7 +12,9 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
@@ -29,6 +33,7 @@ public class CreateTripActivity extends AppCompatActivity {
     public static final String TAG = "CreateTripActivity";
     ActivityCreateTripBinding binding;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,42 +44,52 @@ public class CreateTripActivity extends AppCompatActivity {
         setContentView(view);
 
         binding.etStart.setInputType(InputType.TYPE_NULL);
-        binding.etStart.setOnClickListener(new View.OnClickListener() {
+        binding.etStart.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                DatePickerDialog picker = new DatePickerDialog(CreateTripActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                binding.etStart.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
-                            }
-                        }, year, month, day);
-                picker.show();
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    hideKeyboard(CreateTripActivity.this);
+                    final Calendar cldr = Calendar.getInstance();
+                    int day = cldr.get(Calendar.DAY_OF_MONTH);
+                    int month = cldr.get(Calendar.MONTH);
+                    int year = cldr.get(Calendar.YEAR);
+                    // date picker dialog
+                    DatePickerDialog picker = new DatePickerDialog(CreateTripActivity.this,
+                            new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                    binding.etStart.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                                }
+                            }, year, month, day);
+                    picker.show();
+                    return true;
+                }
+                return false;
             }
         });
 
         binding.etEnd.setInputType(InputType.TYPE_NULL);
-        binding.etEnd.setOnClickListener(new View.OnClickListener() {
+        binding.etEnd.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                DatePickerDialog picker = new DatePickerDialog(CreateTripActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                binding.etEnd.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
-                            }
-                        }, year, month, day);
-                picker.show();
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    hideKeyboard(CreateTripActivity.this);
+                    final Calendar cldr = Calendar.getInstance();
+                    int day = cldr.get(Calendar.DAY_OF_MONTH);
+                    int month = cldr.get(Calendar.MONTH);
+                    int year = cldr.get(Calendar.YEAR);
+                    // date picker dialog
+                    DatePickerDialog picker = new DatePickerDialog(CreateTripActivity.this,
+                            new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                    binding.etEnd.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
+                                }
+                            }, year, month, day);
+                    picker.show();
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -184,5 +199,19 @@ public class CreateTripActivity extends AppCompatActivity {
         startActivity(i);
         // so that pressing the back button on the MainActivity doesn't go back to the login screen
         finish();
+    }
+
+    /**
+     * for use when inputting start and end dates
+     */
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
