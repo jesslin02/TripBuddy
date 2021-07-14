@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.parse.ParseUser;
 import com.tripbuddy.R;
 import com.tripbuddy.TripsAdapter;
 import com.tripbuddy.models.Trip;
@@ -97,11 +98,17 @@ public class TripsFragment extends Fragment {
         // TODO: add trips
 
         // sample data to verify recycler view
-        Trip grad = new Trip("graduation trip", "New York City");
+        Trip grad = new Trip();
+        grad.setTitle("graduation trip");
+        grad.setDestination("New York City");
+        grad.setUser(ParseUser.getCurrentUser());
         grad.setStart(2021, 6, 2);
         grad.setEnd(2021, 6, 8);
         allTrips.add(grad);
-        Trip weekend = new Trip("weekend getaway", "Boston");
+        Trip weekend = new Trip();
+        weekend.setTitle("weekend getaway");
+        weekend.setDestination("Boston");
+        weekend.setUser(ParseUser.getCurrentUser());
         weekend.setStart(2021, 6, 10);
         weekend.setEnd(2021, 6, 11);
         allTrips.add(weekend);

@@ -1,5 +1,7 @@
 package com.tripbuddy.models;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import org.parceler.Parcel;
@@ -8,28 +10,50 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-@Parcel
-public class Trip {
-    /* title of trip */
-    String title;
-    /* pointer to user who created the trip */
-    ParseUser user;
-    /* city where trip is located */
-    String destination;
-    /* start date of trip */
-    Date start;
-    /* end date of trip */
-    Date end;
-    /* OPTIONAL: short notes about trip */
-    String notes;
+@Parcel(analyze = {Trip.class})
+@ParseClassName("Trip")
+public class Trip extends ParseObject {
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_USER = "user";
+    public static final String KEY_DEST = "destination";
+    public static final String KEY_START = "start";
+    public static final String KEY_END = "end";
+    public static final String KEY_NOTES = "notes";
 
-    public Trip() {
-        // empty constructor for parceler
+    /* title of trip */
+    public String getTitle() {
+        return getString(KEY_TITLE);
     }
 
-    public Trip(String title, String destination) {
-        this.title = title;
-        this.destination = destination;
+    public void setTitle(String title) {
+        put(KEY_TITLE, title);
+    }
+
+    /* city where trip is located */
+    public String getDestination() {
+        return getString(KEY_DEST);
+    }
+
+    public void setDestination(String dest) {
+        put(KEY_DEST, dest);
+    }
+
+    /* start date of trip */
+    public String getStart() {
+        Date parseDate = getDate(KEY_START);
+        return formatDate(parseDate);
+    }
+
+    /* end date of trip */
+    public String getEnd() {
+        Date parseDate = getDate(KEY_END);
+        return formatDate(parseDate);
+    }
+
+    private static String formatDate(Date date) {
+        String pattern = "MMMM d";
+        SimpleDateFormat sdFormat = new SimpleDateFormat(pattern);
+        return sdFormat.format(date);
     }
 
     private static Date newDate(int year, int month, int date) {
@@ -41,36 +65,30 @@ public class Trip {
     }
 
     public void setStart(int year, int month, int date) {
-        this.start = newDate(year, month, date);
+        Date start = newDate(year, month, date);
+        put(KEY_START, start);
     }
 
     public void setEnd(int year, int month, int date) {
-        this.end = newDate(year, month, date);
+        Date end = newDate(year, month, date);
+        put(KEY_END, end);
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public String getStart() {
-        return formatDate(start);
-    }
-
-    public String getEnd() {
-        return formatDate(end);
-    }
-
-    private static String formatDate(Date date) {
-        String pattern = "MMMM d";
-        SimpleDateFormat sdFormat = new SimpleDateFormat(pattern);
-        return sdFormat.format(date);
-    }
-
+    /* OPTIONAL: short notes about trip */
     public String getNotes() {
-        return notes;
+        return getString(KEY_NOTES);
+    }
+
+    public void setNotes(String notes) {
+        put(KEY_NOTES, notes);
+    }
+
+    /* pointer to user who created the trip */
+    public ParseUser getUser() {
+        return getParseUser(KEY_USER);
+    }
+
+    public void setUser(ParseUser user) {
+        put(KEY_USER, user);
     }
 }
