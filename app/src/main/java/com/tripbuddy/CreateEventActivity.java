@@ -24,8 +24,10 @@ import com.parse.SaveCallback;
 import com.tripbuddy.databinding.ActivityCreateEventBinding;
 import com.tripbuddy.CreateTripActivity.dateTouchListener;
 import com.tripbuddy.models.Event;
+import com.tripbuddy.models.Trip;
 
-import java.sql.Time;
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -33,12 +35,17 @@ import java.util.List;
 public class CreateEventActivity extends AppCompatActivity {
     public static final String TAG = "CreateEventActivity";
     ActivityCreateEventBinding binding;
+    Trip trip;
     String title;
     String location;
     String startDate;
     String startTime;
+    /* list of values in the start date [hh, mm, yyyy, MM, dd] */
+    List<Integer> startList;
     String endDate;
     String endTime;
+    /* list of values in the end date [hh, mm, yyyy, MM, dd] */
+    List<Integer> endList;
     long phone;
     String website;
     String notes;
@@ -47,6 +54,9 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setContentView(R.layout.activity_create_event);
+
+        trip = Parcels.unwrap(getIntent().getParcelableExtra(Trip.class.getSimpleName()));
+        Log.d(TAG, String.format("Creating event for '%s'", trip.getTitle()));
 
         binding = ActivityCreateEventBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -73,7 +83,10 @@ public class CreateEventActivity extends AppCompatActivity {
                 startTime = binding.etStartTime.getText().toString();
                 endDate = binding.etEndDate.getText().toString();
                 endTime = binding.etEndTime.getText().toString();
-                phone = Long.valueOf(binding.etPhone.getText().toString());
+                String phoneString = binding.etPhone.getText().toString();
+                if (!phoneString.isEmpty()) {
+                    phone = Long.valueOf(phoneString);
+                }
                 website = binding.etWebsite.getText().toString();
                 notes = binding.etNotes.getText().toString();
                 if (checkRequiredInput()) {
@@ -117,7 +130,16 @@ public class CreateEventActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                etTime.setText((hourOfDay + 1) + ":" + minute);
+                                String timeOfDay = "AM";
+                                String extraZero = "";
+                                if (hourOfDay > 12) {
+                                    hourOfDay = hourOfDay % 12;
+                                    timeOfDay = "PM";
+                                }
+                                if (minute < 10) {
+                                    extraZero = "0";
+                                }
+                                etTime.setText(hourOfDay + ":" + extraZero + minute + " " + timeOfDay);
                             }
                         }, hour, min, false);
                 picker.show();
@@ -130,10 +152,11 @@ public class CreateEventActivity extends AppCompatActivity {
     private void saveTrip(ParseUser user) {
         Event event = new Event();
         event.setUser(user);
+        event.setTrip(trip);
         event.setTitle(title);
         event.setLocation(location);
-        event.setStart(convertToDateTimeList(startDate, startTime));
-        event.setEnd(convertToDateTimeList(endDate, endTime));
+        event.setStart(startList);
+        event.setEnd(endList);
         if (phone != 0) {
             event.setPhone(phone);
         }
@@ -162,8 +185,8 @@ public class CreateEventActivity extends AppCompatActivity {
      * uses checkDates() from CreateTripActivity to check dates then checks times
      */
     private boolean checkDates() {
-        List<Integer> startList = convertToDateTimeList(startDate, startTime);
-        List<Integer> endList = convertToDateTimeList(endDate, endTime);
+        startList = convertToDateTimeList(startDate, startTime);
+        endList = convertToDateTimeList(endDate, endTime);
         // making sure to go from largest to smallest unit of time
         // year, month, day, hour, min
         int[] yearMonthDay = new int[]{2, 0, 1, 3, 4};
@@ -213,9 +236,12 @@ public class CreateEventActivity extends AppCompatActivity {
     static List<Integer> convertToTimeList(String time) {
         String[] splitTime = time.split(":");
         List<Integer> converted = new ArrayList<>();
-        for (int i = 0; i < splitTime.length; i++) {
-            converted.add(Integer.valueOf(splitTime[i]));
+        int hour = Integer.valueOf(splitTime[0]);
+        if (splitTime[1].endsWith("PM")) {
+            hour += 12;
         }
+        converted.add(hour);
+        converted.add(Integer.valueOf(splitTime[1].substring(0, 2)));
         return converted;
     }
 
@@ -245,6 +271,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
     private void goItineraryActivity() {
         Intent i = new Intent(this, ItineraryActivity.class);
+        i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
         startActivity(i);
         finish();
     }

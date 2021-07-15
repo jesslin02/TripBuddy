@@ -28,7 +28,7 @@ public class Event extends ParseObject {
         // REMINDER: month value is 0 indexed (0 for january, 1 for february, etc)
         Calendar cal = Calendar.getInstance();
         cal.clear();
-        cal.set(year, month - 1, date, hrs - 1, min);
+        cal.set(year, month - 1, date, hrs, min);
         return cal.getTime();
     }
 

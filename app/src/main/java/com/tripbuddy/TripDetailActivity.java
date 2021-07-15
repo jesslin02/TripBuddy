@@ -46,5 +46,14 @@ public class TripDetailActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TripDetailActivity.this, CreateEventActivity.class);
+                i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+                startActivity(i);
+            }
+        });
     }
 }
