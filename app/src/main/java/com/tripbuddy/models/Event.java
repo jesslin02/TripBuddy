@@ -1,5 +1,7 @@
 package com.tripbuddy.models;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import org.parceler.Parcel;
@@ -8,41 +10,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-@Parcel
-public class Event {
-    /* title of event */
-    String title;
-    /* pointer to trip that contains this event */
-    Trip trip;
-    /* pointer to user who created the trip */
-    ParseUser user;
-    /* start date/time of trip */
-    Date start;
-    /* end date/time of trip */
-    Date end;
-    /* city where trip is located */
-    String location;
-    /* OPTIONAL: phone number of venue */
-    long phone;
-    /* OPTIONAL: website of venue */
-    String website;
-    /* OPTIONAL: short notes about event */
-    String notes;
-
-    public Event() {
-        // empty constructor for parceler
-    }
-
-    // simplified constructor for testing purposes
-    public Event(String title, String location) {
-        this(title, null, location);
-    }
-
-    public Event(String title, Trip trip, String location) {
-        this.title = title;
-        this.trip = trip;
-        this.location = location;
-    }
+@Parcel(analyze = {Event.class})
+@ParseClassName("Event")
+public class Event extends ParseObject {
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_TRIP = "trip";
+    public static final String KEY_USER = "user";
+    public static final String KEY_LOC = "location";
+    public static final String KEY_START = "start";
+    public static final String KEY_END = "end";
+    public static final String KEY_PHONE = "phone";
+    public static final String KEY_WEB = "website";
+    public static final String KEY_NOTES = "notes";
 
     private static Date newDate(int year, int month, int date, int hrs, int min) {
         // REMINDER: month value is 0 indexed (0 for january, 1 for february, etc)
@@ -52,24 +31,49 @@ public class Event {
         return cal.getTime();
     }
 
+    /* title of event */
+    public String getTitle() {
+        return getString(KEY_TITLE);
+    }
+
+    public void setTitle(String title) {
+        put(KEY_TITLE, title);
+    }
+
+    /* pointer to trip that contains this event */
+    public Trip getTrip() {
+        return (Trip) getParseObject(KEY_TRIP);
+    }
+
+    public void setTrip(Trip trip) {
+        put(KEY_TRIP, trip);
+    }
+
+    /* pointer to user who created the trip */
+    public ParseUser getUser() {
+        return getParseUser(KEY_USER);
+    }
+
+    public void setUser(ParseUser user) {
+        put(KEY_USER, user);
+    }
+
     public void setStart(int year, int month, int date, int hrs, int min) {
-        this.start = newDate(year, month, date, hrs, min);
+        Date start = newDate(year, month, date, hrs, min);
+        put(KEY_START, start);
     }
 
     public void setEnd(int year, int month, int date, int hrs, int min) {
-        this.end = newDate(year, month, date, hrs, min);
-    }
-
-    public String getTitle() {
-        return title;
+        Date end = newDate(year, month, date, hrs, min);
+        put(KEY_END, end);
     }
 
     public String getStart() {
-        return formatDate(start);
+        return formatDate(getDate(KEY_START));
     }
 
     public String getEnd() {
-        return formatDate(end);
+        return formatDate(getDate(KEY_END));
     }
 
     private static String formatDate(Date date) {
@@ -79,6 +83,37 @@ public class Event {
     }
 
     public String getLocation() {
-        return location;
+        return getString(KEY_LOC);
+    }
+
+    public void setLocation(String loc) {
+        put(KEY_LOC, loc);
+    }
+
+    /* OPTIONAL: phone number of venue */
+    public long getPhone() {
+        return getLong(KEY_PHONE);
+    }
+
+    public void setPhone(long phone) {
+        put(KEY_PHONE, phone);
+    }
+
+    /* OPTIONAL: website of venue */
+    public String getWebsite() {
+        return getString(KEY_WEB);
+    }
+
+    public void setWebsite(String web) {
+        put(KEY_WEB, web);
+    }
+
+    /* OPTIONAL: short notes about event */
+    public String getNotes() {
+        return getString(KEY_NOTES);
+    }
+
+    public void setNotes(String notes) {
+        put(KEY_NOTES, notes);
     }
 }

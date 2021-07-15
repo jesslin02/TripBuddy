@@ -17,7 +17,7 @@ public class ParseApplication extends Application {
 
         // register parse models BEFORE initializing
         ParseObject.registerSubclass(Trip.class);
-        // ParseObject.registerSubclass(Event.class);
+        ParseObject.registerSubclass(Event.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("snXIjMUOp4bhWmLsiEWX0IYtCuxOLARY4xumpCJA")
