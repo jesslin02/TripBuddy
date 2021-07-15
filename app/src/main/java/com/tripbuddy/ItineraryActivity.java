@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
@@ -44,25 +47,30 @@ public class ItineraryActivity extends AppCompatActivity {
     }
 
     private void getEvents() {
-        // TODO: add trips
+        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+        // include data referred by user key
+        query.include(Event.KEY_USER);
+        query.whereEqualTo(Event.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Event.KEY_TRIP, trip);
+        query.setLimit(10);
+        query.findInBackground(new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> events, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with retrieving trips", e);
+                    return;
+                }
 
-        // sample data to verify recycler view
-        Event statue = new Event();
-        statue.setTitle("ferry ride");
-        statue.setLocation("Statue of Liberty");
-        statue.setUser(ParseUser.getCurrentUser());
-        statue.setTrip(trip);
-        statue.setStart(2021, 6, 2, 8, 0);
-        statue.setEnd(2021, 6, 2, 11, 0);
-        allEvents.add(statue);
-        Event shop = new Event();
-        shop.setTitle("shopping spree");
-        shop.setLocation("5th Avenue");
-        shop.setUser(ParseUser.getCurrentUser());
-        shop.setTrip(trip);
-        shop.setStart(2021, 6, 2, 15, 0);
-        shop.setEnd(2021, 6, 2, 19, 0);
-        allEvents.add(shop);
-        adapter.notifyDataSetChanged();
+                // for debugging purposes let's print every trip title to logcat
+                for (Event event : events) {
+                    Log.i(TAG, "Event: " + event.getTitle() + ", Location: " + event.getLocation());
+                }
+
+                // save received posts to list and notify adapter of new data
+                allEvents.clear();
+                allEvents.addAll(events);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 }
