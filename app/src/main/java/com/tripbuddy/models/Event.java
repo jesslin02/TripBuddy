@@ -9,6 +9,7 @@ import org.parceler.Parcel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Parcel(analyze = {Event.class})
 @ParseClassName("Event")
@@ -23,11 +24,11 @@ public class Event extends ParseObject {
     public static final String KEY_WEB = "website";
     public static final String KEY_NOTES = "notes";
 
-    private static Date newDate(int year, int month, int date, int hrs, int min) {
+    private static Date newDate(int month, int date, int year, int hrs, int min) {
         // REMINDER: month value is 0 indexed (0 for january, 1 for february, etc)
         Calendar cal = Calendar.getInstance();
         cal.clear();
-        cal.set(year, month, date, hrs, min);
+        cal.set(year, month - 1, date, hrs - 1, min);
         return cal.getTime();
     }
 
@@ -58,13 +59,13 @@ public class Event extends ParseObject {
         put(KEY_USER, user);
     }
 
-    public void setStart(int year, int month, int date, int hrs, int min) {
-        Date start = newDate(year, month, date, hrs, min);
+    public void setStart(List<Integer> dateList) {
+        Date start = newDate(dateList.get(0), dateList.get(1), dateList.get(2), dateList.get(3), dateList.get(4));
         put(KEY_START, start);
     }
 
-    public void setEnd(int year, int month, int date, int hrs, int min) {
-        Date end = newDate(year, month, date, hrs, min);
+    public void setEnd(List<Integer> dateList) {
+        Date end = newDate(dateList.get(0), dateList.get(1), dateList.get(2), dateList.get(3), dateList.get(4));
         put(KEY_END, end);
     }
 

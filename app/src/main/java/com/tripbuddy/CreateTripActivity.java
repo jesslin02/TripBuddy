@@ -44,10 +44,10 @@ public class CreateTripActivity extends AppCompatActivity {
         setContentView(view);
 
         binding.etStart.setInputType(InputType.TYPE_NULL);
-        binding.etStart.setOnTouchListener(new dateTouchListener(binding.etStart));
+        binding.etStart.setOnTouchListener(new dateTouchListener(binding.etStart, this));
 
         binding.etEnd.setInputType(InputType.TYPE_NULL);
-        binding.etEnd.setOnTouchListener(new dateTouchListener(binding.etEnd));
+        binding.etEnd.setOnTouchListener(new dateTouchListener(binding.etEnd, this));
 
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,24 +78,26 @@ public class CreateTripActivity extends AppCompatActivity {
      * allows popup calendar date picker
      * https://www.tutlane.com/tutorial/android/android-datepicker-with-examples
      */
-    class dateTouchListener implements View.OnTouchListener {
+    static class dateTouchListener implements View.OnTouchListener {
         EditText etDate;
+        Activity activity;
 
-        public dateTouchListener(EditText etDate) {
+        public dateTouchListener(EditText etDate, Activity activity) {
             super();
             this.etDate = etDate;
+            this.activity = activity;
         }
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                hideKeyboard(CreateTripActivity.this);
+                hideKeyboard(activity);
                 final Calendar cldr = Calendar.getInstance();
                 int day = cldr.get(Calendar.DAY_OF_MONTH);
                 int month = cldr.get(Calendar.MONTH);
                 int year = cldr.get(Calendar.YEAR);
                 // date picker dialog
-                DatePickerDialog picker = new DatePickerDialog(CreateTripActivity.this,
+                DatePickerDialog picker = new DatePickerDialog(activity,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -140,7 +142,7 @@ public class CreateTripActivity extends AppCompatActivity {
      * @param start string in format mm/dd/yyyy
      * @param end string in format mm/dd/yyyy
      */
-    private boolean checkDates(String start, String end) {
+    static boolean checkDates(String start, String end) {
         List<Integer> startList = convertToDateList(start);
         List<Integer> endList = convertToDateList(end);
         // making sure to go from largest to smallest unit of time
@@ -189,7 +191,7 @@ public class CreateTripActivity extends AppCompatActivity {
      * @param date in the form of "mm/dd/yyyy"
      * @return List<Integer> in the form of [mm, dd, yyyy]
      */
-    private List<Integer> convertToDateList(String date) {
+    static List<Integer> convertToDateList(String date) {
         List<Integer> converted = new ArrayList<>();
         String[] separated = date.split("/");
         for (int i = 0; i < separated.length; i++) {
