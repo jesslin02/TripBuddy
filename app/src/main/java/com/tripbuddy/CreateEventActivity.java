@@ -1,53 +1,36 @@
 package com.tripbuddy;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.tripbuddy.databinding.ActivityCreateEventBinding;
-import com.tripbuddy.CreateTripActivity.dateTouchListener;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
 import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class CreateEventActivity extends AppCompatActivity {
     public static final String TAG = "CreateEventActivity";
     ActivityCreateEventBinding binding;
     Trip trip;
-    String title;
-    String location;
-    String startDate;
-    String startTime;
-    Calendar start;
-    String endDate;
-    String endTime;
-    Calendar end;
-    long phone;
-    String website;
-    String notes;
+    Calendar startCal;
+    Calendar endCal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,33 +44,24 @@ public class CreateEventActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        startCal = Calendar.getInstance();
+        endCal = Calendar.getInstance();
+
         binding.etStartDate.setInputType(InputType.TYPE_NULL);
-        binding.etStartDate.setOnTouchListener(new dateTouchListener(binding.etStartDate, this));
+        binding.etStartDate.setOnTouchListener(new Utils.dateTouchListener(binding.etStartDate, this, startCal));
 
         binding.etStartTime.setInputType(InputType.TYPE_NULL);
-        binding.etStartTime.setOnTouchListener(new timeTouchListener(binding.etStartTime, this));
+        binding.etStartTime.setOnTouchListener(new timeTouchListener(binding.etStartTime, this, startCal));
 
         binding.etEndDate.setInputType(InputType.TYPE_NULL);
-        binding.etEndDate.setOnTouchListener(new dateTouchListener(binding.etEndDate, this));
+        binding.etEndDate.setOnTouchListener(new Utils.dateTouchListener(binding.etEndDate, this, endCal));
 
         binding.etEndTime.setInputType(InputType.TYPE_NULL);
-        binding.etEndTime.setOnTouchListener(new timeTouchListener(binding.etEndTime, this));
+        binding.etEndTime.setOnTouchListener(new timeTouchListener(binding.etEndTime, this, endCal));
 
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                title = binding.etTitle.getText().toString();
-                location = binding.etLocation.getText().toString();
-                startDate = binding.etStartDate.getText().toString();
-                startTime = binding.etStartTime.getText().toString();
-                endDate = binding.etEndDate.getText().toString();
-                endTime = binding.etEndTime.getText().toString();
-                String phoneString = binding.etPhone.getText().toString();
-                if (!phoneString.isEmpty()) {
-                    phone = Long.valueOf(phoneString);
-                }
-                website = binding.etWebsite.getText().toString();
-                notes = binding.etNotes.getText().toString();
                 if (checkRequiredInput()) {
                     if (checkDates()) {
                         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -111,17 +85,19 @@ public class CreateEventActivity extends AppCompatActivity {
     class timeTouchListener implements View.OnTouchListener {
         EditText etTime;
         Activity activity;
+        Calendar cal;
 
-        public timeTouchListener(EditText etTime, Activity activity) {
+        public timeTouchListener(EditText etTime, Activity activity, Calendar cal) {
             super();
             this.etTime = etTime;
             this.activity = activity;
+            this.cal = cal;
         }
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                CreateTripActivity.hideKeyboard(activity);
+                Utils.hideKeyboard(activity);
                 final Calendar cldr = Calendar.getInstance();
                 int hour = cldr.get(Calendar.HOUR_OF_DAY);
                 int min = cldr.get(Calendar.MINUTE);
@@ -130,16 +106,9 @@ public class CreateEventActivity extends AppCompatActivity {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 SimpleDateFormat sdFormat = new SimpleDateFormat("h:mm a");
-                                Calendar cal = Calendar.getInstance();
                                 cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                 cal.set(Calendar.MINUTE, minute);
-                                if (etTime == binding.etStartTime) {
-                                    start = cal;
-                                    etTime.setText(sdFormat.format(start.getTime()));
-                                } else {
-                                    end = cal;
-                                    etTime.setText(sdFormat.format(end.getTime()));
-                                }
+                                etTime.setText(sdFormat.format(cal.getTime()));
                             }
                         }, hour, min, false);
                 picker.show();
@@ -153,16 +122,20 @@ public class CreateEventActivity extends AppCompatActivity {
         Event event = new Event();
         event.setUser(user);
         event.setTrip(trip);
-        event.setTitle(title);
-        event.setLocation(location);
-        event.setStart(start);
-        event.setEnd(end);
-        if (phone != 0) {
+        event.setTitle(binding.etTitle.getText().toString());
+        event.setLocation(binding.etLocation.getText().toString());
+        event.setStart(startCal);
+        event.setEnd(endCal);
+        String phoneString = binding.etPhone.getText().toString();
+        if (!phoneString.isEmpty()) {
+            long phone = Long.parseLong(phoneString);
             event.setPhone(phone);
         }
+        String website = binding.etWebsite.getText().toString();
         if (!website.isEmpty()) {
             event.setWebsite(website);
         }
+        String notes = binding.etNotes.getText().toString();
         if (!notes.isEmpty()) {
             event.setNotes(notes);
         }
@@ -176,97 +149,24 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
                 Log.i(TAG, "Event creation was successful!");
                 resetInput();
-                goItineraryActivity();
+                Utils.goItineraryActivity(CreateEventActivity.this, trip);
+                finish();
             }
         });
     }
 
-    /**
-     * uses checkDates() from CreateTripActivity to check dates then checks times
-     */
     private boolean checkDates() {
-        convertToCalendar(start, startDate, startTime);
-        convertToCalendar(end, endDate, endTime);
-        return start.getTimeInMillis() < end.getTimeInMillis();
+        return startCal.getTimeInMillis() < endCal.getTimeInMillis();
     }
 
     private boolean checkRequiredInput() {
-        boolean validInput = true;
-        if (title.isEmpty()) {
-            binding.etTitle.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            validInput = false;
-        }
-        if (location.isEmpty()) {
-            binding.etLocation.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            validInput = false;
-        }
-        if (startDate.isEmpty()) {
-            binding.etStartDate.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            validInput = false;
-        }
-        if (startTime.isEmpty()) {
-            binding.etStartTime.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            validInput = false;
-        }
-        if (endDate.isEmpty()) {
-            binding.etEndDate.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            validInput = false;
-        }
-        if (endTime.isEmpty()) {
-            binding.etEndTime.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            validInput = false;
-        }
-        return validInput;
-    }
-
-//    /**
-//     * @param time string in the form "hh:mm"
-//     * @return list of ints in the form [hh, mm]
-//     */
-//    static List<Integer> convertToTimeList(String time) {
-//        String[] splitTime = time.split(":");
-//        List<Integer> converted = new ArrayList<>();
-//        int hour = Integer.parseInt(splitTime[0]);
-//        int minute = Integer.parseInt(splitTime[1].substring(0, 2));
-//        if (hour != 12 && splitTime[1].endsWith("PM")) {
-//            hour += 12;
-//        } else if (hour == 12 && splitTime[1].endsWith("AM")) {
-//            hour -= 12;
-//        }
-//        converted.add(hour);
-//        converted.add(minute);
-//        return converted;
-//    }
-
-    static void convertToCalendar(Calendar cal, String date, String time) {
-        List<Integer> converted = Utils.convertToDateList(date); // [mm, dd, yyyy]
-        cal.set(Calendar.YEAR, converted.get(2));
-        cal.set(Calendar.MONTH, converted.get(0) - 1);
-        cal.set(Calendar.DAY_OF_MONTH, converted.get(1));
+        return Utils.checkRequiredInput(binding.etTitle, binding.etLocation, binding.etStartDate,
+                binding.etStartTime, binding.etEndDate, binding.etEndTime);
     }
 
     private void resetInput() {
-        binding.etTitle.setText("");
-        binding.etTitle.getBackground().clearColorFilter();
-        binding.etLocation.setText("");
-        binding.etLocation.getBackground().clearColorFilter();
-        binding.etStartDate.setText("");
-        binding.etStartDate.getBackground().clearColorFilter();
-        binding.etStartTime.setText("");
-        binding.etStartTime.getBackground().clearColorFilter();
-        binding.etEndDate.setText("");
-        binding.etEndDate.getBackground().clearColorFilter();
-        binding.etEndTime.setText("");
-        binding.etEndTime.getBackground().clearColorFilter();
-        binding.etPhone.setText("");
-        binding.etWebsite.setText("");
-        binding.etNotes.setText("");
-    }
-
-    private void goItineraryActivity() {
-        Intent i = new Intent(this, ItineraryActivity.class);
-        i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
-        startActivity(i);
-        finish();
+        Utils.resetInput(binding.etTitle, binding.etLocation, binding.etStartDate,
+                binding.etStartTime, binding.etEndDate, binding.etEndTime, binding.etPhone,
+                binding.etWebsite, binding.etNotes);
     }
 }

@@ -65,14 +65,14 @@ public class Trip extends ParseObject {
         return cal.getTime();
     }
 
-    public void setStart(List<Integer> dateList) {
-        Date start = newDate(dateList.get(0), dateList.get(1), dateList.get(2));
-        put(KEY_START, start);
+    public void setStart(Calendar cal) {
+        // Date start = newDate(dateList.get(0), dateList.get(1), dateList.get(2));
+        put(KEY_START, cal.getTime());
     }
 
-    public void setEnd(List<Integer> dateList) {
-        Date end = newDate(dateList.get(0), dateList.get(1), dateList.get(2));
-        put(KEY_END, end);
+    public void setEnd(Calendar cal) {
+        // Date end = newDate(dateList.get(0), dateList.get(1), dateList.get(2));
+        put(KEY_END, cal.getTime());
     }
 
     /* OPTIONAL: short notes about trip */

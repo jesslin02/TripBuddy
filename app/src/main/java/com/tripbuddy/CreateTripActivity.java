@@ -26,13 +26,16 @@ import com.tripbuddy.databinding.ActivityCreateTripBinding;
 import com.tripbuddy.databinding.ActivityLoginBinding;
 import com.tripbuddy.models.Trip;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class CreateTripActivity extends AppCompatActivity {
     public static final String TAG = "CreateTripActivity";
-    ActivityCreateTripBinding binding;
+    public ActivityCreateTripBinding binding;
+    Calendar startCal;
+    Calendar endCal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,27 +46,25 @@ public class CreateTripActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        startCal = Calendar.getInstance();
+        endCal = Calendar.getInstance();
+
         binding.etStart.setInputType(InputType.TYPE_NULL);
-        binding.etStart.setOnTouchListener(new dateTouchListener(binding.etStart, this));
+        binding.etStart.setOnTouchListener(new Utils.dateTouchListener(binding.etStart, this, startCal));
 
         binding.etEnd.setInputType(InputType.TYPE_NULL);
-        binding.etEnd.setOnTouchListener(new dateTouchListener(binding.etEnd, this));
+        binding.etEnd.setOnTouchListener(new Utils.dateTouchListener(binding.etEnd, this, endCal));
 
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String title = binding.etTitle.getText().toString();
-                String dest = binding.etDestination.getText().toString();
-                String start = binding.etStart.getText().toString();
-                String end = binding.etEnd.getText().toString();
-                String notes = binding.etNotes.getText().toString();
-                if (checkRequiredInput(title, dest, start, end)) {
-                    if (checkDates(start,end)) {
+                if (checkRequiredInput()) {
+                    if (checkDates()) {
                         ParseUser currentUser = ParseUser.getCurrentUser();
-                        saveTrip(currentUser, title, dest, start, end, notes);
+                        saveTrip(currentUser);
                     } else {
                         Toast.makeText(CreateTripActivity.this,
-                                "Start date must be before end date", Toast.LENGTH_SHORT).show();
+                                "Start date cannot be after end date", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(CreateTripActivity.this,
@@ -74,102 +75,36 @@ public class CreateTripActivity extends AppCompatActivity {
     }
 
     /**
-     * used as onTouchListener for inputting the start date and end date
-     * allows popup calendar date picker
-     * https://www.tutlane.com/tutorial/android/android-datepicker-with-examples
-     */
-    static class dateTouchListener implements View.OnTouchListener {
-        EditText etDate;
-        Activity activity;
-
-        public dateTouchListener(EditText etDate, Activity activity) {
-            super();
-            this.etDate = etDate;
-            this.activity = activity;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                hideKeyboard(activity);
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                DatePickerDialog picker = new DatePickerDialog(activity,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                etDate.setText((monthOfYear + 1) + "/" + dayOfMonth + "/" + year);
-                            }
-                        }, year, month, day);
-                picker.show();
-                return true;
-            }
-            return false;
-        }
-    }
-
-    /**
      * checks if all required fields are filled out
      * if a required field isn't filled out, changes background color to red
      */
-    private boolean checkRequiredInput(String title, String dest, String start, String end) {
-        boolean validInput = true;
-        if (title.isEmpty()) {
-            binding.etTitle.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            validInput = false;
-        }
-        if (dest.isEmpty()) {
-            binding.etDestination.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            validInput = false;
-        }
-        if (start.isEmpty()) {
-            binding.etStart.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            validInput = false;
-        }
-        if (end.isEmpty()) {
-            binding.etEnd.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            validInput = false;
-        }
-        return validInput;
+    private boolean checkRequiredInput() {
+        return Utils.checkRequiredInput(binding.etTitle, binding.etDestination, binding.etStart,
+                binding.etEnd);
     }
 
     /**
      * checks if start date and end date of trip are valid
      * (start date must be before end date)
-     * @param start string in format mm/dd/yyyy
-     * @param end string in format mm/dd/yyyy
      */
-    static boolean checkDates(String start, String end) {
-        List<Integer> startList = Utils.convertToDateList(start);
-        List<Integer> endList = Utils.convertToDateList(end);
-        // making sure to go from largest to smallest unit of time
-        int[] yearMonthDay = new int[]{2, 0, 1};
-        for (int i : yearMonthDay) {
-            if (startList.get(i) > endList.get(i)) {
-                return false;
-            } else if (startList.get(i) < endList.get(i)) {
-                return true;
-            }
-        }
-        return true;
+    private boolean checkDates() {
+        return startCal.getTimeInMillis() < endCal.getTimeInMillis();
     }
 
     /**
      * creates and saves trip to Parse
      */
-    private void saveTrip(ParseUser user, String title, String dest, String start, String end, String notes) {
+    private void saveTrip(ParseUser user) {
         Trip trip = new Trip();
         trip.setUser(user);
-        trip.setTitle(title);
-        trip.setDestination(dest);
+        trip.setTitle(binding.etTitle.getText().toString());
+        trip.setDestination(binding.etDestination.getText().toString());
+        String notes = binding.etNotes.getText().toString();
         if (!notes.isEmpty()) {
             trip.setNotes(notes);
         }
-        trip.setStart(Utils.convertToDateList(start));
-        trip.setEnd(Utils.convertToDateList(end));
+        trip.setStart(startCal);
+        trip.setEnd(endCal);
         trip.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -190,29 +125,7 @@ public class CreateTripActivity extends AppCompatActivity {
      * after trip has been created
      */
     private void resetInput() {
-        binding.etTitle.setText("");
-        binding.etTitle.getBackground().clearColorFilter();
-        binding.etDestination.setText("");
-        binding.etDestination.getBackground().clearColorFilter();
-        binding.etStart.setText("");
-        binding.etStart.getBackground().clearColorFilter();
-        binding.etEnd.setText("");
-        binding.etEnd.getBackground().clearColorFilter();
-        binding.etNotes.setText("");
-    }
-
-    /**
-     * for use when inputting start and end dates
-     * https://stackoverflow.com/questions/1109022/how-do-you-close-hide-the-android-soft-keyboard-programmatically
-     */
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        Utils.resetInput(binding.etTitle, binding.etDestination, binding.etStart,
+                binding.etEnd, binding.etNotes);
     }
 }

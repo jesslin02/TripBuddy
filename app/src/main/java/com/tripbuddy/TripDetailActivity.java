@@ -41,9 +41,7 @@ public class TripDetailActivity extends AppCompatActivity {
         binding.btnItinerary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(TripDetailActivity.this, ItineraryActivity.class);
-                i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
-                startActivity(i);
+                Utils.goItineraryActivity(TripDetailActivity.this, trip);
             }
         });
 
