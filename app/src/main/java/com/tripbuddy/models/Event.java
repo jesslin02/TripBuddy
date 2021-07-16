@@ -60,12 +60,10 @@ public class Event extends ParseObject {
     }
 
     public void setStart(Calendar cal) {
-        // Date start = newDate(dateList.get(0), dateList.get(1), dateList.get(2), dateList.get(3), dateList.get(4));
         put(KEY_START, cal.getTime());
     }
 
     public void setEnd(Calendar cal) {
-        // Date end = newDate(dateList.get(0), dateList.get(1), dateList.get(2), dateList.get(3), dateList.get(4));
         put(KEY_END, cal.getTime());
     }
 

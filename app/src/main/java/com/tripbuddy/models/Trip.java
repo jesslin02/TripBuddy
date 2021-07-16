@@ -57,21 +57,11 @@ public class Trip extends ParseObject {
         return sdFormat.format(date);
     }
 
-    private static Date newDate(int month, int date, int year) {
-        // REMINDER: month value is 0 indexed (0 for january, 1 for february, etc)
-        Calendar cal = Calendar.getInstance();
-        cal.clear();
-        cal.set(year, month - 1, date);
-        return cal.getTime();
-    }
-
     public void setStart(Calendar cal) {
-        // Date start = newDate(dateList.get(0), dateList.get(1), dateList.get(2));
         put(KEY_START, cal.getTime());
     }
 
     public void setEnd(Calendar cal) {
-        // Date end = newDate(dateList.get(0), dateList.get(1), dateList.get(2));
         put(KEY_END, cal.getTime());
     }
 

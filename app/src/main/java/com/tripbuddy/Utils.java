@@ -27,7 +27,7 @@ public class Utils {
 
     /**
      * go to MainActivity from current activity
-     * for use in login, signup, and create trip activities
+     * LoginActivity, SignUpActivity, CreateTripActivity
      */
     public static void goMainActivity(Activity current) {
         Intent i = new Intent(current, MainActivity.class);
@@ -38,7 +38,7 @@ public class Utils {
 
     /**
      * go to ItineraryActivity from current activity
-     * for use in trip detail and create event activities
+     * TripDetailActivity, CreateEventActivity
      */
     public static void goItineraryActivity(Activity current, Trip trip) {
         Intent i = new Intent(current, ItineraryActivity.class);
@@ -48,6 +48,7 @@ public class Utils {
 
     /**
      * clears text input fields after creating a trip or an event
+     * CreateTripActivity, CreateEventActivity
      * @param items array of EditText objects to be cleared
      */
     public static void resetInput(EditText ... items) {
@@ -60,6 +61,7 @@ public class Utils {
     /**
      * checks that all required input fields are filled out when user presses
      * the create button for a new trip or event
+     * CreateTripActivity, CreateEventActivity
      */
     public static boolean checkRequiredInput(EditText ... items) {
         boolean validInput = true;
@@ -74,6 +76,7 @@ public class Utils {
 
     /**
      * for use when inputting start and end dates/times
+     * CreateTripActivity, CreateEventActivity
      * https://stackoverflow.com/questions/1109022/how-do-you-close-hide-the-android-soft-keyboard-programmatically
      */
     public static void hideKeyboard(Activity activity) {
@@ -91,7 +94,7 @@ public class Utils {
      * used as onTouchListener for inputting the start date and end date
      * allows popup calendar date picker
      * https://www.tutlane.com/tutorial/android/android-datepicker-with-examples
-     * for use in create trip and create event activities
+     * CreateTripActivity, CreateEventActivity
      */
     static class dateTouchListener implements View.OnTouchListener {
         EditText etDate;
