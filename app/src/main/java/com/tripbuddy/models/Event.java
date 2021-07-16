@@ -24,13 +24,13 @@ public class Event extends ParseObject {
     public static final String KEY_WEB = "website";
     public static final String KEY_NOTES = "notes";
 
-    private static Date newDate(int month, int date, int year, int hrs, int min) {
-        // REMINDER: month value is 0 indexed (0 for january, 1 for february, etc)
-        Calendar cal = Calendar.getInstance();
-        cal.clear();
-        cal.set(year, month - 1, date, hrs, min);
-        return cal.getTime();
-    }
+//    private static Date newDate(int month, int date, int year, int hrs, int min) {
+//        // REMINDER: month value is 0 indexed (0 for january, 1 for february, etc)
+//        Calendar cal = Calendar.getInstance();
+//        cal.clear();
+//        cal.set(year, month - 1, date, hrs, min);
+//        return cal.getTime();
+//    }
 
     /* title of event */
     public String getTitle() {
@@ -59,14 +59,14 @@ public class Event extends ParseObject {
         put(KEY_USER, user);
     }
 
-    public void setStart(List<Integer> dateList) {
-        Date start = newDate(dateList.get(0), dateList.get(1), dateList.get(2), dateList.get(3), dateList.get(4));
-        put(KEY_START, start);
+    public void setStart(Calendar cal) {
+        // Date start = newDate(dateList.get(0), dateList.get(1), dateList.get(2), dateList.get(3), dateList.get(4));
+        put(KEY_START, cal.getTime());
     }
 
-    public void setEnd(List<Integer> dateList) {
-        Date end = newDate(dateList.get(0), dateList.get(1), dateList.get(2), dateList.get(3), dateList.get(4));
-        put(KEY_END, end);
+    public void setEnd(Calendar cal) {
+        // Date end = newDate(dateList.get(0), dateList.get(1), dateList.get(2), dateList.get(3), dateList.get(4));
+        put(KEY_END, cal.getTime());
     }
 
     public String getStart() {

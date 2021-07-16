@@ -69,15 +69,8 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
                 Toast.makeText(SignUpActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-                goMainActivity();
+                Utils.goMainActivity(SignUpActivity.this);
             }
         });
-    }
-
-    private void goMainActivity() {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        // so that pressing the back button on the MainActivity doesn't go back to the login screen
-        finish();
     }
 }

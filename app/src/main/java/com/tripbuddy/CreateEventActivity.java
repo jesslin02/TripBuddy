@@ -28,6 +28,7 @@ import com.tripbuddy.models.Trip;
 
 import org.parceler.Parcels;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -40,12 +41,10 @@ public class CreateEventActivity extends AppCompatActivity {
     String location;
     String startDate;
     String startTime;
-    /* list of values in the start date [hh, mm, yyyy, MM, dd] */
-    List<Integer> startList;
+    Calendar start;
     String endDate;
     String endTime;
-    /* list of values in the end date [hh, mm, yyyy, MM, dd] */
-    List<Integer> endList;
+    Calendar end;
     long phone;
     String website;
     String notes;
@@ -109,7 +108,7 @@ public class CreateEventActivity extends AppCompatActivity {
      * used as onTouchListener for inputting the start time and end time
      * allows popup time picker
      */
-    static class timeTouchListener implements View.OnTouchListener {
+    class timeTouchListener implements View.OnTouchListener {
         EditText etTime;
         Activity activity;
 
@@ -126,20 +125,21 @@ public class CreateEventActivity extends AppCompatActivity {
                 final Calendar cldr = Calendar.getInstance();
                 int hour = cldr.get(Calendar.HOUR_OF_DAY);
                 int min = cldr.get(Calendar.MINUTE);
-                TimePickerDialog picker = new TimePickerDialog(activity,
+                TimePickerDialog picker = new TimePickerDialog(activity, 2,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                String timeOfDay = "AM";
-                                String extraZero = "";
-                                if (hourOfDay > 12) {
-                                    hourOfDay = hourOfDay % 12;
-                                    timeOfDay = "PM";
+                                SimpleDateFormat sdFormat = new SimpleDateFormat("h:mm a");
+                                Calendar cal = Calendar.getInstance();
+                                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                cal.set(Calendar.MINUTE, minute);
+                                if (etTime == binding.etStartTime) {
+                                    start = cal;
+                                    etTime.setText(sdFormat.format(start.getTime()));
+                                } else {
+                                    end = cal;
+                                    etTime.setText(sdFormat.format(end.getTime()));
                                 }
-                                if (minute < 10) {
-                                    extraZero = "0";
-                                }
-                                etTime.setText(hourOfDay + ":" + extraZero + minute + " " + timeOfDay);
                             }
                         }, hour, min, false);
                 picker.show();
@@ -155,8 +155,8 @@ public class CreateEventActivity extends AppCompatActivity {
         event.setTrip(trip);
         event.setTitle(title);
         event.setLocation(location);
-        event.setStart(startList);
-        event.setEnd(endList);
+        event.setStart(start);
+        event.setEnd(end);
         if (phone != 0) {
             event.setPhone(phone);
         }
@@ -185,19 +185,9 @@ public class CreateEventActivity extends AppCompatActivity {
      * uses checkDates() from CreateTripActivity to check dates then checks times
      */
     private boolean checkDates() {
-        startList = convertToDateTimeList(startDate, startTime);
-        endList = convertToDateTimeList(endDate, endTime);
-        // making sure to go from largest to smallest unit of time
-        // year, month, day, hour, min
-        int[] yearMonthDay = new int[]{2, 0, 1, 3, 4};
-        for (int i : yearMonthDay) {
-            if (startList.get(i) > endList.get(i)) {
-                return false;
-            } else if (startList.get(i) < endList.get(i)) {
-                return true;
-            }
-        }
-       return true;
+        convertToCalendar(start, startDate, startTime);
+        convertToCalendar(end, endDate, endTime);
+        return start.getTimeInMillis() < end.getTimeInMillis();
     }
 
     private boolean checkRequiredInput() {
@@ -229,26 +219,30 @@ public class CreateEventActivity extends AppCompatActivity {
         return validInput;
     }
 
-    /**
-     * @param time string in the form "hh:mm"
-     * @return list of ints in the form [hh, mm]
-     */
-    static List<Integer> convertToTimeList(String time) {
-        String[] splitTime = time.split(":");
-        List<Integer> converted = new ArrayList<>();
-        int hour = Integer.valueOf(splitTime[0]);
-        if (splitTime[1].endsWith("PM")) {
-            hour += 12;
-        }
-        converted.add(hour);
-        converted.add(Integer.valueOf(splitTime[1].substring(0, 2)));
-        return converted;
-    }
+//    /**
+//     * @param time string in the form "hh:mm"
+//     * @return list of ints in the form [hh, mm]
+//     */
+//    static List<Integer> convertToTimeList(String time) {
+//        String[] splitTime = time.split(":");
+//        List<Integer> converted = new ArrayList<>();
+//        int hour = Integer.parseInt(splitTime[0]);
+//        int minute = Integer.parseInt(splitTime[1].substring(0, 2));
+//        if (hour != 12 && splitTime[1].endsWith("PM")) {
+//            hour += 12;
+//        } else if (hour == 12 && splitTime[1].endsWith("AM")) {
+//            hour -= 12;
+//        }
+//        converted.add(hour);
+//        converted.add(minute);
+//        return converted;
+//    }
 
-    static List<Integer> convertToDateTimeList(String date, String time) {
-        List<Integer> converted = CreateTripActivity.convertToDateList(date);
-        converted.addAll(convertToTimeList(time));
-        return converted;
+    static void convertToCalendar(Calendar cal, String date, String time) {
+        List<Integer> converted = Utils.convertToDateList(date); // [mm, dd, yyyy]
+        cal.set(Calendar.YEAR, converted.get(2));
+        cal.set(Calendar.MONTH, converted.get(0) - 1);
+        cal.set(Calendar.DAY_OF_MONTH, converted.get(1));
     }
 
     private void resetInput() {

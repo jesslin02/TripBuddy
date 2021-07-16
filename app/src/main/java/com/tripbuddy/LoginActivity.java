@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
         // setContentView(R.layout.activity_login);
 
         if (ParseUser.getCurrentUser() != null) {
-            goMainActivity();
+            Utils.goMainActivity(LoginActivity.this);
         }
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
@@ -62,15 +62,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 // navigate to the main activity if the user has signed in properly
-                goMainActivity();
+                Utils.goMainActivity(LoginActivity.this);
             }
         });
     }
 
-    private void goMainActivity() {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        // so that pressing the back button on the MainActivity doesn't go back to the login screen
-        finish();
-    }
 }

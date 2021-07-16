@@ -143,8 +143,8 @@ public class CreateTripActivity extends AppCompatActivity {
      * @param end string in format mm/dd/yyyy
      */
     static boolean checkDates(String start, String end) {
-        List<Integer> startList = convertToDateList(start);
-        List<Integer> endList = convertToDateList(end);
+        List<Integer> startList = Utils.convertToDateList(start);
+        List<Integer> endList = Utils.convertToDateList(end);
         // making sure to go from largest to smallest unit of time
         int[] yearMonthDay = new int[]{2, 0, 1};
         for (int i : yearMonthDay) {
@@ -168,8 +168,8 @@ public class CreateTripActivity extends AppCompatActivity {
         if (!notes.isEmpty()) {
             trip.setNotes(notes);
         }
-        trip.setStart(convertToDateList(start));
-        trip.setEnd(convertToDateList(end));
+        trip.setStart(Utils.convertToDateList(start));
+        trip.setEnd(Utils.convertToDateList(end));
         trip.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -180,24 +180,9 @@ public class CreateTripActivity extends AppCompatActivity {
                 }
                 Log.i(TAG, "Trip creation was successful!");
                 resetInput();
-                goMainActivity();
+                Utils.goMainActivity(CreateTripActivity.this);
             }
         });
-    }
-
-    /**
-     * converts editText date input string into an int array
-     * for use in the Trip setStart and setEnd methods
-     * @param date in the form of "mm/dd/yyyy"
-     * @return List<Integer> in the form of [mm, dd, yyyy]
-     */
-    static List<Integer> convertToDateList(String date) {
-        List<Integer> converted = new ArrayList<>();
-        String[] separated = date.split("/");
-        for (int i = 0; i < separated.length; i++) {
-            converted.add(i, Integer.valueOf(separated[i]));
-        }
-        return converted;
     }
 
     /**
@@ -214,13 +199,6 @@ public class CreateTripActivity extends AppCompatActivity {
         binding.etEnd.setText("");
         binding.etEnd.getBackground().clearColorFilter();
         binding.etNotes.setText("");
-    }
-
-    private void goMainActivity() {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        // so that pressing the back button on the MainActivity doesn't go back to the login screen
-        finish();
     }
 
     /**
