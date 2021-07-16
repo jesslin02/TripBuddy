@@ -39,16 +39,24 @@ public class Trip extends ParseObject {
         put(KEY_DEST, dest);
     }
 
-    /* start date of trip */
+    /* String representation of start date of trip  */
     public String getStart() {
         Date parseDate = getDate(KEY_START);
         return formatDate(parseDate);
+    }
+
+    public Date getStartDate() {
+        return getDate(KEY_START);
     }
 
     /* end date of trip */
     public String getEnd() {
         Date parseDate = getDate(KEY_END);
         return formatDate(parseDate);
+    }
+
+    public Date getEndDate() {
+        return getDate(KEY_END);
     }
 
     private static String formatDate(Date date) {

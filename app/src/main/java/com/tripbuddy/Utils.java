@@ -18,6 +18,7 @@ import org.parceler.Parcels;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,6 +45,12 @@ public class Utils {
         Intent i = new Intent(current, ItineraryActivity.class);
         i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
         current.startActivity(i);
+    }
+
+    public static Calendar toCalendar(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
     }
 
     /**

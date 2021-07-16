@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,12 +52,14 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         TextView tvTitle;
         TextView tvDestination;
         TextView tvDate;
+        Button btnEdit;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDestination = itemView.findViewById(R.id.tvDestination);
             tvDate = itemView.findViewById(R.id.tvDate);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
 
             itemView.setOnClickListener(this);
         }
@@ -66,6 +69,15 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
             tvDestination.setText(trip.getDestination());
             String fullDate = trip.getStart() + " - " + trip.getEnd();
             tvDate.setText(fullDate);
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, CreateTripActivity.class);
+                    i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+                    i.putExtra("edit", true);
+                    context.startActivity(i);
+                }
+            });
         }
 
         @Override

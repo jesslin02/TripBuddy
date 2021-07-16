@@ -26,6 +26,8 @@ import com.tripbuddy.databinding.ActivityCreateTripBinding;
 import com.tripbuddy.databinding.ActivityLoginBinding;
 import com.tripbuddy.models.Trip;
 
+import org.parceler.Parcels;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,6 +36,11 @@ import java.util.List;
 public class CreateTripActivity extends AppCompatActivity {
     public static final String TAG = "CreateTripActivity";
     public ActivityCreateTripBinding binding;
+    /* if user is editing trip or not */
+    boolean edit;
+    /* existing trip if editing */
+    Trip trip;
+    Intent intent;
     Calendar startCal;
     Calendar endCal;
 
@@ -48,6 +55,15 @@ public class CreateTripActivity extends AppCompatActivity {
 
         startCal = Calendar.getInstance();
         endCal = Calendar.getInstance();
+        trip = new Trip();
+
+        intent = getIntent();
+        if (intent.getBooleanExtra("edit", true)) {
+            trip = Parcels.unwrap(intent.getParcelableExtra(Trip.class.getSimpleName()));
+            startCal = Utils.toCalendar(trip.getStartDate());
+            endCal = Utils.toCalendar(trip.getEndDate());
+            populateItems();
+        }
 
         binding.etStart.setInputType(InputType.TYPE_NULL);
         binding.etStart.setOnTouchListener(new Utils.dateTouchListener(binding.etStart, this, startCal));
@@ -75,6 +91,19 @@ public class CreateTripActivity extends AppCompatActivity {
     }
 
     /**
+     * populate fields with existing information if user is editing a trip
+     */
+    private void populateItems() {
+        binding.etTitle.setText(trip.getTitle());
+        binding.etDestination.setText(trip.getDestination());
+        binding.etNotes.setText(trip.getNotes());
+        SimpleDateFormat sdFormat = new SimpleDateFormat("M/d/yyyy");
+        binding.etStart.setText(sdFormat.format(startCal.getTime()));
+        binding.etEnd.setText(sdFormat.format(endCal.getTime()));
+        binding.btnCreate.setText("Update");
+    }
+
+    /**
      * checks if all required fields are filled out
      * if a required field isn't filled out, changes background color to red
      */
@@ -95,7 +124,6 @@ public class CreateTripActivity extends AppCompatActivity {
      * creates and saves trip to Parse
      */
     private void saveTrip(ParseUser user) {
-        Trip trip = new Trip();
         trip.setUser(user);
         trip.setTitle(binding.etTitle.getText().toString());
         trip.setDestination(binding.etDestination.getText().toString());

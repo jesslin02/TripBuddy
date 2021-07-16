@@ -155,6 +155,7 @@ public class TripsFragment extends Fragment {
 
     private void onAddButton() {
         Intent i = new Intent(mainActivity, CreateTripActivity.class);
+        i.putExtra("edit", false);
         startActivity(i);
     }
 }
