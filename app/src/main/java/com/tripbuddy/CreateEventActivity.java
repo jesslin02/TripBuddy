@@ -2,6 +2,7 @@ package com.tripbuddy;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -28,7 +29,10 @@ import java.util.Calendar;
 public class CreateEventActivity extends AppCompatActivity {
     public static final String TAG = "CreateEventActivity";
     ActivityCreateEventBinding binding;
+    Intent intent;
     Trip trip;
+    /* for use if user is editing an existing event */
+    Event event;
     Calendar startCal;
     Calendar endCal;
 
@@ -37,7 +41,8 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // setContentView(R.layout.activity_create_event);
 
-        trip = Parcels.unwrap(getIntent().getParcelableExtra(Trip.class.getSimpleName()));
+        intent = getIntent();
+        trip = Parcels.unwrap(intent.getParcelableExtra(Trip.class.getSimpleName()));
         Log.d(TAG, String.format("Creating event for '%s'", trip.getTitle()));
 
         binding = ActivityCreateEventBinding.inflate(getLayoutInflater());
@@ -46,6 +51,14 @@ public class CreateEventActivity extends AppCompatActivity {
 
         startCal = Calendar.getInstance();
         endCal = Calendar.getInstance();
+        event = new Event();
+
+        if (intent.getBooleanExtra("edit", true)) {
+            event = Parcels.unwrap(intent.getParcelableExtra(Event.class.getSimpleName()));
+            startCal = Utils.toCalendar(event.getStartDate());
+            endCal = Utils.toCalendar(event.getEndDate());
+            populateItems();
+        }
 
         binding.etStartDate.setInputType(InputType.TYPE_NULL);
         binding.etStartDate.setOnTouchListener(new Utils.dateTouchListener(binding.etStartDate, this, startCal));
@@ -76,6 +89,24 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * populate fields with existing information if user is editing an event
+     */
+    private void populateItems() {
+        binding.etTitle.setText(event.getTitle());
+        binding.etLocation.setText(event.getLocation());
+        binding.etPhone.setText(String.valueOf(event.getPhone()));
+        binding.etWebsite.setText(event.getWebsite());
+        binding.etNotes.setText(event.getNotes());
+        SimpleDateFormat formatDate = new SimpleDateFormat("M/d/yyyy");
+        SimpleDateFormat formatTime = new SimpleDateFormat("h:mm a");
+        binding.etStartDate.setText(formatDate.format(startCal.getTime()));
+        binding.etStartTime.setText(formatTime.format(startCal.getTime()));
+        binding.etEndDate.setText(formatDate.format(endCal.getTime()));
+        binding.etEndTime.setText(formatTime.format(endCal.getTime()));
+        binding.btnCreate.setText("Update");
     }
 
     /**
@@ -119,7 +150,6 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void saveTrip(ParseUser user) {
-        Event event = new Event();
         event.setUser(user);
         event.setTrip(trip);
         event.setTitle(binding.etTitle.getText().toString());

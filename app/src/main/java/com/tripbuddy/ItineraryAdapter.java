@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,12 +21,14 @@ import java.util.List;
 
 public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.ViewHolder> {
     public static final String TAG = "ItineraryAdapter";
+    Trip trip;
     Context context;
     List<Event> events;
 
-    public ItineraryAdapter(Context c, List<Event> e) {
+    public ItineraryAdapter(Context c, List<Event> e, Trip trip) {
         this.context = c;
         this.events = e;
+        this.trip = trip;
     }
 
     @NonNull
@@ -51,6 +54,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
         TextView tvLocation;
         TextView tvStart;
         TextView tvEnd;
+        Button btnEdit;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,6 +62,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             tvLocation = itemView.findViewById(R.id.tvLocation);
             tvStart = itemView.findViewById(R.id.tvStart);
             tvEnd = itemView.findViewById(R.id.tvEnd);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
 
             itemView.setOnClickListener(this);
         }
@@ -67,6 +72,16 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             tvLocation.setText(event.getLocation());
             tvStart.setText(event.getStart());
             tvEnd.setText(event.getEnd());
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, CreateEventActivity.class);
+                    i.putExtra("edit", true);
+                    i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+                    i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
+                    context.startActivity(i);
+                }
+            });
         }
 
         @Override
@@ -76,6 +91,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             if (position != RecyclerView.NO_POSITION) {
                 Event selected = events.get(position);
                 Intent i = new Intent(context, EventDetailActivity.class);
+                i.putExtra("edit", false);
                 i.putExtra(Event.class.getSimpleName(), Parcels.wrap(selected));
                 context.startActivity(i);
             }

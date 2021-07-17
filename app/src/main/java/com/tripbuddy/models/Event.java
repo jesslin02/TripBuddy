@@ -71,8 +71,16 @@ public class Event extends ParseObject {
         return formatDate(getDate(KEY_START));
     }
 
+    public Date getStartDate() {
+        return getDate(KEY_START);
+    }
+
     public String getEnd() {
         return formatDate(getDate(KEY_END));
+    }
+
+    public Date getEndDate() {
+        return getDate(KEY_END);
     }
 
     private static String formatDate(Date date) {

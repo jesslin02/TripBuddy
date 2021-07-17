@@ -37,7 +37,7 @@ public class ItineraryActivity extends AppCompatActivity {
 
         rvEvents = findViewById(R.id.rvEvents);
         allEvents = new ArrayList<>();
-        adapter = new ItineraryAdapter(this, allEvents);
+        adapter = new ItineraryAdapter(this, allEvents, trip);
 
         rvEvents.setAdapter(adapter);
         llManager = new LinearLayoutManager(this);
