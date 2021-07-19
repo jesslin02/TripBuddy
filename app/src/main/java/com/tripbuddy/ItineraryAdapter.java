@@ -8,10 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.parse.DeleteCallback;
+import com.parse.ParseException;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
@@ -55,6 +58,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
         TextView tvStart;
         TextView tvEnd;
         Button btnEdit;
+        Button btnDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +67,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             tvStart = itemView.findViewById(R.id.tvStart);
             tvEnd = itemView.findViewById(R.id.tvEnd);
             btnEdit = itemView.findViewById(R.id.btnEdit);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
 
             itemView.setOnClickListener(this);
         }
@@ -80,6 +85,24 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
                     i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
                     i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
                     context.startActivity(i);
+                }
+            });
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    trip.deleteInBackground(new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "Error deleting event: " + event.getTitle(), e);
+                                Toast.makeText(context, "Error deleting event!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            int position = getAdapterPosition();
+                            events.remove(position);
+                            notifyDataSetChanged();
+                        }
+                    });
                 }
             });
         }
