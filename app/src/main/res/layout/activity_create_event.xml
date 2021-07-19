@@ -30,18 +30,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAdd" />
 
-    <EditText
-        android:id="@+id/etLocation"
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/event_location"
+        app:layout_constraintStart_toStartOf="@+id/etTitle"
+        app:layout_constraintTop_toBottomOf="@+id/etTitle" />
+
+    <fragment
+        android:id="@+id/fragLocation"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="32dp"
-        android:ems="10"
-        android:inputType="textCapWords"
         android:hint="@string/event_location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
 
     <EditText
         android:id="@+id/etStartDate"
@@ -55,7 +61,7 @@
         android:clickable="true"
         android:hint="@string/start_date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/fragLocation" />
 
 
     <EditText
@@ -68,7 +74,7 @@
         android:inputType="datetime"
         android:clickable="true"
         android:hint="@string/start_time"
-        app:layout_constraintEnd_toEndOf="@id/etLocation"
+        app:layout_constraintEnd_toEndOf="@id/fragLocation"
         app:layout_constraintStart_toEndOf="@id/etStartDate"
         app:layout_constraintTop_toTopOf="@+id/etStartDate" />
 
@@ -97,7 +103,7 @@
         android:inputType="datetime"
         android:clickable="true"
         android:hint="@string/end_time"
-        app:layout_constraintEnd_toEndOf="@+id/etLocation"
+        app:layout_constraintEnd_toEndOf="@+id/fragLocation"
         app:layout_constraintStart_toEndOf="@id/etEndDate"
         app:layout_constraintTop_toTopOf="@+id/etEndDate" />
 

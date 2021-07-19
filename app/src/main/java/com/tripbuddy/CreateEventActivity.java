@@ -3,6 +3,7 @@ package com.tripbuddy;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -12,8 +13,15 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -24,15 +32,19 @@ import com.tripbuddy.models.Trip;
 import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class CreateEventActivity extends AppCompatActivity {
     public static final String TAG = "CreateEventActivity";
+    String API_KEY = BuildConfig.API_KEY;
     ActivityCreateEventBinding binding;
+    AutocompleteSupportFragment autocompleteFragment;
     Intent intent;
     Trip trip;
     /* for use if user is editing an existing event */
     Event event;
+    String eventLocation;
     Calendar startCal;
     Calendar endCal;
 
@@ -48,10 +60,36 @@ public class CreateEventActivity extends AppCompatActivity {
         binding = ActivityCreateEventBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        Places.initialize(this, API_KEY);
+        PlacesClient placesClient = Places.createClient(this);
 
         startCal = Calendar.getInstance();
         endCal = Calendar.getInstance();
         event = new Event();
+
+        // Initialize the AutocompleteSupportFragment.
+        autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragLocation);
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                eventLocation = place.getName();
+            }
+
+
+            @Override
+            public void onError(@NonNull Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
 
         if (intent.getBooleanExtra("edit", true)) {
             event = Parcels.unwrap(intent.getParcelableExtra(Event.class.getSimpleName()));
@@ -96,7 +134,7 @@ public class CreateEventActivity extends AppCompatActivity {
      */
     private void populateItems() {
         binding.etTitle.setText(event.getTitle());
-        binding.etLocation.setText(event.getLocation());
+        autocompleteFragment.setText(event.getLocation());
         binding.etPhone.setText(String.valueOf(event.getPhone()));
         binding.etWebsite.setText(event.getWebsite());
         binding.etNotes.setText(event.getNotes());
@@ -153,7 +191,7 @@ public class CreateEventActivity extends AppCompatActivity {
         event.setUser(user);
         event.setTrip(trip);
         event.setTitle(binding.etTitle.getText().toString());
-        event.setLocation(binding.etLocation.getText().toString());
+        event.setLocation(eventLocation);
         event.setStart(startCal);
         event.setEnd(endCal);
         String phoneString = binding.etPhone.getText().toString();
@@ -169,6 +207,7 @@ public class CreateEventActivity extends AppCompatActivity {
         if (!notes.isEmpty()) {
             event.setNotes(notes);
         }
+
         event.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -190,13 +229,19 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private boolean checkRequiredInput() {
-        return Utils.checkRequiredInput(binding.etTitle, binding.etLocation, binding.etStartDate,
-                binding.etStartTime, binding.etEndDate, binding.etEndTime);
+        boolean locationFilled = true;
+        if (eventLocation == null) {
+            binding.tvLocation.setTextColor(Color.RED);
+            locationFilled = false;
+        }
+        return Utils.checkRequiredInput(binding.etTitle, binding.etStartDate,
+                binding.etStartTime, binding.etEndDate, binding.etEndTime) && locationFilled;
     }
 
     private void resetInput() {
-        Utils.resetInput(binding.etTitle, binding.etLocation, binding.etStartDate,
-                binding.etStartTime, binding.etEndDate, binding.etEndTime, binding.etPhone,
+        autocompleteFragment.onResume();
+        Utils.resetInput(binding.etTitle, binding.etStartDate, binding.etStartTime,
+                binding.etEndDate, binding.etEndTime, binding.etPhone,
                 binding.etWebsite, binding.etNotes);
     }
 }

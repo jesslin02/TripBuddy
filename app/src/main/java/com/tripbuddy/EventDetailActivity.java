@@ -38,7 +38,10 @@ public class EventDetailActivity extends AppCompatActivity {
         binding.tvLocation.setText(event.getLocation());
         binding.tvStart.setText(event.getStart());
         binding.tvEnd.setText(event.getEnd());
-        binding.tvPhone.setText(String.valueOf(event.getPhone()));
+        long phone = event.getPhone();
+        if (phone != 0) {
+            binding.tvPhone.setText(String.valueOf(phone));
+        }
         binding.tvWebsite.setText(event.getWebsite());
         binding.tvNotes.setText(event.getNotes());
     }
