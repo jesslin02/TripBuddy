@@ -1,11 +1,15 @@
 package com.tripbuddy;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -26,6 +30,7 @@ public class ItineraryActivity extends AppCompatActivity {
     ItineraryAdapter adapter;
     List<Event> allEvents;
     Trip trip;
+    MenuItem addTrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,5 +77,36 @@ public class ItineraryActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
+        Log.d(TAG, "onPrepareOptionsMenu");
+        addTrip = menu.findItem(R.id.add);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected");
+        int id = item.getItemId();
+        if (id == R.id.add) {
+            onAddButton();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void onAddButton() {
+        Intent i = new Intent(this, CreateEventActivity.class);
+        i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+        i.putExtra("edit", false);
+        startActivity(i);
     }
 }
