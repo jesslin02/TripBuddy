@@ -57,6 +57,7 @@ public class ItineraryActivity extends AppCompatActivity {
         query.include(Event.KEY_USER);
         query.whereEqualTo(Event.KEY_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(Event.KEY_TRIP, trip);
+        query.orderByAscending(Event.KEY_START);
         query.setLimit(10);
         query.findInBackground(new FindCallback<Event>() {
             @Override
