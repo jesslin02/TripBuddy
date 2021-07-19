@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.parse.DeleteCallback;
+import com.parse.ParseException;
 import com.tripbuddy.models.Trip;
 
 import org.parceler.Parcels;
@@ -53,6 +55,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         TextView tvDestination;
         TextView tvDate;
         Button btnEdit;
+        Button btnDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +63,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
             tvDestination = itemView.findViewById(R.id.tvDestination);
             tvDate = itemView.findViewById(R.id.tvDate);
             btnEdit = itemView.findViewById(R.id.btnEdit);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
 
             itemView.setOnClickListener(this);
         }
@@ -76,6 +80,25 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
                     i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
                     i.putExtra("edit", true);
                     context.startActivity(i);
+                }
+            });
+            
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    trip.deleteInBackground(new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "Error deleting trip: " + trip.getTitle(), e);
+                                Toast.makeText(context, "Error deleting trip!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            int position = getAdapterPosition();
+                            trips.remove(position);
+                            notifyDataSetChanged();
+                        }
+                    });
                 }
             });
         }

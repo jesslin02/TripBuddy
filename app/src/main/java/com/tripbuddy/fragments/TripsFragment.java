@@ -107,7 +107,7 @@ public class TripsFragment extends Fragment {
         getTrips();
     }
 
-    private void getTrips() {
+    public void getTrips() {
         ParseQuery<Trip> query = ParseQuery.getQuery(Trip.class);
         // include data referred by user key
         query.include(Trip.KEY_USER);

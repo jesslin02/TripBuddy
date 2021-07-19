@@ -50,6 +50,7 @@ public class TripDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(TripDetailActivity.this, CreateEventActivity.class);
                 i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+                i.putExtra("edit", false);
                 startActivity(i);
             }
         });
