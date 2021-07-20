@@ -1,5 +1,6 @@
 package com.tripbuddy;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -19,6 +20,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -30,17 +37,21 @@ import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 public class CreateTripActivity extends AppCompatActivity {
     public static final String TAG = "CreateTripActivity";
     public ActivityCreateTripBinding binding;
+    String API_KEY = BuildConfig.API_KEY;
+    AutocompleteSupportFragment autocompleteFragment;
     /* if user is editing trip or not */
     boolean edit;
     /* existing trip if editing */
     Trip trip;
     Intent intent;
+    String tripDestination;
     Calendar startCal;
     Calendar endCal;
 
@@ -52,10 +63,36 @@ public class CreateTripActivity extends AppCompatActivity {
         binding = ActivityCreateTripBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        Places.initialize(this, API_KEY);
+        PlacesClient placesClient = Places.createClient(this);
 
         startCal = Calendar.getInstance();
         endCal = Calendar.getInstance();
         trip = new Trip();
+
+        // Initialize the AutocompleteSupportFragment.
+        autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragLocation);
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                tripDestination = place.getName();
+            }
+
+
+            @Override
+            public void onError(@NonNull Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
 
         intent = getIntent();
         if (intent.getBooleanExtra("edit", true)) {
@@ -95,7 +132,7 @@ public class CreateTripActivity extends AppCompatActivity {
      */
     private void populateItems() {
         binding.etTitle.setText(trip.getTitle());
-        binding.etDestination.setText(trip.getDestination());
+        autocompleteFragment.setText(trip.getDestination());
         binding.etNotes.setText(trip.getNotes());
         SimpleDateFormat sdFormat = new SimpleDateFormat("M/d/yyyy");
         binding.etStart.setText(sdFormat.format(startCal.getTime()));
@@ -108,8 +145,12 @@ public class CreateTripActivity extends AppCompatActivity {
      * if a required field isn't filled out, changes background color to red
      */
     private boolean checkRequiredInput() {
-        return Utils.checkRequiredInput(binding.etTitle, binding.etDestination, binding.etStart,
-                binding.etEnd);
+        boolean locationFilled = true;
+        if (tripDestination == null) {
+            binding.tvLocation.setTextColor(Color.RED);
+            locationFilled = false;
+        }
+        return Utils.checkRequiredInput(binding.etTitle, binding.etStart, binding.etEnd) && locationFilled;
     }
 
     /**
@@ -126,7 +167,7 @@ public class CreateTripActivity extends AppCompatActivity {
     private void saveTrip(ParseUser user) {
         trip.setUser(user);
         trip.setTitle(binding.etTitle.getText().toString());
-        trip.setDestination(binding.etDestination.getText().toString());
+        trip.setDestination(tripDestination);
         String notes = binding.etNotes.getText().toString();
         if (!notes.isEmpty()) {
             trip.setNotes(notes);
@@ -153,7 +194,7 @@ public class CreateTripActivity extends AppCompatActivity {
      * after trip has been created
      */
     private void resetInput() {
-        Utils.resetInput(binding.etTitle, binding.etDestination, binding.etStart,
-                binding.etEnd, binding.etNotes);
+        autocompleteFragment.onResume();
+        Utils.resetInput(binding.etTitle, binding.etStart, binding.etEnd, binding.etNotes);
     }
 }

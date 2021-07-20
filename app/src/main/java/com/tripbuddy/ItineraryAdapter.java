@@ -90,7 +90,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    trip.deleteInBackground(new DeleteCallback() {
+                    event.deleteInBackground(new DeleteCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e != null) {
