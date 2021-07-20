@@ -135,7 +135,11 @@ public class CreateEventActivity extends AppCompatActivity {
     private void populateItems() {
         binding.etTitle.setText(event.getTitle());
         autocompleteFragment.setText(event.getLocation());
-        binding.etPhone.setText(String.valueOf(event.getPhone()));
+        eventLocation = event.getLocation();
+        long phone = event.getPhone();
+        if (phone != 0) {
+            binding.etPhone.setText(String.valueOf(phone));
+        }
         binding.etWebsite.setText(event.getWebsite());
         binding.etNotes.setText(event.getNotes());
         SimpleDateFormat formatDate = new SimpleDateFormat("M/d/yyyy");

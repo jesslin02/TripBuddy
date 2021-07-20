@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,8 +58,8 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
         TextView tvLocation;
         TextView tvStart;
         TextView tvEnd;
-        Button btnEdit;
-        Button btnDelete;
+        ImageView ivEdit;
+        ImageView ivDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,8 +67,8 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             tvLocation = itemView.findViewById(R.id.tvLocation);
             tvStart = itemView.findViewById(R.id.tvStart);
             tvEnd = itemView.findViewById(R.id.tvEnd);
-            btnEdit = itemView.findViewById(R.id.btnEdit);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
+            ivEdit = itemView.findViewById(R.id.ivEdit);
+            ivDelete = itemView.findViewById(R.id.ivDelete);
 
             itemView.setOnClickListener(this);
         }
@@ -77,7 +78,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             tvLocation.setText(event.getLocation());
             tvStart.setText(event.getStart());
             tvEnd.setText(event.getEnd());
-            btnEdit.setOnClickListener(new View.OnClickListener() {
+            ivEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(context, CreateEventActivity.class);
@@ -87,7 +88,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
                     context.startActivity(i);
                 }
             });
-            btnDelete.setOnClickListener(new View.OnClickListener() {
+            ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     event.deleteInBackground(new DeleteCallback() {

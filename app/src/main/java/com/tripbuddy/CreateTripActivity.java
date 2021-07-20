@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -76,6 +77,7 @@ public class CreateTripActivity extends AppCompatActivity {
 
         // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        autocompleteFragment.setTypeFilter(TypeFilter.CITIES);
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -133,6 +135,7 @@ public class CreateTripActivity extends AppCompatActivity {
     private void populateItems() {
         binding.etTitle.setText(trip.getTitle());
         autocompleteFragment.setText(trip.getDestination());
+        tripDestination = trip.getDestination();
         binding.etNotes.setText(trip.getNotes());
         SimpleDateFormat sdFormat = new SimpleDateFormat("M/d/yyyy");
         binding.etStart.setText(sdFormat.format(startCal.getTime()));

@@ -2,11 +2,13 @@ package com.tripbuddy;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,16 +56,16 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         TextView tvTitle;
         TextView tvDestination;
         TextView tvDate;
-        Button btnEdit;
-        Button btnDelete;
+        ImageView ivEdit;
+        ImageView ivDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDestination = itemView.findViewById(R.id.tvDestination);
             tvDate = itemView.findViewById(R.id.tvDate);
-            btnEdit = itemView.findViewById(R.id.btnEdit);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
+            ivEdit = itemView.findViewById(R.id.ivEdit);
+            ivDelete = itemView.findViewById(R.id.ivDelete);
 
             itemView.setOnClickListener(this);
         }
@@ -73,7 +75,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
             tvDestination.setText(trip.getDestination());
             String fullDate = trip.getStart() + " - " + trip.getEnd();
             tvDate.setText(fullDate);
-            btnEdit.setOnClickListener(new View.OnClickListener() {
+            ivEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(context, CreateTripActivity.class);
@@ -83,7 +85,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
                 }
             });
 
-            btnDelete.setOnClickListener(new View.OnClickListener() {
+            ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     trip.deleteInBackground(new DeleteCallback() {
