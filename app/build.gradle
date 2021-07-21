@@ -52,6 +52,10 @@ dependencies {
     annotationProcessor 'org.parceler:parceler:1.1.12'
     implementation "com.github.parse-community.Parse-SDK-Android:parse:1.24.1"
     implementation 'com.google.android.libraries.places:places:2.4.0'
-    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
-    implementation 'com.facebook.android:facebook-login:[8.1)'
+    //implementation ('com.facebook.android:facebook-android-sdk:5.15.3') {
+    //    exclude group: 'com.parse.bolts', module: 'bolts-tasks'
+    //}
+    implementation 'com.github.parse-community:ParseFacebookUtils-Android:1.14.0'
+    implementation 'com.facebook.android:facebook-android-sdk:11.1.1'
+
 }
