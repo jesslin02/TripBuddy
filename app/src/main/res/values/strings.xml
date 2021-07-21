@@ -1,4 +1,7 @@
 <resources>
+    <string name="facebook_app_id">869383517267217</string>
+    <string name="fb_login_protocol_scheme">fb869383517267217</string>
+
     <string name="app_name">TripBuddy</string>
     <string name="home">Home</string>
     <string name="now">Now</string>

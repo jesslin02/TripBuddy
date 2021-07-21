@@ -8,13 +8,26 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.tripbuddy.databinding.ActivityLoginBinding;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
+import java.util.Arrays;
+
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
+    static final String EMAIL = "email";
+    CallbackManager callbackManager;
     ActivityLoginBinding binding;
 
     @Override
@@ -29,6 +42,27 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+
+        callbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+                });
 
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +80,26 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i(TAG, "onClick go to signup button");
                 Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(i);
+            }
+        });
+
+        binding.loginButton.setReadPermissions(Arrays.asList(EMAIL));
+
+        // Callback registration
+        binding.loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
             }
         });
     }

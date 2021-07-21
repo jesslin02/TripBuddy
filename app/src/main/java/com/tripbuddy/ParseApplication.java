@@ -2,6 +2,8 @@ package com.tripbuddy;
 
 import android.app.Application;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.tripbuddy.models.Event;
@@ -25,5 +27,8 @@ public class ParseApplication extends Application {
                 .server("https://parseapi.back4app.com")
                 .build()
         );
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 }
