@@ -14,29 +14,52 @@
         android:layout_marginTop="16dp"
         android:textSize="32sp"
         android:textStyle="bold"
+        android:textColor="@color/navy"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="graduation trip"/>
+
+    <ImageView
+        android:id="@+id/ivDestination"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDate"
+        app:srcCompat="@drawable/ic_location_pin"
+        app:tint="@color/navy" />
 
     <TextView
         android:id="@+id/tvDestination"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/ivDestination"
         app:layout_constraintTop_toBottomOf="@id/tvDate"
         tools:text="New York City"/>
+
+    <ImageView
+        android:id="@+id/ivDate"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:srcCompat="@drawable/ic_calendar"
+        app:tint="@color/navy" />
 
     <TextView
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivDate"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         tools:text="June 1 - June 8"/>
 

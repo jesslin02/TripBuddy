@@ -18,25 +18,47 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="ferry ride"/>
 
+    <ImageView
+        android:id="@+id/ivLocation"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEnd"
+        app:srcCompat="@drawable/ic_location_pin"
+        app:tint="@color/navy" />
+
     <TextView
         android:id="@+id/tvLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivLocation"
         app:layout_constraintTop_toBottomOf="@id/tvEnd"
         tools:text="Statue of Liberty"/>
+
+    <ImageView
+        android:id="@+id/ivDate"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:srcCompat="@drawable/ic_calendar"
+        app:tint="@color/navy" />
 
     <TextView
         android:id="@+id/tvStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/ivDate"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         tools:text="June 2 8:00 AM"/>
 
@@ -44,32 +66,54 @@
         android:id="@+id/tvEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/ivDate"
         app:layout_constraintTop_toBottomOf="@id/tvStart"
         tools:text="June 2 11:00 AM"/>
+
+    <ImageView
+        android:id="@+id/ivPhone"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvPhone"
+        app:srcCompat="@drawable/ic_telephone"
+        app:tint="@color/navy" />
 
     <TextView
         android:id="@+id/tvPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivPhone"
         app:layout_constraintTop_toBottomOf="@id/tvLocation"
         tools:text="(800)888-8888"/>
+
+    <ImageView
+        android:id="@+id/ivWebsite"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvWebsite"
+        app:srcCompat="@drawable/ic_internet"
+        app:tint="@color/navy" />
 
     <TextView
         android:id="@+id/tvWebsite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivWebsite"
         app:layout_constraintTop_toBottomOf="@id/tvPhone"
         tools:text="https://www.statueofliberty.com"/>
 
@@ -77,7 +121,7 @@
         android:id="@+id/tvNoteTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="16dp"
         android:text="@string/notes"
         android:textSize="20sp"

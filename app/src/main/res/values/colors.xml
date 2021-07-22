@@ -9,4 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_red">#FFF9BEC8</color>
     <color name="medium_red">#FFFF3C56</color>
+    <!-- cool dark palette -->
+    <color name="navy">#FF355070</color>
+    <color name="deep_purple">#FF6D597A</color>
+    <color name="deep_magenta">#FFB56576</color>
+    <color name="salmon">#FFE56B6F</color>
+    <color name="beige">#FFEAAC8B</color>
+    <color name="light_beige">#FFFED9b7</color>
+
 </resources>
