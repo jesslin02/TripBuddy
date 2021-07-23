@@ -2,10 +2,12 @@ package com.tripbuddy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -30,7 +32,7 @@ public class ItineraryActivity extends AppCompatActivity {
     ItineraryAdapter adapter;
     List<Event> allEvents;
     Trip trip;
-    MenuItem addTrip;
+    MenuItem addEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class ItineraryActivity extends AppCompatActivity {
         ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
         // include data referred by user key
         query.include(Event.KEY_USER);
+        query.include(Event.KEY_TRIP);
         query.whereEqualTo(Event.KEY_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(Event.KEY_TRIP, trip);
         query.orderByAscending(Event.KEY_START);
@@ -89,7 +92,8 @@ public class ItineraryActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
         Log.d(TAG, "onPrepareOptionsMenu");
-        addTrip = menu.findItem(R.id.add);
+        addEvent = menu.findItem(R.id.add);
+        addEvent.getIcon().setTint(Color.WHITE);
         return super.onPrepareOptionsMenu(menu);
     }
 

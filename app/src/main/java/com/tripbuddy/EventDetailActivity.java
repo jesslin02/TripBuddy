@@ -1,9 +1,15 @@
 package com.tripbuddy;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.tripbuddy.databinding.ActivityEventDetailBinding;
@@ -17,6 +23,7 @@ public class EventDetailActivity extends AppCompatActivity {
     public static final String TAG = "EventDetailActivity";
     ActivityEventDetailBinding binding;
     Event event;
+    MenuItem editEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,5 +51,36 @@ public class EventDetailActivity extends AppCompatActivity {
         }
         binding.tvWebsite.setText(event.getWebsite());
         binding.tvNotes.setText(event.getNotes());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
+        Log.d(TAG, "onPrepareOptionsMenu");
+        editEvent = menu.findItem(R.id.edit);
+        editEvent.getIcon().setTint(Color.WHITE);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.edit) {
+            onEditButton();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void onEditButton() {
+        Intent i = new Intent(this, CreateEventActivity.class);
+        i.putExtra("edit", true);
+        i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(event.getTrip()));
+        i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
+        startActivity(i);
     }
 }
