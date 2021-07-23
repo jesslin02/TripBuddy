@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_marginTop="8dp"
+    android:layout_marginHorizontal="8dp"
+    android:background="@drawable/rounded_list_item">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -15,7 +18,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="graduation trip"/>
+        tools:text="graduation trip" />
 
     <TextView
         android:id="@+id/tvDestination"
@@ -26,7 +29,7 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        tools:text="New York City"/>
+        tools:text="New York City" />
 
     <TextView
         android:id="@+id/tvDate"
@@ -36,15 +39,15 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvTitle"
-        tools:text="June 1 - June 8"/>
+        tools:text="June 1 - June 8" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:layout_marginTop="16dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@id/tvDestination"/>
+        app:layout_constraintTop_toBottomOf="@id/tvDestination" />
 
 
     <ImageView
@@ -55,7 +58,7 @@
         app:layout_constraintEnd_toStartOf="@id/ivDelete"
         app:layout_constraintTop_toTopOf="@id/ivDelete"
         app:srcCompat="@drawable/ic_pencil"
-        app:tint="@color/navy"/>
+        app:tint="@color/green" />
 
     <ImageView
         android:id="@+id/ivDelete"
@@ -63,9 +66,9 @@
         android:layout_height="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvDate"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDate"
         app:srcCompat="@drawable/ic_delete"
-        app:tint="@color/navy"/>
+        app:tint="@color/green" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

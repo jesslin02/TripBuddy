@@ -16,5 +16,20 @@
     <color name="salmon">#FFE56B6F</color>
     <color name="beige">#FFEAAC8B</color>
     <color name="light_beige">#FFFED9b7</color>
+    <!-- warm light palette -->
+    <color name="light_salmon">#FFFEC5BB</color>
+    <color name="peach">#FFFCD5CE</color>
+    <color name="pale_peach">#FFFAE1DD</color>
+    <color name="cream">#FFF8EDEB</color>
+    <color name="light_mint">#FFE8E8E4</color>
+    <color name="mint">#FFD8E2DC</color>
+    <color name="pale_green">#FFECE4DB</color>
+    <color name="apricot">#FFFFE5D9</color>
+    <color name="light_orange">#FFFFD7BA</color>
+    <color name="orange">#FFFEC89A</color>
+
+    <color name="dark_pink">#FFE5989B</color>
+    <color name="olive">#FF81B29A</color>
+    <color name="green">#FF40916C</color>
 
 </resources>
