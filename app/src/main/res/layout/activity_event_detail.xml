@@ -36,7 +36,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="@color/quantum_grey700"
         app:layout_constraintStart_toEndOf="@id/ivLocation"
         app:layout_constraintTop_toBottomOf="@id/tvEnd"
         tools:text="Statue of Liberty"/>
@@ -59,7 +59,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="@color/quantum_grey700"
         app:layout_constraintStart_toEndOf="@id/ivDate"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         tools:text="June 2 8:00 AM"/>
@@ -71,7 +71,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="@color/quantum_grey700"
         app:layout_constraintStart_toEndOf="@id/ivDate"
         app:layout_constraintTop_toBottomOf="@id/tvStart"
         tools:text="June 2 11:00 AM"/>
@@ -94,7 +94,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="@color/quantum_grey700"
         app:layout_constraintStart_toEndOf="@id/ivPhone"
         app:layout_constraintTop_toBottomOf="@id/tvLocation"
         tools:text="(800)888-8888"/>
@@ -117,7 +117,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="@color/quantum_grey700"
         app:layout_constraintStart_toEndOf="@id/ivWebsite"
         app:layout_constraintTop_toBottomOf="@id/tvPhone"
         tools:text="https://www.statueofliberty.com"/>
@@ -141,7 +141,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginHorizontal="16dp"
         android:textSize="16sp"
-        android:textColor="@color/black"
+        android:textColor="@color/quantum_grey700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNoteTitle"

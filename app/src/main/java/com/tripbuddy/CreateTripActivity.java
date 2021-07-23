@@ -32,6 +32,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.tripbuddy.databinding.ActivityCreateTripBinding;
 import com.tripbuddy.databinding.ActivityLoginBinding;
+import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
 import org.parceler.Parcels;
@@ -187,7 +188,10 @@ public class CreateTripActivity extends AppCompatActivity {
                 }
                 Log.i(TAG, "Trip creation was successful!");
                 resetInput();
-                Utils.goMainActivity(CreateTripActivity.this);
+                Intent i = new Intent(CreateTripActivity.this, TripDetailActivity.class);
+                i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+                startActivity(i);
+                finish();
             }
         });
     }

@@ -90,5 +90,6 @@ public class TripDetailActivity extends AppCompatActivity {
         i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
         i.putExtra("edit", true);
         startActivity(i);
+        finish();
     }
 }

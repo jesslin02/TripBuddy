@@ -79,6 +79,12 @@ public class TripsFragment extends Fragment {
         getTrips();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getTrips();
+    }
+
     public void getTrips() {
         ParseQuery<Trip> query = ParseQuery.getQuery(Trip.class);
         // include data referred by user key

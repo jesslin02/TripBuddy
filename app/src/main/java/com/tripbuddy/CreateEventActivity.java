@@ -222,7 +222,10 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
                 Log.i(TAG, "Event creation was successful!");
                 resetInput();
-                Utils.goItineraryActivity(CreateEventActivity.this, trip);
+                // Utils.goItineraryActivity(CreateEventActivity.this, trip);
+                Intent i = new Intent(CreateEventActivity.this, EventDetailActivity.class);
+                i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
+                startActivity(i);
                 finish();
             }
         });

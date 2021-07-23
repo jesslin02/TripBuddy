@@ -53,6 +53,12 @@ public class ItineraryActivity extends AppCompatActivity {
         getEvents();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getEvents();
+    }
+
     private void getEvents() {
         ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
         // include data referred by user key

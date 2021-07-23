@@ -82,5 +82,6 @@ public class EventDetailActivity extends AppCompatActivity {
         i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(event.getTrip()));
         i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
         startActivity(i);
+        finish();
     }
 }
