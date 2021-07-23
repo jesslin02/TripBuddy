@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TripBuddy"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CreateEventActivity"></activity>
+        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".CreateEventActivity" />
         <activity android:name=".CreateTripActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity">
@@ -29,28 +30,32 @@
         <activity android:name=".ItineraryActivity" />
         <activity android:name=".TripDetailActivity" />
         <activity android:name=".MainActivity" />
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <provider
             android:name="com.facebook.FacebookContentProvider"
-        android:authorities="com.facebook.app.FacebookContentProvider976165716555193"
-        android:exported="true" />
+            android:authorities="com.facebook.app.FacebookContentProvider976165716555193"
+            android:exported="true" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@ import com.facebook.login.LoginManager;
 import com.parse.ParseUser;
 import com.tripbuddy.LoginActivity;
 import com.tripbuddy.R;
+import com.tripbuddy.SettingsActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +27,7 @@ public class ProfileFragment extends Fragment {
     public static final String KEY_NAME = "name";
     TextView tvName;
     Button btnLogout;
+    Button btnSettings;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -43,6 +45,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         tvName = view.findViewById(R.id.tvName);
         btnLogout = view.findViewById(R.id.btnLogout);
+        btnSettings = view.findViewById(R.id.btnSettings);
 
         tvName.setText(ParseUser.getCurrentUser().getString(KEY_NAME));
 
@@ -56,5 +59,19 @@ public class ProfileFragment extends Fragment {
                 getActivity().finish();
             }
         });
+
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        tvName.setText(ParseUser.getCurrentUser().getString(KEY_NAME));
     }
 }
