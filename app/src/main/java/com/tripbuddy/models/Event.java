@@ -102,6 +102,16 @@ public class Event extends ParseObject {
         return getLong(KEY_PHONE);
     }
 
+    public String getPhoneString() {
+        long phone = getLong(KEY_PHONE);
+        if (phone == 0) {
+            return null;
+        }
+        String phoneStr = String.valueOf(phone);
+        String formatted = phoneStr.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
+        return formatted;
+    }
+
     public void setPhone(long phone) {
         put(KEY_PHONE, phone);
     }

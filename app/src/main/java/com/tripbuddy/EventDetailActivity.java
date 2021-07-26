@@ -46,10 +46,10 @@ public class EventDetailActivity extends AppCompatActivity {
         binding.tvStart.setText(event.getStart());
         binding.tvEnd.setText(event.getEnd());
 
-        long phone = event.getPhone();
-        if (phone != 0) {
+        String phone = event.getPhoneString();
+        if (phone != null) {
             binding.ivPhone.setVisibility(View.VISIBLE);
-            binding.tvPhone.setText(String.valueOf(phone));
+            binding.tvPhone.setText(phone);
             binding.tvPhone.setVisibility(View.VISIBLE);
         }
 
