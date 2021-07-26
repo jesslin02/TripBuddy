@@ -3,6 +3,7 @@ package com.tripbuddy;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,6 +50,8 @@ public class ItineraryActivity extends AppCompatActivity {
         rvEvents.setAdapter(adapter);
         llManager = new LinearLayoutManager(this);
         rvEvents.setLayoutManager(llManager);
+        ItemTouchHelper itHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        itHelper.attachToRecyclerView(rvEvents);
 
         getEvents();
     }

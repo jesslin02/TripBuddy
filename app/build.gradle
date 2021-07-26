@@ -57,5 +57,4 @@ dependencies {
     //}
     implementation 'com.github.parse-community:ParseFacebookUtils-Android:1.14.0'
     implementation 'com.facebook.android:facebook-android-sdk:11.1.1'
-
 }

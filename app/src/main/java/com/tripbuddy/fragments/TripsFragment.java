@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +26,7 @@ import com.parse.ParseUser;
 import com.tripbuddy.CreateTripActivity;
 import com.tripbuddy.MainActivity;
 import com.tripbuddy.R;
+import com.tripbuddy.SwipeToDeleteCallback;
 import com.tripbuddy.TripsAdapter;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
@@ -75,6 +77,8 @@ public class TripsFragment extends Fragment {
         rvTrips.setAdapter(adapter);
         llManager = new LinearLayoutManager(getContext());
         rvTrips.setLayoutManager(llManager);
+        ItemTouchHelper itHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        itHelper.attachToRecyclerView(rvTrips);
 
         getTrips();
     }

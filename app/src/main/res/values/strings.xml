@@ -47,5 +47,6 @@
     <string name="hidden_password">********</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
+    <string name="undo">Undo</string>
 
 </resources>
