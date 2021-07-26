@@ -57,6 +57,15 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
     }
 
     @Override
+    public void editItem(int position) {
+        Intent i = new Intent(context, CreateTripActivity.class);
+        Trip trip = trips.get(position);
+        i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+        i.putExtra("edit", true);
+        context.startActivity(i);
+    }
+
+    @Override
     public void deleteItem(int position) {
         recentlyDeletedTrip = trips.get(position);
         recentlyDeletedTripPosition = position;
@@ -67,7 +76,8 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
 
     private void showUndoSnackbar() {
         View view = ((MainActivity) context).findViewById(R.id.coordinator_layout);
-        Snackbar sb = Snackbar.make(view, R.string.undo, Snackbar.LENGTH_LONG);
+        String sbMessage = recentlyDeletedTrip.getTitle() + " was removed";
+        Snackbar sb = Snackbar.make(view, sbMessage, Snackbar.LENGTH_LONG);
         sb.setAnchorView(((MainActivity) context).findViewById(R.id.bottom_navigation));
         sb.setAction(R.string.undo, new View.OnClickListener() {
             @Override

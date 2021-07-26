@@ -70,7 +70,8 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
 
     private void showUndoSnackbar() {
         View view = ((ItineraryActivity) context).findViewById(R.id.coordinator_layout);
-        Snackbar sb = Snackbar.make(view, R.string.undo, Snackbar.LENGTH_LONG);
+        String sbMessage = recentlyDeletedEvent.getTitle() + " was removed";
+        Snackbar sb = Snackbar.make(view, sbMessage, Snackbar.LENGTH_LONG);
         sb.setAction(R.string.undo, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +109,16 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
     @Override
     public Context getContext() {
         return context;
+    }
+
+    @Override
+    public void editItem(int position) {
+        Intent i = new Intent(context, CreateEventActivity.class);
+        Event event = events.get(position);
+        i.putExtra("edit", true);
+        i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+        i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
+        context.startActivity(i);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

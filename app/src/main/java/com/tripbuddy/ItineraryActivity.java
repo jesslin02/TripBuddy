@@ -2,7 +2,6 @@ package com.tripbuddy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +17,8 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.tripbuddy.callbacks.SwipeToDeleteCallback;
+import com.tripbuddy.callbacks.SwipeToEditCallback;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
@@ -50,8 +51,10 @@ public class ItineraryActivity extends AppCompatActivity {
         rvEvents.setAdapter(adapter);
         llManager = new LinearLayoutManager(this);
         rvEvents.setLayoutManager(llManager);
-        ItemTouchHelper itHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
-        itHelper.attachToRecyclerView(rvEvents);
+        ItemTouchHelper deleteHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        deleteHelper.attachToRecyclerView(rvEvents);
+        ItemTouchHelper editHelper = new ItemTouchHelper(new SwipeToEditCallback(adapter));
+        editHelper.attachToRecyclerView(rvEvents);
 
         getEvents();
     }
