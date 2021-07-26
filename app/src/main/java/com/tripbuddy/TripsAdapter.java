@@ -123,16 +123,12 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         TextView tvTitle;
         TextView tvDestination;
         TextView tvDate;
-        ImageView ivEdit;
-        ImageView ivDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDestination = itemView.findViewById(R.id.tvDestination);
             tvDate = itemView.findViewById(R.id.tvDate);
-            ivEdit = itemView.findViewById(R.id.ivEdit);
-            ivDelete = itemView.findViewById(R.id.ivDelete);
 
             itemView.setOnClickListener(this);
         }
@@ -142,34 +138,6 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
             tvDestination.setText(trip.getDestination());
             String fullDate = trip.getStart() + " - " + trip.getEnd();
             tvDate.setText(fullDate);
-            ivEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(context, CreateTripActivity.class);
-                    i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
-                    i.putExtra("edit", true);
-                    context.startActivity(i);
-                }
-            });
-
-            ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    trip.deleteInBackground(new DeleteCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e(TAG, "Error deleting trip: " + trip.getTitle(), e);
-                                Toast.makeText(context, "Error deleting trip!", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            int position = getAdapterPosition();
-                            trips.remove(position);
-                            notifyDataSetChanged();
-                        }
-                    });
-                }
-            });
         }
 
         @Override

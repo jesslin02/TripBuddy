@@ -232,7 +232,7 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private boolean checkDates() {
-        return startCal.getTimeInMillis() < endCal.getTimeInMillis();
+        return startCal.getTimeInMillis() <= endCal.getTimeInMillis();
     }
 
     private boolean checkRequiredInput() {

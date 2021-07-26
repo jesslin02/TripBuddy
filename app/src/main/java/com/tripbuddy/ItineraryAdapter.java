@@ -126,8 +126,6 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
         TextView tvLocation;
         TextView tvStart;
         TextView tvEnd;
-        ImageView ivEdit;
-        ImageView ivDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -135,8 +133,6 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             tvLocation = itemView.findViewById(R.id.tvLocation);
             tvStart = itemView.findViewById(R.id.tvStart);
             tvEnd = itemView.findViewById(R.id.tvEnd);
-            ivEdit = itemView.findViewById(R.id.ivEdit);
-            ivDelete = itemView.findViewById(R.id.ivDelete);
 
             itemView.setOnClickListener(this);
         }
@@ -146,34 +142,6 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             tvLocation.setText(event.getLocation());
             tvStart.setText(event.getStart());
             tvEnd.setText(event.getEnd());
-            ivEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(context, CreateEventActivity.class);
-                    i.putExtra("edit", true);
-                    i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
-                    i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
-                    context.startActivity(i);
-                }
-            });
-            ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    event.deleteInBackground(new DeleteCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e(TAG, "Error deleting event: " + event.getTitle(), e);
-                                Toast.makeText(context, "Error deleting event!", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            int position = getAdapterPosition();
-                            events.remove(position);
-                            notifyDataSetChanged();
-                        }
-                    });
-                }
-            });
         }
 
         @Override

@@ -104,7 +104,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnItinerary"/>
+        app:layout_constraintTop_toBottomOf="@+id/btnItinerary"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tvNotes"
@@ -117,6 +118,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNoteTitle"
-        tools:text="fun trip to celebrate the class of 2021"/>
+        tools:text="fun trip to celebrate the class of 2021"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

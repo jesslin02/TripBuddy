@@ -85,7 +85,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvPhone"
         app:srcCompat="@drawable/ic_telephone"
-        app:tint="@color/green" />
+        app:tint="@color/green"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tvPhone"
@@ -97,7 +98,8 @@
         android:textColor="@color/quantum_grey700"
         app:layout_constraintStart_toEndOf="@id/ivPhone"
         app:layout_constraintTop_toBottomOf="@id/tvLocation"
-        tools:text="(800)888-8888"/>
+        tools:text="(800)888-8888"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/ivWebsite"
@@ -108,7 +110,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvWebsite"
         app:srcCompat="@drawable/ic_internet"
-        app:tint="@color/green" />
+        app:tint="@color/green"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tvWebsite"
@@ -120,7 +123,8 @@
         android:textColor="@color/quantum_grey700"
         app:layout_constraintStart_toEndOf="@id/ivWebsite"
         app:layout_constraintTop_toBottomOf="@id/tvPhone"
-        tools:text="https://www.statueofliberty.com"/>
+        tools:text="https://www.statueofliberty.com"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tvNoteTitle"
@@ -132,7 +136,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWebsite"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvWebsite"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tvNotes"
@@ -145,6 +150,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNoteTitle"
-        tools:text="fun trip to celebrate the class of 2021"/>
+        tools:text="fun trip to celebrate the class of 2021"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

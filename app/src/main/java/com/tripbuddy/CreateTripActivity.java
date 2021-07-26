@@ -162,7 +162,7 @@ public class CreateTripActivity extends AppCompatActivity {
      * (start date must be before end date)
      */
     private boolean checkDates() {
-        return startCal.getTimeInMillis() < endCal.getTimeInMillis();
+        return startCal.getTimeInMillis() <= endCal.getTimeInMillis();
     }
 
     /**

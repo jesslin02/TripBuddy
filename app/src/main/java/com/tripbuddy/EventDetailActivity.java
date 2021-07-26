@@ -45,12 +45,27 @@ public class EventDetailActivity extends AppCompatActivity {
         binding.tvLocation.setText(event.getLocation());
         binding.tvStart.setText(event.getStart());
         binding.tvEnd.setText(event.getEnd());
+
         long phone = event.getPhone();
         if (phone != 0) {
+            binding.ivPhone.setVisibility(View.VISIBLE);
             binding.tvPhone.setText(String.valueOf(phone));
+            binding.tvPhone.setVisibility(View.VISIBLE);
         }
-        binding.tvWebsite.setText(event.getWebsite());
-        binding.tvNotes.setText(event.getNotes());
+
+        String web = event.getWebsite();
+        if (web != null && !web.isEmpty()) {
+            binding.ivWebsite.setVisibility(View.VISIBLE);
+            binding.tvWebsite.setText(web);
+            binding.tvWebsite.setVisibility(View.VISIBLE);
+        }
+
+        String notes = event.getNotes();
+        if (notes != null && !notes.isEmpty()) {
+            binding.tvNoteTitle.setVisibility(View.VISIBLE);
+            binding.tvNotes.setText(notes);
+            binding.tvNotes.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

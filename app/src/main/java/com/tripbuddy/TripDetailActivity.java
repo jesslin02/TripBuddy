@@ -43,7 +43,14 @@ public class TripDetailActivity extends AppCompatActivity {
         binding.tvDestination.setText(trip.getDestination());
         String fullDate = trip.getStart() + " - " + trip.getEnd();
         binding.tvDate.setText(fullDate);
-        binding.tvNotes.setText(trip.getNotes());
+
+        String notes = trip.getNotes();
+        if (notes != null && !notes.isEmpty()) {
+            binding.tvNoteTitle.setVisibility(View.VISIBLE);
+            binding.tvNotes.setText(trip.getNotes());
+            binding.tvNotes.setVisibility(View.VISIBLE);
+        }
+
         binding.btnItinerary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
