@@ -1,7 +1,10 @@
 package com.tripbuddy;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,6 +31,7 @@ import com.parse.SaveCallback;
 import com.tripbuddy.databinding.ActivityCreateEventBinding;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
+import com.tripbuddy.receivers.AlarmReceiver;
 
 import org.parceler.Parcels;
 
@@ -222,6 +226,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     return;
                 }
                 Log.i(TAG, "Event creation was successful!");
+                createNotif();
                 resetInput();
                 // Utils.goItineraryActivity(CreateEventActivity.this, trip);
                 Intent i = new Intent(CreateEventActivity.this, EventDetailActivity.class);
@@ -230,6 +235,18 @@ public class CreateEventActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void createNotif() {
+        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+
+        int requestID = (int) System.currentTimeMillis(); //unique requestID to differentiate between various notification with same NotifId
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one
+        PendingIntent pIntent = PendingIntent.getBroadcast(this, requestID, alarmIntent, flags);
+
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, startCal.getTimeInMillis(), pIntent);
+        Log.i(TAG, "created notif");
     }
 
     private boolean checkDates() {

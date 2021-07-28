@@ -6,6 +6,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -20,6 +21,9 @@ import android.widget.Button;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.tripbuddy.fragments.ProfileFragment;
 import com.tripbuddy.fragments.TripsFragment;
+import com.tripbuddy.receivers.AlarmReceiver;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     MenuItem addTrip;
     NotificationChannel channel;
     NotificationManager notifManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
