@@ -29,8 +29,6 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
     public static final String TAG = "TripsAdapter";
     Context context;
     List<Trip> trips;
-    Trip recentlyDeletedTrip;
-    int recentlyDeletedTripPosition;
 
     public TripsAdapter(Context c, List<Trip> t) {
         this.context = c;
@@ -67,22 +65,22 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
 
     @Override
     public void deleteItem(int position) {
-        recentlyDeletedTrip = trips.get(position);
-        recentlyDeletedTripPosition = position;
-        trips.remove(recentlyDeletedTripPosition);
-        notifyItemRemoved(recentlyDeletedTripPosition);
-        showUndoSnackbar();
+        Log.i(TAG, "deleteItem at position " + String.valueOf(position));
+        Trip recentlyDeletedTrip = trips.get(position);
+        trips.remove(position);
+        notifyItemRemoved(position);
+        showUndoSnackbar(recentlyDeletedTrip, position);
     }
 
-    private void showUndoSnackbar() {
+    private void showUndoSnackbar(Trip deleted, int deletedPos) {
         View view = ((MainActivity) context).findViewById(R.id.coordinator_layout);
-        String sbMessage = recentlyDeletedTrip.getTitle() + " was removed";
+        String sbMessage = deleted.getTitle() + " was removed";
         Snackbar sb = Snackbar.make(view, sbMessage, Snackbar.LENGTH_LONG);
         sb.setAnchorView(((MainActivity) context).findViewById(R.id.bottom_navigation));
         sb.setAction(R.string.undo, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                undoDelete();
+                undoDelete(deleted, deletedPos);
             }
         });
         sb.show();
@@ -90,16 +88,16 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         sb.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
-                if (event == BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_TIMEOUT) {
-                    recentlyDeletedTrip.deleteInBackground(new DeleteCallback() {
+                if (event != BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_ACTION) {
+                    deleted.deleteInBackground(new DeleteCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e != null) {
-                                Log.e(TAG, "Error deleting event: " + recentlyDeletedTrip.getTitle(), e);
+                                Log.e(TAG, "Error deleting event: " + deleted.getTitle(), e);
                                 Toast.makeText(context, "Error deleting event!", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            Log.d(TAG, "recently deleted event: " + recentlyDeletedTrip.getTitle());
+                            Log.d(TAG, "recently deleted event: " + deleted.getTitle());
                         }
                     });
                 }
@@ -108,9 +106,9 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         });
     }
 
-    private void undoDelete() {
-        trips.add(recentlyDeletedTripPosition, recentlyDeletedTrip);
-        notifyItemInserted(recentlyDeletedTripPosition);
+    private void undoDelete(Trip deleted, int deletedPos) {
+        trips.add(deletedPos, deleted);
+        notifyItemInserted(deletedPos);
     }
 
     @Override

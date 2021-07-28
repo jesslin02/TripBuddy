@@ -141,6 +141,7 @@ public class CreateTripActivity extends AppCompatActivity {
         SimpleDateFormat sdFormat = new SimpleDateFormat("M/d/yyyy");
         binding.etStart.setText(sdFormat.format(startCal.getTime()));
         binding.etEnd.setText(sdFormat.format(endCal.getTime()));
+        binding.tvAdd.setText("Edit this trip");
         binding.btnCreate.setText("Update");
     }
 

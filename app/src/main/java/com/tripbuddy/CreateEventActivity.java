@@ -148,6 +148,7 @@ public class CreateEventActivity extends AppCompatActivity {
         binding.etStartTime.setText(formatTime.format(startCal.getTime()));
         binding.etEndDate.setText(formatDate.format(endCal.getTime()));
         binding.etEndTime.setText(formatTime.format(endCal.getTime()));
+        binding.tvAdd.setText("Edit this event");
         binding.btnCreate.setText("Update");
     }
 

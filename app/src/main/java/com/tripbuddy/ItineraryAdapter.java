@@ -32,8 +32,6 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
     Trip trip;
     Context context;
     List<Event> events;
-    Event recentlyDeletedEvent;
-    int recentlyDeletedEventPosition;
 
     public ItineraryAdapter(Context c, List<Event> e, Trip trip) {
         this.context = c;
@@ -61,21 +59,20 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
 
     @Override
     public void deleteItem(int position) {
-        recentlyDeletedEvent = events.get(position);
-        recentlyDeletedEventPosition = position;
-        events.remove(recentlyDeletedEventPosition);
-        notifyItemRemoved(recentlyDeletedEventPosition);
-        showUndoSnackbar();
+        Event recentlyDeletedEvent = events.get(position);
+        events.remove(position);
+        notifyItemRemoved(position);
+        showUndoSnackbar(recentlyDeletedEvent, position);
     }
 
-    private void showUndoSnackbar() {
+    private void showUndoSnackbar(Event deleted, int deletedPos) {
         View view = ((ItineraryActivity) context).findViewById(R.id.coordinator_layout);
-        String sbMessage = recentlyDeletedEvent.getTitle() + " was removed";
+        String sbMessage = deleted.getTitle() + " was removed";
         Snackbar sb = Snackbar.make(view, sbMessage, Snackbar.LENGTH_LONG);
         sb.setAction(R.string.undo, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                undoDelete();
+                undoDelete(deleted, deletedPos);
             }
         });
         sb.show();
@@ -83,16 +80,16 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
         sb.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
-                if (event == BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_TIMEOUT) {
-                    recentlyDeletedEvent.deleteInBackground(new DeleteCallback() {
+                if (event != BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_ACTION) {
+                    deleted.deleteInBackground(new DeleteCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e != null) {
-                                Log.e(TAG, "Error deleting event: " + recentlyDeletedEvent.getTitle(), e);
+                                Log.e(TAG, "Error deleting event: " + deleted.getTitle(), e);
                                 Toast.makeText(context, "Error deleting event!", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            Log.d(TAG, "recently deleted event: " + recentlyDeletedEvent.getTitle());
+                            Log.d(TAG, "recently deleted event: " + deleted.getTitle());
                         }
                     });
                 }
@@ -101,9 +98,9 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
         });
     }
 
-    private void undoDelete() {
-        events.add(recentlyDeletedEventPosition, recentlyDeletedEvent);
-        notifyItemInserted(recentlyDeletedEventPosition);
+    private void undoDelete(Event deleted, int deletedPos) {
+        events.add(deletedPos, deleted);
+        notifyItemInserted(deletedPos);
     }
 
     @Override

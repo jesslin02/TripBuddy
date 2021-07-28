@@ -58,29 +58,25 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         View itemView = viewHolder.itemView;
         int itemHeight = itemView.getHeight();
 
-        if (dX == 0 && !isCurrentlyActive) {
+        if (dX == 0 && !isCurrentlyActive) { // clears background if not swiping anymore
             clearCanvas(c, itemView.getRight() + (int) dX, itemView.getTop(),
                     itemView.getRight(), itemView.getBottom());
             return;
         }
 
-        int backgroundCornerOffset = 20;
+        int backgroundCornerOffset = 20; // shows background behind rounded corners of items
 
-        if (dX < 0) { // swiping left
-            int iconMargin = (itemHeight - iconHeight) / 2;
-            int iconTop = itemView.getTop() + (itemHeight - iconHeight) / 2;
-            int iconBottom = iconTop + iconHeight;
-            int iconLeft = itemView.getRight() - iconMargin - iconWidth;
-            int iconRight = itemView.getRight() - iconMargin;
+        int iconMargin = (itemHeight - iconHeight) / 2;
+        int iconTop = itemView.getTop() + (itemHeight - iconHeight) / 2;
+        int iconBottom = iconTop + iconHeight;
+        int iconLeft = itemView.getRight() - iconMargin - iconWidth;
+        int iconRight = itemView.getRight() - iconMargin;
 
-            icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
-            icon.setTint(Color.WHITE);
+        icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+        icon.setTint(Color.WHITE);
 
-            background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
-                    itemView.getTop(), itemView.getRight(), itemView.getBottom());
-        } else {
-            background.setBounds(0, 0, 0, 0);
-        }
+        background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
+                itemView.getTop(), itemView.getRight(), itemView.getBottom());
         background.draw(c);
         icon.draw(c);
     }
