@@ -84,6 +84,7 @@ public class ItineraryActivity extends AppCompatActivity {
 
                 // for debugging purposes let's print every trip title to logcat
                 for (Event event : events) {
+                    Utils.createNotif(ItineraryActivity.this, event);
                     Log.i(TAG, "Event: " + event.getTitle() + ", Location: " + event.getLocation());
                 }
 

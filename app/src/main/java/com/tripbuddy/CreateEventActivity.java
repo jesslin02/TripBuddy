@@ -226,7 +226,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     return;
                 }
                 Log.i(TAG, "Event creation was successful!");
-                createNotif();
+                // Utils.createNotif(CreateEventActivity.this, event);
                 resetInput();
                 // Utils.goItineraryActivity(CreateEventActivity.this, trip);
                 Intent i = new Intent(CreateEventActivity.this, EventDetailActivity.class);
@@ -235,18 +235,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void createNotif() {
-        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-
-        int requestID = (int) System.currentTimeMillis(); //unique requestID to differentiate between various notification with same NotifId
-        int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one
-        PendingIntent pIntent = PendingIntent.getBroadcast(this, requestID, alarmIntent, flags);
-
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, startCal.getTimeInMillis(), pIntent);
-        Log.i(TAG, "created notif");
     }
 
     private boolean checkDates() {

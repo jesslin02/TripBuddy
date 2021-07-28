@@ -1,17 +1,23 @@
 package com.tripbuddy;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
+import com.tripbuddy.receivers.AlarmReceiver;
 
 import org.parceler.Parcels;
 
@@ -140,5 +146,26 @@ public class Utils {
             }
             return false;
         }
+    }
+
+    public static void createNotif(Context context, Event event) {
+        Calendar notifTime = Calendar.getInstance();
+        notifTime.setTime(event.getStartDate());
+        if (notifTime.getTimeInMillis() < System.currentTimeMillis()) {
+            return;
+        }
+
+        Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        alarmIntent.putExtra("event", event.getTitle());
+        alarmIntent.putExtra("location", event.getLocation());
+        alarmIntent.putExtra("time", notifTime.getTimeInMillis());
+
+        int requestID = (int) System.currentTimeMillis(); //unique requestID to differentiate between various notification with same NotifId
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one
+        PendingIntent pIntent = PendingIntent.getBroadcast(context, requestID, alarmIntent, flags);
+
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, notifTime.getTimeInMillis(), pIntent);
+        Log.i(context.getClass().getSimpleName(), "created notif for " + event.getTitle());
     }
 }

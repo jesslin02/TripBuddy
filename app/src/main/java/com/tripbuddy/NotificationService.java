@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.core.app.JobIntentService;
 import androidx.core.app.NotificationCompat;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -27,8 +30,12 @@ public class NotificationService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    protected void onHandleIntent(@NotNull Intent intent) {
         Log.i(TAG, "onHandleIntent");
+        String eventTitle = intent.getStringExtra("event");
+        String eventLocation = intent.getStringExtra("location");
+        long eventTime = intent.getLongExtra("time", 0);
+
         Context context = getApplicationContext();
         notifManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // First let's define the intent to trigger when notification is selected
@@ -47,12 +54,12 @@ public class NotificationService extends IntentService {
 
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(
                 this, "reminders").setSmallIcon(R.drawable.map)
-                .setContentTitle("test title")
-                .setContentText("test body")
+                .setContentTitle(eventTitle)
+                .setContentText(eventLocation)
                 .setContentIntent(pIntent)
                 .setAutoCancel(true);
 
         // mId allows you to update the notification later on.
-        notifManager.notify(NOTIFICATION_ID, notifBuilder.build());
+        notifManager.notify((int) eventTime, notifBuilder.build());
     }
 }

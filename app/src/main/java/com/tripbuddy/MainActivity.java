@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notifManager.createNotificationChannel(channel);
 
-        createNotification(20, R.drawable.map, "Test", "Notif Body", "reminders");
+        // createNotification(20, R.drawable.map, "Test", "Notif Body", "reminders");
     }
 
     //  createNotification(56, R.drawable.ic_launcher, "New Message",

@@ -13,7 +13,14 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i("AlarmReceiver", "onReceive");
         Toast.makeText(context, "Alarm running", Toast.LENGTH_SHORT).show();
+        String eventTitle = intent.getStringExtra("event");
+        String eventLocation = intent.getStringExtra("location");
+        long eventTime = intent.getLongExtra("time", 0);
+
         Intent i = new Intent(context, NotificationService.class);
+        i.putExtra("event", eventTitle);
+        i.putExtra("location", eventLocation);
+        i.putExtra("time", eventTime);
         context.startService(i);
     }
 }
