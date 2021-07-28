@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -156,9 +157,11 @@ public class Utils {
         }
 
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-        alarmIntent.putExtra("event", event.getTitle());
-        alarmIntent.putExtra("location", event.getLocation());
-        alarmIntent.putExtra("time", notifTime.getTimeInMillis());
+        Bundle alarmExtras = new Bundle();
+        alarmExtras.putString("event", event.getTitle());
+        alarmExtras.putString("location", event.getLocation());
+        alarmExtras.putInt("time", (int) notifTime.getTimeInMillis());
+        alarmIntent.putExtras(alarmExtras);
 
         int requestID = (int) System.currentTimeMillis(); //unique requestID to differentiate between various notification with same NotifId
         int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one

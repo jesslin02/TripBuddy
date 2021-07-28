@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupNotifs() {
         // Configure the channel
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        int importance = NotificationManager.IMPORTANCE_HIGH;
         channel = new NotificationChannel("reminders", "Event Reminders", importance);
         channel.setDescription("Reminders About Upcoming Events");
         // Register the channel with the notifications manager
