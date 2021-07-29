@@ -205,8 +205,13 @@ public class CreateEventActivity extends AppCompatActivity {
         event.setEnd(endCal);
         String phoneString = binding.etPhone.getText().toString();
         if (!phoneString.isEmpty()) {
-            long phone = Long.parseLong(phoneString);
-            event.setPhone(phone);
+            if (phoneString.matches("^[0-9]*$") && phoneString.length() == 10) {
+                long phone = Long.parseLong(phoneString);
+                event.setPhone(phone);
+            } else {
+                Toast.makeText(this, "Phone number is invalid", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
         String website = binding.etWebsite.getText().toString();
         if (!website.isEmpty()) {
