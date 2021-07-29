@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".EventDetailActivity" />
-        <activity android:name=".ItineraryActivity" />
+        <activity android:name=".ItineraryActivity"/>
         <activity android:name=".TripDetailActivity" />
         <activity android:name=".MainActivity" />
 

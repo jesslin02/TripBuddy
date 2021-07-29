@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,18 +26,21 @@ import com.tripbuddy.models.Trip;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.ViewHolder> implements Adapter {
+public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.ViewHolder> implements Adapter, Filterable {
     public static final String TAG = "ItineraryAdapter";
     Trip trip;
     Context context;
     List<Event> events;
+    List<Event> eventsFiltered;
 
     public ItineraryAdapter(Context c, List<Event> e, Trip trip) {
         this.context = c;
         this.events = e;
+        this.eventsFiltered = e;
         this.trip = trip;
     }
 
@@ -48,13 +53,13 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ItineraryAdapter.ViewHolder holder, int position) {
-        Event event = events.get(position);
+        Event event = eventsFiltered.get(position);
         holder.bind(event);
     }
 
     @Override
     public int getItemCount() {
-        return events.size();
+        return eventsFiltered.size();
     }
 
     @Override
@@ -116,6 +121,44 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
         i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
         i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
         context.startActivity(i);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString = constraint.toString().toLowerCase();
+                if (charString.isEmpty()) {
+                    eventsFiltered = events;
+                } else {
+                    List<Event> filteredList = new ArrayList<>();
+                    for (Event event : events) {
+                        Log.i(TAG, "performFiltering on event at " + event.getLocation()
+                                + " with query " + constraint);
+
+                        // name match condition. we are looking for title or location match
+                        if (event.getTitle().toLowerCase().contains(charString)
+                                || event.getLocation().toLowerCase().contains(charString)
+                                || event.getStart().toLowerCase().contains(charString)) {
+                            filteredList.add(event);
+                        }
+                    }
+
+                    eventsFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = eventsFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                eventsFiltered = (ArrayList<Event>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -6,11 +6,11 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.parse.Parse;
 import com.parse.ParseObject;
-import com.parse.facebook.ParseFacebookUtils;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
 public class ParseApplication extends Application {
+
     /**
      * initializes Parse SDK as soon as the application is created
      */
@@ -29,9 +29,9 @@ public class ParseApplication extends Application {
                 .build()
         );
 
-        ParseFacebookUtils.initialize(this);
+        // ParseFacebookUtils.initialize(this);
 
-//        FacebookSdk.sdkInitialize(getApplicationContext());
-//        AppEventsLogger.activateApp(this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 }
