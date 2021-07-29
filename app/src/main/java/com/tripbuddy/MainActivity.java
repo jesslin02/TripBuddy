@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
     FragmentManager fragmentManager;
     MenuItem addTrip;
+    MenuItem search;
     NotificationChannel channel;
     NotificationManager notifManager;
 
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onPrepareOptionsMenu");
         addTrip = menu.findItem(R.id.add);
         addTrip.setVisible(false);
+        search = menu.findItem(R.id.action_search);
+        search.setVisible(false);
         return super.onPrepareOptionsMenu(menu);
     }
 //

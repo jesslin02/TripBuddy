@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,6 +48,7 @@ public class TripsFragment extends Fragment {
     TripsAdapter adapter;
     List<Trip> allTrips;
     MenuItem addTrip;
+    MenuItem search;
     MainActivity mainActivity;
 
     public TripsFragment() {
@@ -125,6 +128,23 @@ public class TripsFragment extends Fragment {
         addTrip = menu.findItem(R.id.add);
         addTrip.setVisible(true);
         addTrip.getIcon().setTint(Color.WHITE);
+
+        search = menu.findItem(R.id.action_search);
+        search.setVisible(true);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
 
     @Override

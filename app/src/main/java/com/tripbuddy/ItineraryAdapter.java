@@ -64,8 +64,8 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
 
     @Override
     public void deleteItem(int position) {
-        Event recentlyDeletedEvent = events.get(position);
-        events.remove(position);
+        Event recentlyDeletedEvent = eventsFiltered.get(position);
+        eventsFiltered.remove(position);
         notifyItemRemoved(position);
         showUndoSnackbar(recentlyDeletedEvent, position);
     }
@@ -104,7 +104,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
     }
 
     private void undoDelete(Event deleted, int deletedPos) {
-        events.add(deletedPos, deleted);
+        eventsFiltered.add(deletedPos, deleted);
         notifyItemInserted(deletedPos);
     }
 
@@ -116,7 +116,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
     @Override
     public void editItem(int position) {
         Intent i = new Intent(context, CreateEventActivity.class);
-        Event event = events.get(position);
+        Event event = eventsFiltered.get(position);
         i.putExtra("edit", true);
         i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
         i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
@@ -189,7 +189,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
             int position = getAdapterPosition();
             Log.i(TAG, "item clicked at position " + Integer.toString(position));
             if (position != RecyclerView.NO_POSITION) {
-                Event selected = events.get(position);
+                Event selected = eventsFiltered.get(position);
                 Intent i = new Intent(context, EventDetailActivity.class);
                 i.putExtra("edit", false);
                 i.putExtra(Event.class.getSimpleName(), Parcels.wrap(selected));
