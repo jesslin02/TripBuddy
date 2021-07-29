@@ -56,8 +56,8 @@ public class NotificationService extends JobIntentService {
 
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(
                 this, "reminders").setSmallIcon(R.drawable.map)
-                .setContentTitle(eventTitle + " happening now")
-                .setContentText(eventLocation)
+                .setContentTitle(eventTitle)
+                .setContentText("Happening now at " + eventLocation)
                 .setContentIntent(pIntent)
                 .setAutoCancel(true);
 

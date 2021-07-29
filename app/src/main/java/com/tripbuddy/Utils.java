@@ -163,12 +163,12 @@ public class Utils {
         alarmExtras.putInt("time", (int) notifTime.getTimeInMillis());
         alarmIntent.putExtras(alarmExtras);
 
-        int requestID = (int) System.currentTimeMillis(); //unique requestID to differentiate between various notification with same NotifId
+        int requestID = (int) notifTime.getTimeInMillis(); //unique requestID to differentiate between various notification with same NotifId
         int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one
         PendingIntent pIntent = PendingIntent.getBroadcast(context, requestID, alarmIntent, flags);
 
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, notifTime.getTimeInMillis(), pIntent);
+        alarmMgr.setExact(AlarmManager.RTC_WAKEUP, notifTime.getTimeInMillis(), pIntent);
         Log.i(context.getClass().getSimpleName(), "created notif for " + event.getTitle());
     }
 }
