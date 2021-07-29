@@ -102,6 +102,15 @@ public class ItineraryActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
+        Log.d(TAG, "onPrepareOptionsMenu");
+        addEvent = menu.findItem(R.id.add);
+        addEvent.getIcon().setTint(Color.WHITE);
+
         search = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -117,14 +126,7 @@ public class ItineraryActivity extends AppCompatActivity {
                 return false;
             }
         });
-        return true;
-    }
 
-    @Override
-    public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
-        Log.d(TAG, "onPrepareOptionsMenu");
-        addEvent = menu.findItem(R.id.add);
-        addEvent.getIcon().setTint(Color.WHITE);
         return super.onPrepareOptionsMenu(menu);
     }
 
