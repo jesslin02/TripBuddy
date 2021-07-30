@@ -68,13 +68,6 @@ public class Utils {
      * CreateTripActivity, CreateEventActivity
      * @param items array of EditText objects to be cleared
      */
-    public static void resetInput(EditText ... items) {
-        for (EditText et : items) {
-            et.setText("");
-            et.getBackground().clearColorFilter();
-        }
-    }
-
     public static void resetInput(TextInputLayout ... items) {
         for (TextInputLayout layout : items) {
             TextInputEditText editText = (TextInputEditText) layout.getEditText();
@@ -83,22 +76,23 @@ public class Utils {
         }
     }
 
+    public static void setDateError(boolean valid, int color, TextInputLayout ... items) {
+        for (TextInputLayout layout : items) {
+            if (!valid) {
+                layout.setErrorTextColor(ColorStateList.valueOf(color));
+                layout.setError("End date cannot be before Start Date");
+                layout.setErrorEnabled(true);
+            } else {
+                layout.setErrorEnabled(false);
+            }
+        }
+    }
+
     /**
      * checks that all required input fields are filled out when user presses
      * the create button for a new trip or event
      * CreateTripActivity, CreateEventActivity
      */
-    public static boolean checkRequiredInput(EditText ... items) {
-        boolean validInput = true;
-        for (EditText et : items) {
-            if (et.getText().toString().isEmpty()) {
-                et.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-                validInput = false;
-            }
-        }
-        return validInput;
-    }
-
     public static boolean checkRequiredInput(int color, TextInputLayout ... items) {
         boolean validInput = true;
         for (TextInputLayout layout : items) {

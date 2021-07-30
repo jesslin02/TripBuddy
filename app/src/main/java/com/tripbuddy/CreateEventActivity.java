@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
@@ -51,11 +52,16 @@ public class CreateEventActivity extends AppCompatActivity {
     String eventLocation;
     Calendar startCal;
     Calendar endCal;
+    int SALMON;
+    int GREEN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setContentView(R.layout.activity_create_event);
+
+        SALMON = getResources().getColor(R.color.salmon);
+        GREEN = getResources().getColor(R.color.green);
 
         intent = getIntent();
         trip = Parcels.unwrap(intent.getParcelableExtra(Trip.class.getSimpleName()));
@@ -121,13 +127,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     if (checkDates()) {
                         ParseUser currentUser = ParseUser.getCurrentUser();
                         saveTrip(currentUser);
-                    } else {
-                        Toast.makeText(CreateEventActivity.this,
-                                "Start date and time must be before end date and time", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(CreateEventActivity.this,
-                            "Please fill out all required fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -209,7 +209,9 @@ public class CreateEventActivity extends AppCompatActivity {
                 long phone = Long.parseLong(phoneString);
                 event.setPhone(phone);
             } else {
-                Toast.makeText(this, "Phone number is invalid", Toast.LENGTH_SHORT).show();
+                binding.phoneLayout.setErrorTextColor(ColorStateList.valueOf(SALMON));
+                binding.phoneLayout.setError("Phone number is invalid");
+                binding.phoneLayout.setErrorEnabled(true);
                 return;
             }
         }
@@ -243,23 +245,29 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private boolean checkDates() {
-        return startCal.getTimeInMillis() <= endCal.getTimeInMillis();
+        boolean valid = startCal.getTimeInMillis() <= endCal.getTimeInMillis();
+        Utils.setDateError(valid, SALMON, binding.startLayout, binding.startTimeLayout,
+                binding.endLayout, binding.endTimeLayout);
+        return valid;
     }
 
     private boolean checkRequiredInput() {
         boolean locationFilled = true;
         if (eventLocation == null) {
-            binding.tvLocation.setTextColor(Color.RED);
+            binding.tvLocation.setTextColor(SALMON);
             locationFilled = false;
+        } else {
+            binding.tvLocation.setTextColor(GREEN);
         }
-        return Utils.checkRequiredInput(binding.etTitle, binding.etStartDate,
-                binding.etStartTime, binding.etEndDate, binding.etEndTime) && locationFilled;
+        return Utils.checkRequiredInput(SALMON, binding.titleLayout, binding.startLayout,
+                binding.startTimeLayout, binding.endLayout, binding.endTimeLayout) && locationFilled;
     }
 
     private void resetInput() {
         autocompleteFragment.onResume();
-        Utils.resetInput(binding.etTitle, binding.etStartDate, binding.etStartTime,
-                binding.etEndDate, binding.etEndTime, binding.etPhone,
-                binding.etWebsite, binding.etNotes);
+        binding.tvLocation.setTextColor(GREEN);
+        Utils.resetInput(binding.titleLayout, binding.startLayout, binding.startTimeLayout,
+                binding.endLayout, binding.endTimeLayout, binding.phoneLayout, binding.websiteLayout,
+                binding.notesLayout);
     }
 }

@@ -60,6 +60,7 @@ public class CreateTripActivity extends AppCompatActivity {
     Calendar startCal;
     Calendar endCal;
     int SALMON;
+    int GREEN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class CreateTripActivity extends AppCompatActivity {
         // setContentView(R.layout.activity_create_trip);
 
         SALMON = getResources().getColor(R.color.salmon);
+        GREEN = getResources().getColor(R.color.green);
 
         binding = ActivityCreateTripBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -155,7 +157,7 @@ public class CreateTripActivity extends AppCompatActivity {
             binding.tvLocation.setTextColor(SALMON);
             locationFilled = false;
         } else {
-            binding.tvLocation.setTextColor(getResources().getColor(R.color.green));
+            binding.tvLocation.setTextColor(GREEN);
         }
         return Utils.checkRequiredInput(SALMON, binding.titleLayout, binding.startLayout, binding.endLayout)
                 && locationFilled;
@@ -167,17 +169,7 @@ public class CreateTripActivity extends AppCompatActivity {
      */
     private boolean checkDates() {
         boolean valid = startCal.getTimeInMillis() <= endCal.getTimeInMillis();
-        TextInputLayout[] items = new TextInputLayout[]{binding.startLayout, binding.endLayout};
-        if (!valid) {
-            for (TextInputLayout layout : items) {
-                layout.setErrorTextColor(ColorStateList.valueOf(SALMON));
-                layout.setError("End date cannot be before Start Date");
-                layout.setErrorEnabled(true);
-            }
-        } else {
-            binding.startLayout.setErrorEnabled(false);
-            binding.endLayout.setErrorEnabled(false);
-        }
+        Utils.setDateError(valid, SALMON, binding.startLayout, binding.endLayout);
         return valid;
     }
 
@@ -218,7 +210,7 @@ public class CreateTripActivity extends AppCompatActivity {
      */
     private void resetInput() {
         autocompleteFragment.onResume();
-        binding.tvLocation.setTextColor(getResources().getColor(R.color.green));
+        binding.tvLocation.setTextColor(GREEN);
         Utils.resetInput(binding.titleLayout, binding.startLayout, binding.endLayout, binding.notesLayout);
     }
 }
