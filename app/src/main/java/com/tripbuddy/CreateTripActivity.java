@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -56,11 +59,14 @@ public class CreateTripActivity extends AppCompatActivity {
     String tripDestination;
     Calendar startCal;
     Calendar endCal;
+    int SALMON;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setContentView(R.layout.activity_create_trip);
+
+        SALMON = getResources().getColor(R.color.salmon);
 
         binding = ActivityCreateTripBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -118,13 +124,7 @@ public class CreateTripActivity extends AppCompatActivity {
                     if (checkDates()) {
                         ParseUser currentUser = ParseUser.getCurrentUser();
                         saveTrip(currentUser);
-                    } else {
-                        Toast.makeText(CreateTripActivity.this,
-                                "Start date cannot be after end date", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(CreateTripActivity.this,
-                            "Please fill out all required fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -152,10 +152,13 @@ public class CreateTripActivity extends AppCompatActivity {
     private boolean checkRequiredInput() {
         boolean locationFilled = true;
         if (tripDestination == null) {
-            binding.tvLocation.setTextColor(Color.RED);
+            binding.tvLocation.setTextColor(SALMON);
             locationFilled = false;
+        } else {
+            binding.tvLocation.setTextColor(getResources().getColor(R.color.green));
         }
-        return Utils.checkRequiredInput(binding.etTitle, binding.etStart, binding.etEnd) && locationFilled;
+        return Utils.checkRequiredInput(SALMON, binding.titleLayout, binding.startLayout, binding.endLayout)
+                && locationFilled;
     }
 
     /**
@@ -163,7 +166,19 @@ public class CreateTripActivity extends AppCompatActivity {
      * (start date must be before end date)
      */
     private boolean checkDates() {
-        return startCal.getTimeInMillis() <= endCal.getTimeInMillis();
+        boolean valid = startCal.getTimeInMillis() <= endCal.getTimeInMillis();
+        TextInputLayout[] items = new TextInputLayout[]{binding.startLayout, binding.endLayout};
+        if (!valid) {
+            for (TextInputLayout layout : items) {
+                layout.setErrorTextColor(ColorStateList.valueOf(SALMON));
+                layout.setError("End date cannot be before Start Date");
+                layout.setErrorEnabled(true);
+            }
+        } else {
+            binding.startLayout.setErrorEnabled(false);
+            binding.endLayout.setErrorEnabled(false);
+        }
+        return valid;
     }
 
     /**
@@ -203,6 +218,7 @@ public class CreateTripActivity extends AppCompatActivity {
      */
     private void resetInput() {
         autocompleteFragment.onResume();
-        Utils.resetInput(binding.etTitle, binding.etStart, binding.etEnd, binding.etNotes);
+        binding.tvLocation.setTextColor(getResources().getColor(R.color.green));
+        Utils.resetInput(binding.titleLayout, binding.startLayout, binding.endLayout, binding.notesLayout);
     }
 }

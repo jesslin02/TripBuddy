@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 import com.tripbuddy.receivers.AlarmReceiver;
@@ -72,6 +75,14 @@ public class Utils {
         }
     }
 
+    public static void resetInput(TextInputLayout ... items) {
+        for (TextInputLayout layout : items) {
+            TextInputEditText editText = (TextInputEditText) layout.getEditText();
+            editText.setText("");
+            layout.setErrorEnabled(false);
+        }
+    }
+
     /**
      * checks that all required input fields are filled out when user presses
      * the create button for a new trip or event
@@ -83,6 +94,23 @@ public class Utils {
             if (et.getText().toString().isEmpty()) {
                 et.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
                 validInput = false;
+            }
+        }
+        return validInput;
+    }
+
+    public static boolean checkRequiredInput(int color, TextInputLayout ... items) {
+        boolean validInput = true;
+        for (TextInputLayout layout : items) {
+            TextInputEditText editText = (TextInputEditText) layout.getEditText();
+            String editTextContent = editText.getText().toString();
+            if (editTextContent.isEmpty()) {
+                layout.setErrorTextColor(ColorStateList.valueOf(color));
+                layout.setError("Required");
+                layout.setErrorEnabled(true);
+                validInput = false;
+            } else {
+                layout.setErrorEnabled(false);
             }
         }
         return validInput;
