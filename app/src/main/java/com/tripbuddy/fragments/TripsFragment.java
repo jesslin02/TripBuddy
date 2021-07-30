@@ -1,6 +1,7 @@
 package com.tripbuddy.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -25,15 +26,20 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.tripbuddy.CreateTripActivity;
+import com.tripbuddy.ItineraryActivity;
 import com.tripbuddy.MainActivity;
 import com.tripbuddy.R;
+import com.tripbuddy.Utils;
 import com.tripbuddy.callbacks.SwipeToDeleteCallback;
 import com.tripbuddy.TripsAdapter;
 import com.tripbuddy.callbacks.SwipeToEditCallback;
+import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +56,8 @@ public class TripsFragment extends Fragment {
     MenuItem addTrip;
     MenuItem search;
     MainActivity mainActivity;
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
 
     public TripsFragment() {
         // Required empty public constructor
@@ -72,6 +80,8 @@ public class TripsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mainActivity = (MainActivity) getActivity();
+        sharedPref = mainActivity.getSharedPreferences("Notifs", MODE_PRIVATE);
+        editor = sharedPref.edit();
         rvTrips = view.findViewById(R.id.rvTrips);
         allTrips = new ArrayList<>();
         adapter = new TripsAdapter(getContext(), allTrips);
@@ -111,12 +121,45 @@ public class TripsFragment extends Fragment {
                 // for debugging purposes let's print every trip title to logcat
                 for (Trip trip : trips) {
                     Log.i(TAG, "Trip: " + trip.getTitle() + ", location: " + trip.getDestination());
+                    addNotifs(trip);
                 }
 
                 // save received posts to list and notify adapter of new data
                 allTrips.clear();
                 allTrips.addAll(trips);
                 adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void addNotifs(Trip trip) {
+        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+        // include data referred by user key
+        query.include(Event.KEY_USER);
+        query.include(Event.KEY_TRIP);
+        query.whereEqualTo(Event.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Event.KEY_TRIP, trip);
+        query.orderByAscending(Event.KEY_START);
+        query.setLimit(10);
+        query.findInBackground(new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> events, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with retrieving events for setting alarms", e);
+                    return;
+                }
+
+                // for debugging purposes let's print every trip title to logcat
+                for (Event event : events) {
+                    String id = event.getId();
+                    if (sharedPref.getBoolean(id, false)) {
+                        Utils.createNotif(mainActivity, event);
+                        editor.putBoolean(id, true);
+                    }
+                    Log.i(TAG, "set notif for event: " + event.getTitle()
+                            + ", location: " + event.getLocation());
+                }
+                editor.commit();
             }
         });
     }

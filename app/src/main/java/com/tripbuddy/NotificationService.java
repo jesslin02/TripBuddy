@@ -11,7 +11,10 @@ import android.util.Log;
 import androidx.core.app.JobIntentService;
 import androidx.core.app.NotificationCompat;
 
+import com.tripbuddy.models.Event;
+
 import org.jetbrains.annotations.NotNull;
+import org.parceler.Parcels;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -34,7 +37,7 @@ public class NotificationService extends JobIntentService {
     protected void onHandleWork(@NotNull Intent intent) {
         Log.i(TAG, "onHandleWork");
         Bundle extras = intent.getExtras();
-        String eventTitle = extras.getString("event");
+        String eventTitle = extras.getString("title");
         String eventLocation = extras.getString("location");
         int eventTime = extras.getInt("time");
 

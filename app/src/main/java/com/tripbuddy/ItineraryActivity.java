@@ -81,13 +81,12 @@ public class ItineraryActivity extends AppCompatActivity {
             @Override
             public void done(List<Event> events, ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Issue with retrieving trips", e);
+                    Log.e(TAG, "Issue with retrieving events", e);
                     return;
                 }
 
                 // for debugging purposes let's print every trip title to logcat
                 for (Event event : events) {
-                    Utils.createNotif(ItineraryActivity.this, event);
                     Log.i(TAG, "Event: " + event.getTitle() + ", Location: " + event.getLocation());
                 }
 

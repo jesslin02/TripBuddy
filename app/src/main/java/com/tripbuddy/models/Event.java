@@ -133,4 +133,8 @@ public class Event extends ParseObject {
     public void setNotes(String notes) {
         put(KEY_NOTES, notes);
     }
+
+    public String getId() {
+        return getObjectId();
+    }
 }

@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -52,6 +53,8 @@ public class CreateEventActivity extends AppCompatActivity {
     String eventLocation;
     Calendar startCal;
     Calendar endCal;
+    /* for use to update notifications */
+    Calendar prevStart;
     int SALMON;
     int GREEN;
 
@@ -103,6 +106,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         if (intent.getBooleanExtra("edit", true)) {
             event = Parcels.unwrap(intent.getParcelableExtra(Event.class.getSimpleName()));
+            prevStart = Utils.toCalendar(event.getStartDate());
             startCal = Utils.toCalendar(event.getStartDate());
             endCal = Utils.toCalendar(event.getEndDate());
             populateItems();
@@ -235,6 +239,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 Log.i(TAG, "Event creation was successful!");
                 // Utils.createNotif(CreateEventActivity.this, event);
                 resetInput();
+                updateNotif();
                 // Utils.goItineraryActivity(CreateEventActivity.this, trip);
                 Intent i = new Intent(CreateEventActivity.this, EventDetailActivity.class);
                 i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
@@ -242,6 +247,20 @@ public class CreateEventActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void updateNotif() {
+        SharedPreferences sharedPref = getSharedPreferences("Notifs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        String id = event.getId();
+        if (sharedPref.getBoolean(id, false)) { // alarm exists for this event
+            // delete old alarm
+            Utils.deleteNotif(this, event, prevStart);
+        }
+        // create new alarm
+        Utils.createNotif(this, event);
+        editor.putBoolean(id, true);
+        editor.commit();
     }
 
     private boolean checkDates() {

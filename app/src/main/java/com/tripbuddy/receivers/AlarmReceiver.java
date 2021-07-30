@@ -13,7 +13,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i("AlarmReceiver", "onReceive");
-        Toast.makeText(context, "Alarm running", Toast.LENGTH_SHORT).show();
         Bundle bundle = intent.getExtras();
 
         Intent notifIntent = new Intent(context, NotificationService.class);

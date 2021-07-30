@@ -180,7 +180,7 @@ public class Utils {
 
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         Bundle alarmExtras = new Bundle();
-        alarmExtras.putString("event", event.getTitle());
+        alarmExtras.putString("title", event.getTitle());
         alarmExtras.putString("location", event.getLocation());
         alarmExtras.putInt("time", (int) notifTime.getTimeInMillis());
         alarmIntent.putExtras(alarmExtras);
@@ -192,5 +192,23 @@ public class Utils {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmMgr.setExact(AlarmManager.RTC_WAKEUP, notifTime.getTimeInMillis(), pIntent);
         Log.i(context.getClass().getSimpleName(), "created notif for " + event.getTitle());
+    }
+
+    public static void deleteNotif(Context context, Event event, Calendar oldTime) {
+        Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        Bundle alarmExtras = new Bundle();
+        alarmExtras.putString("title", event.getTitle());
+        alarmExtras.putString("location", event.getLocation());
+        alarmExtras.putInt("time", (int) oldTime.getTimeInMillis());
+        alarmIntent.putExtras(alarmExtras);
+
+        int requestID = (int) oldTime.getTimeInMillis(); //unique requestID to differentiate between various notification with same NotifId
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one
+        PendingIntent pIntent = PendingIntent.getBroadcast(context, requestID, alarmIntent, flags);
+
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.cancel(pIntent);
+        pIntent.cancel();
+        Log.i(context.getClass().getSimpleName(), "deleted notif for " + event.getTitle());
     }
 }
