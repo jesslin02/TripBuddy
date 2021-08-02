@@ -113,20 +113,15 @@ public class CreateTripActivity extends AppCompatActivity {
             populateItems();
         }
 
-        binding.etStart.setInputType(InputType.TYPE_NULL);
-        binding.etStart.setOnTouchListener(new Utils.dateTouchListener(binding.etStart, this, startCal));
-
-        binding.etEnd.setInputType(InputType.TYPE_NULL);
-        binding.etEnd.setOnTouchListener(new Utils.dateTouchListener(binding.etEnd, this, endCal));
+        binding.btnChooseDate.setOnClickListener(new Utils.dateClickListener(binding.tvDateRange,
+                this, startCal, endCal, getSupportFragmentManager()));
 
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkRequiredInput()) {
-                    if (checkDates()) {
-                        ParseUser currentUser = ParseUser.getCurrentUser();
-                        saveTrip(currentUser);
-                    }
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    saveTrip(currentUser);
                 }
             }
         });
@@ -141,8 +136,8 @@ public class CreateTripActivity extends AppCompatActivity {
         tripDestination = trip.getDestination();
         binding.etNotes.setText(trip.getNotes());
         SimpleDateFormat sdFormat = new SimpleDateFormat("M/d/yyyy");
-        binding.etStart.setText(sdFormat.format(startCal.getTime()));
-        binding.etEnd.setText(sdFormat.format(endCal.getTime()));
+        binding.tvDateRange.setText(sdFormat.format(startCal.getTime()) + " - "
+                                    + sdFormat.format(endCal.getTime()));
         binding.tvAdd.setText("Edit this trip");
         binding.btnCreate.setText("Update");
     }
@@ -159,18 +154,7 @@ public class CreateTripActivity extends AppCompatActivity {
         } else {
             binding.tvLocation.setTextColor(GREEN);
         }
-        return Utils.checkRequiredInput(SALMON, binding.titleLayout, binding.startLayout, binding.endLayout)
-                && locationFilled;
-    }
-
-    /**
-     * checks if start date and end date of trip are valid
-     * (start date must be before end date)
-     */
-    private boolean checkDates() {
-        boolean valid = startCal.getTimeInMillis() <= endCal.getTimeInMillis();
-        Utils.setDateError(valid, SALMON, binding.startLayout, binding.endLayout);
-        return valid;
+        return Utils.checkRequiredInput(SALMON, binding.titleLayout) && locationFilled;
     }
 
     /**
@@ -211,6 +195,6 @@ public class CreateTripActivity extends AppCompatActivity {
     private void resetInput() {
         autocompleteFragment.onResume();
         binding.tvLocation.setTextColor(GREEN);
-        Utils.resetInput(binding.titleLayout, binding.startLayout, binding.endLayout, binding.notesLayout);
+        Utils.resetInput(binding.titleLayout, binding.notesLayout);
     }
 }

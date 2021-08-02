@@ -7,8 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,7 +14,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import androidx.core.util.Pair;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.tripbuddy.models.Event;
@@ -26,10 +30,8 @@ import com.tripbuddy.receivers.AlarmReceiver;
 import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * contains functions that are used across multiple classes
@@ -168,6 +170,49 @@ public class Utils {
                 return true;
             }
             return false;
+        }
+    }
+
+    static class dateClickListener implements View.OnClickListener {
+        TextView tvDate;
+        Activity activity;
+        Calendar startCal;
+        Calendar endCal;
+        FragmentManager fragMgr;
+
+        public dateClickListener(TextView tvDate, Activity activity, Calendar startCal,
+                                 Calendar endCal, FragmentManager fragMgr) {
+            super();
+            this.tvDate = tvDate;
+            this.activity = activity;
+            this.startCal = startCal;
+            this.endCal = endCal;
+            this.fragMgr = fragMgr;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Utils.hideKeyboard(activity);
+            MaterialDatePicker<Pair<Long, Long>> rangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                    .setTitleText("Select dates")
+                    .setSelection(
+                            new Pair(
+                                    MaterialDatePicker.thisMonthInUtcMilliseconds(),
+                                    MaterialDatePicker.todayInUtcMilliseconds()
+                            )
+                    ).build();
+
+            rangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
+                @Override
+                public void onPositiveButtonClick(Pair<Long, Long> selection) {
+                    Long startMillis = selection.first;
+                    startCal.setTimeInMillis(startMillis);
+                    Long endMillis = selection.second;
+                    endCal.setTimeInMillis(endMillis);
+                    tvDate.setText(rangePicker.getHeaderText());
+                }
+            });
+            rangePicker.show(fragMgr, "range date picker");
         }
     }
 
