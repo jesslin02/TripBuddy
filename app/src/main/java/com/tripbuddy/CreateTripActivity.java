@@ -135,7 +135,7 @@ public class CreateTripActivity extends AppCompatActivity {
         autocompleteFragment.setText(trip.getDestination());
         tripDestination = trip.getDestination();
         binding.etNotes.setText(trip.getNotes());
-        SimpleDateFormat sdFormat = new SimpleDateFormat("MMMM d, yyyy");
+        SimpleDateFormat sdFormat = new SimpleDateFormat("MMM d, yyyy");
         binding.etDates.setText(sdFormat.format(startCal.getTime()) + " - "
                                     + sdFormat.format(endCal.getTime()));
         binding.tvAdd.setText("Edit this trip");

@@ -1,14 +1,10 @@
 package com.tripbuddy;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -27,13 +23,14 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.timepicker.MaterialTimePicker;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.tripbuddy.databinding.ActivityCreateEventBinding;
+import com.tripbuddy.listeners.TimeTouchListener;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
-import com.tripbuddy.receivers.AlarmReceiver;
 
 import org.parceler.Parcels;
 
@@ -113,16 +110,20 @@ public class CreateEventActivity extends AppCompatActivity {
         }
 
         binding.etStartDate.setInputType(InputType.TYPE_NULL);
-        binding.etStartDate.setOnTouchListener(new Utils.dateTouchListener(binding.etStartDate, this, startCal));
+        binding.etStartDate.setOnTouchListener(new Utils.dateTouchListener(binding.etStartDate,
+                this, startCal, getSupportFragmentManager()));
 
         binding.etStartTime.setInputType(InputType.TYPE_NULL);
-        binding.etStartTime.setOnTouchListener(new timeTouchListener(binding.etStartTime, this, startCal));
+        binding.etStartTime.setOnTouchListener(new TimeTouchListener(binding.etStartTime,
+                this, startCal, getSupportFragmentManager()));
 
         binding.etEndDate.setInputType(InputType.TYPE_NULL);
-        binding.etEndDate.setOnTouchListener(new Utils.dateTouchListener(binding.etEndDate, this, endCal));
+        binding.etEndDate.setOnTouchListener(new Utils.dateTouchListener(binding.etEndDate,
+                this, endCal, getSupportFragmentManager()));
 
         binding.etEndTime.setInputType(InputType.TYPE_NULL);
-        binding.etEndTime.setOnTouchListener(new timeTouchListener(binding.etEndTime, this, endCal));
+        binding.etEndTime.setOnTouchListener(new TimeTouchListener(binding.etEndTime,
+                this, endCal, getSupportFragmentManager()));
 
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,46 +159,6 @@ public class CreateEventActivity extends AppCompatActivity {
         binding.etEndTime.setText(formatTime.format(endCal.getTime()));
         binding.tvAdd.setText("Edit this event");
         binding.btnCreate.setText("Update");
-    }
-
-    /**
-     * used as onTouchListener for inputting the start time and end time
-     * allows popup time picker
-     */
-    class timeTouchListener implements View.OnTouchListener {
-        EditText etTime;
-        Activity activity;
-        Calendar cal;
-
-        public timeTouchListener(EditText etTime, Activity activity, Calendar cal) {
-            super();
-            this.etTime = etTime;
-            this.activity = activity;
-            this.cal = cal;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                Utils.hideKeyboard(activity);
-                final Calendar cldr = Calendar.getInstance();
-                int hour = cldr.get(Calendar.HOUR_OF_DAY);
-                int min = cldr.get(Calendar.MINUTE);
-                TimePickerDialog picker = new TimePickerDialog(activity, 2,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                SimpleDateFormat sdFormat = new SimpleDateFormat("h:mm a");
-                                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                cal.set(Calendar.MINUTE, minute);
-                                etTime.setText(sdFormat.format(cal.getTime()));
-                            }
-                        }, hour, min, false);
-                picker.show();
-                return true;
-            }
-            return false;
-        }
     }
 
     private void saveTrip(ParseUser user) {

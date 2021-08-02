@@ -60,7 +60,7 @@ public class Trip extends ParseObject {
     }
 
     private static String formatDate(Date date) {
-        String pattern = "MMMM d";
+        String pattern = "MMM d";
         SimpleDateFormat sdFormat = new SimpleDateFormat(pattern);
         return sdFormat.format(date);
     }

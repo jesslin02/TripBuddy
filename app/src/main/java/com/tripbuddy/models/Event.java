@@ -84,7 +84,7 @@ public class Event extends ParseObject {
     }
 
     private static String formatDate(Date date) {
-        String pattern = "MMMM d h:mm a";
+        String pattern = "MMM d h:mm a";
         SimpleDateFormat sdFormat = new SimpleDateFormat(pattern);
         return sdFormat.format(date);
     }

@@ -141,35 +141,37 @@ public class Utils {
         EditText etDate;
         Activity activity;
         Calendar cal;
+        FragmentManager fragMgr;
 
-        public dateTouchListener(EditText etDate, Activity activity, Calendar cal) {
+        public dateTouchListener(EditText etDate, Activity activity, Calendar cal, FragmentManager fragMgr) {
             super();
             this.etDate = etDate;
             this.activity = activity;
             this.cal = cal;
+            this.fragMgr = fragMgr;
         }
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 Utils.hideKeyboard(activity);
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                DatePickerDialog picker = new DatePickerDialog(activity,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                SimpleDateFormat sdFormat = new SimpleDateFormat("M/d/yyyy");
-                                cal.set(Calendar.YEAR, year);
-                                cal.set(Calendar.MONTH, monthOfYear);
-                                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                etDate.setText(sdFormat.format(cal.getTime()));
-                            }
-                        }, year, month, day);
-                picker.show();
+
+                MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                        .setTitleText("Select date")
+                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .build();
+
+                datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+                    @Override
+                    public void onPositiveButtonClick(Long selection) {
+                        cal.setTimeInMillis(selection + DAY_MILLIS);
+                        SimpleDateFormat sdFormat = new SimpleDateFormat("MMM d, yyyy");
+                        etDate.setText(sdFormat.format(cal.getTime()));
+                    }
+                });
+
+                datePicker.show(fragMgr, "date picker");
+
                 return true;
             }
             return false;
@@ -177,16 +179,16 @@ public class Utils {
     }
 
     static class dateRangeTouchListener implements View.OnTouchListener {
-        TextView tvDate;
+        EditText etDate;
         Activity activity;
         Calendar startCal;
         Calendar endCal;
         FragmentManager fragMgr;
 
-        public dateRangeTouchListener(TextView tvDate, Activity activity, Calendar startCal,
+        public dateRangeTouchListener(EditText etDate, Activity activity, Calendar startCal,
                                  Calendar endCal, FragmentManager fragMgr) {
             super();
-            this.tvDate = tvDate;
+            this.etDate = etDate;
             this.activity = activity;
             this.startCal = startCal;
             this.endCal = endCal;
@@ -197,7 +199,8 @@ public class Utils {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 Utils.hideKeyboard(activity);
-                MaterialDatePicker<Pair<Long, Long>> rangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                MaterialDatePicker<Pair<Long, Long>> rangePicker =
+                        MaterialDatePicker.Builder.dateRangePicker()
                         .setTitleText("Select dates")
                         .setSelection(
                                 new Pair(
@@ -213,8 +216,8 @@ public class Utils {
                         startCal.setTimeInMillis(startMillis);
                         long endMillis = selection.second + DAY_MILLIS;
                         endCal.setTimeInMillis(endMillis);
-                        SimpleDateFormat sdFormat = new SimpleDateFormat("MMMM d, yyyy");
-                        tvDate.setText(sdFormat.format(startCal.getTime()) + " - "
+                        SimpleDateFormat sdFormat = new SimpleDateFormat("MMM d, yyyy");
+                        etDate.setText(sdFormat.format(startCal.getTime()) + " - "
                                 + sdFormat.format(endCal.getTime()));
                     }
                 });

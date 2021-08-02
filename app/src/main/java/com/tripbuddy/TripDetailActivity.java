@@ -17,6 +17,8 @@ import com.tripbuddy.models.Trip;
 
 import org.parceler.Parcels;
 
+import java.text.SimpleDateFormat;
+
 public class TripDetailActivity extends AppCompatActivity {
     public static final String TAG = "TripDetailActivity";
     ActivityTripDetailBinding binding;
@@ -41,7 +43,8 @@ public class TripDetailActivity extends AppCompatActivity {
     private void displayDetails() {
         binding.tvTitle.setText(trip.getTitle());
         binding.tvDestination.setText(trip.getDestination());
-        String fullDate = trip.getStart() + " - " + trip.getEnd();
+        SimpleDateFormat sdFormat = new SimpleDateFormat("MMMM d, yyyy");
+        String fullDate = sdFormat.format(trip.getStartDate()) + " - " + sdFormat.format(trip.getEndDate());
         binding.tvDate.setText(fullDate);
 
         String notes = trip.getNotes();
