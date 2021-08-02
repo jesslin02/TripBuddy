@@ -74,31 +74,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
 
-        <TextView
-            android:id="@+id/tvDateRange"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dateLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginHorizontal="32dp"
-            android:text="@string/select_dates"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragLocation"
-            tools:hint="July 1 - July 7" />
-
-        <Button
-            android:id="@+id/btnChooseDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:hint="Dates*"
             android:layout_marginTop="12dp"
             android:layout_marginHorizontal="32dp"
-            android:text="@string/select_dates"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvDateRange"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragLocation"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDates"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="date"
+                android:clickable="true"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/notesLayout"
@@ -109,7 +105,7 @@
             android:layout_marginHorizontal="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnChooseDate"
+            app:layout_constraintTop_toBottomOf="@id/dateLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText

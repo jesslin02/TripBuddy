@@ -1,5 +1,6 @@
 package com.tripbuddy;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -16,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.util.Pair;
 import androidx.fragment.app.FragmentManager;
 
@@ -37,6 +39,7 @@ import java.util.Date;
  * contains functions that are used across multiple classes
  */
 public class Utils {
+    static final long DAY_MILLIS = 86400000;
 
     /**
      * go to MainActivity from current activity
@@ -173,14 +176,14 @@ public class Utils {
         }
     }
 
-    static class dateClickListener implements View.OnClickListener {
+    static class dateRangeTouchListener implements View.OnTouchListener {
         TextView tvDate;
         Activity activity;
         Calendar startCal;
         Calendar endCal;
         FragmentManager fragMgr;
 
-        public dateClickListener(TextView tvDate, Activity activity, Calendar startCal,
+        public dateRangeTouchListener(TextView tvDate, Activity activity, Calendar startCal,
                                  Calendar endCal, FragmentManager fragMgr) {
             super();
             this.tvDate = tvDate;
@@ -191,28 +194,34 @@ public class Utils {
         }
 
         @Override
-        public void onClick(View v) {
-            Utils.hideKeyboard(activity);
-            MaterialDatePicker<Pair<Long, Long>> rangePicker = MaterialDatePicker.Builder.dateRangePicker()
-                    .setTitleText("Select dates")
-                    .setSelection(
-                            new Pair(
-                                    MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                                    MaterialDatePicker.todayInUtcMilliseconds()
-                            )
-                    ).build();
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                Utils.hideKeyboard(activity);
+                MaterialDatePicker<Pair<Long, Long>> rangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                        .setTitleText("Select dates")
+                        .setSelection(
+                                new Pair(
+                                        MaterialDatePicker.thisMonthInUtcMilliseconds(),
+                                        MaterialDatePicker.todayInUtcMilliseconds()
+                                )
+                        ).build();
 
-            rangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
-                @Override
-                public void onPositiveButtonClick(Pair<Long, Long> selection) {
-                    Long startMillis = selection.first;
-                    startCal.setTimeInMillis(startMillis);
-                    Long endMillis = selection.second;
-                    endCal.setTimeInMillis(endMillis);
-                    tvDate.setText(rangePicker.getHeaderText());
-                }
-            });
-            rangePicker.show(fragMgr, "range date picker");
+                rangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
+                    @Override
+                    public void onPositiveButtonClick(Pair<Long, Long> selection) {
+                        long startMillis = selection.first + DAY_MILLIS;
+                        startCal.setTimeInMillis(startMillis);
+                        long endMillis = selection.second + DAY_MILLIS;
+                        endCal.setTimeInMillis(endMillis);
+                        SimpleDateFormat sdFormat = new SimpleDateFormat("MMMM d, yyyy");
+                        tvDate.setText(sdFormat.format(startCal.getTime()) + " - "
+                                + sdFormat.format(endCal.getTime()));
+                    }
+                });
+                rangePicker.show(fragMgr, "range date picker");
+                return true;
+            }
+            return false;
         }
     }
 

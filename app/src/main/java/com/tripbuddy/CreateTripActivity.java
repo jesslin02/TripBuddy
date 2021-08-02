@@ -113,7 +113,7 @@ public class CreateTripActivity extends AppCompatActivity {
             populateItems();
         }
 
-        binding.btnChooseDate.setOnClickListener(new Utils.dateClickListener(binding.tvDateRange,
+        binding.etDates.setOnTouchListener(new Utils.dateRangeTouchListener(binding.etDates,
                 this, startCal, endCal, getSupportFragmentManager()));
 
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {
@@ -135,8 +135,8 @@ public class CreateTripActivity extends AppCompatActivity {
         autocompleteFragment.setText(trip.getDestination());
         tripDestination = trip.getDestination();
         binding.etNotes.setText(trip.getNotes());
-        SimpleDateFormat sdFormat = new SimpleDateFormat("M/d/yyyy");
-        binding.tvDateRange.setText(sdFormat.format(startCal.getTime()) + " - "
+        SimpleDateFormat sdFormat = new SimpleDateFormat("MMMM d, yyyy");
+        binding.etDates.setText(sdFormat.format(startCal.getTime()) + " - "
                                     + sdFormat.format(endCal.getTime()));
         binding.tvAdd.setText("Edit this trip");
         binding.btnCreate.setText("Update");
@@ -154,7 +154,7 @@ public class CreateTripActivity extends AppCompatActivity {
         } else {
             binding.tvLocation.setTextColor(GREEN);
         }
-        return Utils.checkRequiredInput(SALMON, binding.titleLayout) && locationFilled;
+        return Utils.checkRequiredInput(SALMON, binding.titleLayout, binding.dateLayout) && locationFilled;
     }
 
     /**
