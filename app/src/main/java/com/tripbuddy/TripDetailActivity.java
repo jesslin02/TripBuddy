@@ -43,8 +43,8 @@ public class TripDetailActivity extends AppCompatActivity {
     private void displayDetails() {
         binding.tvTitle.setText(trip.getTitle());
         binding.tvDestination.setText(trip.getDestination());
-        SimpleDateFormat sdFormat = new SimpleDateFormat("MMMM d, yyyy");
-        String fullDate = sdFormat.format(trip.getStartDate()) + " - " + sdFormat.format(trip.getEndDate());
+        String fullDate = Utils.DATE_FORMAT.format(trip.getStartDate()) + " - "
+                + Utils.DATE_FORMAT.format(trip.getEndDate());
         binding.tvDate.setText(fullDate);
 
         String notes = trip.getNotes();

@@ -1,5 +1,6 @@
 package com.tripbuddy;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -50,6 +51,7 @@ public class CreateEventActivity extends AppCompatActivity {
     int SALMON;
     int GREEN;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +108,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         binding.etStartDate.setInputType(InputType.TYPE_NULL);
         binding.etStartDate.setOnTouchListener(new DateTouchListener(binding.etStartDate,
-                this, startCal, getSupportFragmentManager()));
+                this, startCal, trip, getSupportFragmentManager()));
 
         binding.etStartTime.setInputType(InputType.TYPE_NULL);
         binding.etStartTime.setOnTouchListener(new TimeTouchListener(binding.etStartTime,
@@ -114,7 +116,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         binding.etEndDate.setInputType(InputType.TYPE_NULL);
         binding.etEndDate.setOnTouchListener(new DateTouchListener(binding.etEndDate,
-                this, endCal, getSupportFragmentManager()));
+                this, endCal, trip, getSupportFragmentManager()));
 
         binding.etEndTime.setInputType(InputType.TYPE_NULL);
         binding.etEndTime.setOnTouchListener(new TimeTouchListener(binding.etEndTime,
@@ -146,11 +148,10 @@ public class CreateEventActivity extends AppCompatActivity {
         }
         binding.etWebsite.setText(event.getWebsite());
         binding.etNotes.setText(event.getNotes());
-        SimpleDateFormat formatDate = new SimpleDateFormat("M/d/yyyy");
         SimpleDateFormat formatTime = new SimpleDateFormat("h:mm a");
-        binding.etStartDate.setText(formatDate.format(startCal.getTime()));
+        binding.etStartDate.setText(Utils.DATE_FORMAT.format(startCal.getTime()));
         binding.etStartTime.setText(formatTime.format(startCal.getTime()));
-        binding.etEndDate.setText(formatDate.format(endCal.getTime()));
+        binding.etEndDate.setText(Utils.DATE_FORMAT.format(endCal.getTime()));
         binding.etEndTime.setText(formatTime.format(endCal.getTime()));
         binding.tvAdd.setText("Edit this event");
         binding.btnCreate.setText("Update");

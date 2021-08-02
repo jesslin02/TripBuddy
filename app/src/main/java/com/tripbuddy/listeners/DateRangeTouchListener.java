@@ -55,9 +55,8 @@ public class DateRangeTouchListener implements View.OnTouchListener{
                     startCal.setTimeInMillis(startMillis);
                     long endMillis = selection.second + DAY_MILLIS;
                     endCal.setTimeInMillis(endMillis);
-                    SimpleDateFormat sdFormat = new SimpleDateFormat("MMM d, yyyy");
-                    etDate.setText(sdFormat.format(startCal.getTime()) + " - "
-                            + sdFormat.format(endCal.getTime()));
+                    etDate.setText(Utils.DATE_FORMAT.format(startCal.getTime()) + " - "
+                            + Utils.DATE_FORMAT.format(endCal.getTime()));
                 }
             });
             rangePicker.show(fragMgr, "range date picker");

@@ -1,28 +1,16 @@
 package com.tripbuddy;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.util.Pair;
-import androidx.fragment.app.FragmentManager;
-
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.tripbuddy.models.Event;
@@ -39,6 +27,7 @@ import java.util.Date;
  * contains functions that are used across multiple classes
  */
 public class Utils {
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM d, yyyy");
     /**
      * go to MainActivity from current activity
      * LoginActivity, SignUpActivity, CreateTripActivity
