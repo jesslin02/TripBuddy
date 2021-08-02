@@ -49,7 +49,7 @@ public class DateTouchListener implements View.OnTouchListener {
         tripStartMillis = tripStart.getTimeInMillis() - DAY_MILLIS;
         Calendar tripEnd = Calendar.getInstance();
         tripEnd.setTime(trip.getEndDate());
-        tripEndMillis = tripEnd.getTimeInMillis();
+        tripEndMillis = tripEnd.getTimeInMillis() - DAY_MILLIS;
     }
 
     @Override
@@ -58,9 +58,10 @@ public class DateTouchListener implements View.OnTouchListener {
             Utils.hideKeyboard(activity);
 
             CalendarConstraints constraints = new CalendarConstraints.Builder()
+                    // limits which months users can see
                     .setStart(tripStartMillis)
                     .setEnd(tripEndMillis)
-                    .setOpenAt(tripStartMillis)
+                    // limits which dates that users can select
                     .setValidator(new CalendarConstraints.DateValidator() {
                         @Override
                         public boolean isValid(long date) {
@@ -81,6 +82,7 @@ public class DateTouchListener implements View.OnTouchListener {
 
             MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select date")
+                    .setSelection(cal.getTimeInMillis() - DAY_MILLIS)
                     .setCalendarConstraints(constraints)
                     .build();
 

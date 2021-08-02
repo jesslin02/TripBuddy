@@ -35,9 +35,8 @@ public class TimeTouchListener implements View.OnTouchListener {
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             Utils.hideKeyboard(activity);
-            final Calendar cldr = Calendar.getInstance();
-            int hour = cldr.get(Calendar.HOUR_OF_DAY);
-            int min = cldr.get(Calendar.MINUTE);
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int min = cal.get(Calendar.MINUTE);
 
             MaterialTimePicker picker = new MaterialTimePicker.Builder()
                     .setHour(hour)
