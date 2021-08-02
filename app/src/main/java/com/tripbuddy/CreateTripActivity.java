@@ -35,6 +35,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.tripbuddy.databinding.ActivityCreateTripBinding;
 import com.tripbuddy.databinding.ActivityLoginBinding;
+import com.tripbuddy.listeners.DateRangeTouchListener;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
@@ -113,7 +114,7 @@ public class CreateTripActivity extends AppCompatActivity {
             populateItems();
         }
 
-        binding.etDates.setOnTouchListener(new Utils.dateRangeTouchListener(binding.etDates,
+        binding.etDates.setOnTouchListener(new DateRangeTouchListener(binding.etDates,
                 this, startCal, endCal, getSupportFragmentManager()));
 
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {

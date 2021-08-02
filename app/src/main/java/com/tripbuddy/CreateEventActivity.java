@@ -1,17 +1,12 @@
 package com.tripbuddy;
 
-import android.app.Activity;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,11 +18,11 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.material.timepicker.MaterialTimePicker;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.tripbuddy.databinding.ActivityCreateEventBinding;
+import com.tripbuddy.listeners.DateTouchListener;
 import com.tripbuddy.listeners.TimeTouchListener;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
@@ -110,7 +105,7 @@ public class CreateEventActivity extends AppCompatActivity {
         }
 
         binding.etStartDate.setInputType(InputType.TYPE_NULL);
-        binding.etStartDate.setOnTouchListener(new Utils.dateTouchListener(binding.etStartDate,
+        binding.etStartDate.setOnTouchListener(new DateTouchListener(binding.etStartDate,
                 this, startCal, getSupportFragmentManager()));
 
         binding.etStartTime.setInputType(InputType.TYPE_NULL);
@@ -118,7 +113,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 this, startCal, getSupportFragmentManager()));
 
         binding.etEndDate.setInputType(InputType.TYPE_NULL);
-        binding.etEndDate.setOnTouchListener(new Utils.dateTouchListener(binding.etEndDate,
+        binding.etEndDate.setOnTouchListener(new DateTouchListener(binding.etEndDate,
                 this, endCal, getSupportFragmentManager()));
 
         binding.etEndTime.setInputType(InputType.TYPE_NULL);
