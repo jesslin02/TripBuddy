@@ -82,7 +82,7 @@ public class DateTouchListener implements View.OnTouchListener {
 
             MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select date")
-                    .setSelection(cal.getTimeInMillis() - DAY_MILLIS)
+                    .setSelection(cal.getTimeInMillis())
                     .setCalendarConstraints(constraints)
                     .build();
 

@@ -2,15 +2,12 @@ package com.tripbuddy;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +18,8 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.DeleteCallback;
 import com.parse.ParseException;
-import com.tripbuddy.models.Event;
+import com.skydoves.transformationlayout.TransformationCompat;
+import com.skydoves.transformationlayout.TransformationLayout;
 import com.tripbuddy.models.Trip;
 
 import org.parceler.Parcels;
@@ -165,12 +163,14 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         TextView tvTitle;
         TextView tvDestination;
         TextView tvDate;
+        TransformationLayout transLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDestination = itemView.findViewById(R.id.tvDestination);
             tvDate = itemView.findViewById(R.id.tvDate);
+            transLayout = itemView.findViewById(R.id.transLayout);
 
             itemView.setOnClickListener(this);
         }
@@ -185,12 +185,12 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            Log.i(TAG, "item clicked at position " + Integer.toString(position));
+            Log.i(TAG, "item clicked at position " + position);
             if (position != RecyclerView.NO_POSITION) {
                 Trip selected = tripsFiltered.get(position);
                 Intent i = new Intent(context, TripDetailActivity.class);
                 i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(selected));
-                context.startActivity(i);
+                TransformationCompat.startActivity(transLayout, i);
             }
         }
     }

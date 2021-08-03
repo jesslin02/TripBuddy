@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.skydoves.transformationlayout.TransformationAppCompatActivity;
 import com.tripbuddy.databinding.ActivityTripDetailBinding;
 import com.tripbuddy.models.Trip;
 
@@ -19,7 +20,7 @@ import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
 
-public class TripDetailActivity extends AppCompatActivity {
+public class TripDetailActivity extends TransformationAppCompatActivity {
     public static final String TAG = "TripDetailActivity";
     ActivityTripDetailBinding binding;
     Trip trip;
@@ -90,6 +91,9 @@ public class TripDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.edit) {
             onEditButton();
+            return true;
+        } else if (item.getItemId() == android.R.id.home) {
+            supportFinishAfterTransition();
             return true;
         }
         return super.onOptionsItemSelected(item);

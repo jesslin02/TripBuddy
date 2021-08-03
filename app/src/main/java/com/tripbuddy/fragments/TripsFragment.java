@@ -25,6 +25,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.skydoves.transformationlayout.TransformationCompat;
 import com.tripbuddy.CreateTripActivity;
 import com.tripbuddy.ItineraryActivity;
 import com.tripbuddy.MainActivity;
@@ -65,6 +66,7 @@ public class TripsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        TransformationCompat.onTransformationStartContainer(this);
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }

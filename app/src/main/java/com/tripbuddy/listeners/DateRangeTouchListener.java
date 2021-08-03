@@ -42,8 +42,8 @@ public class DateRangeTouchListener implements View.OnTouchListener{
                             .setTitleText("Select dates")
                             .setSelection(
                                     new Pair<>(
-                                            MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                                            MaterialDatePicker.todayInUtcMilliseconds()
+                                            startCal.getTimeInMillis() - DAY_MILLIS,
+                                            endCal.getTimeInMillis() - DAY_MILLIS
                                     )
                             );
             MaterialDatePicker<Pair<Long,Long>> rangePicker = rangePickerBuilder.build();
