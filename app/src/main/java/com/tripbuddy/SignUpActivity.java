@@ -3,6 +3,7 @@ package com.tripbuddy;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,11 +36,21 @@ public class SignUpActivity extends AppCompatActivity {
                 String username = binding.etUsername.getText().toString();
                 String password = binding.etPassword.getText().toString();
                 String passwordConfirm = binding.etPasswordConfirm.getText().toString();
-                if (!password.equals(passwordConfirm)) {
-                    Toast.makeText(SignUpActivity.this, "Passwords must match", Toast.LENGTH_SHORT).show();
-                    return;
+                int salmon = getResources().getColor(R.color.salmon);
+                if (Utils.checkRequiredInput(salmon, binding.nameLayout, binding.usernameLayout,
+                        binding.passwordLayout, binding.passwordConfirmLayout)) {
+                    if (!password.equals(passwordConfirm)) {
+                        binding.passwordLayout.setErrorTextColor(ColorStateList.valueOf(salmon));
+                        binding.passwordLayout.setError("Passwords must match");
+                        binding.passwordLayout.setErrorEnabled(true);
+
+                        binding.passwordConfirmLayout.setErrorTextColor(ColorStateList.valueOf(salmon));
+                        binding.passwordConfirmLayout.setError("Passwords must match");
+                        binding.passwordConfirmLayout.setErrorEnabled(true);
+                        return;
+                    }
+                    signUpUser(name, username, password);
                 }
-                signUpUser(name, username, password);
             }
         });
 

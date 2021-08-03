@@ -1,6 +1,7 @@
 package com.tripbuddy;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+import com.royrodriguez.transitionbutton.TransitionButton;
 import com.tripbuddy.databinding.ActivityLoginBinding;
 
 import org.json.JSONException;
@@ -32,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     String email;
     CallbackManager callbackManager;
     ActivityLoginBinding binding;
+    int salmon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
         callbackManager = CallbackManager.Factory.create();
+        salmon = getResources().getColor(R.color.salmon);
 
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +58,21 @@ public class LoginActivity extends AppCompatActivity {
                 String username = binding.etUsername.getText().toString();
                 String password = binding.etPassword.getText().toString();
                 loginUser(username, password);
+            }
+        });
+
+        binding.transitionBtnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.transitionBtnLogin.startAnimation();
+                Log.i(TAG, "onClick transition login button");
+                String username = binding.etUsername.getText().toString();
+                String password = binding.etPassword.getText().toString();
+                if (Utils.checkRequiredInput(salmon, binding.usernameLayout, binding.passwordLayout)) {
+                    loginUser(username, password);
+                } else {
+                    binding.transitionBtnLogin.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
+                }
             }
         });
 
@@ -141,7 +160,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e != null) {
-                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    binding.passwordLayout.setErrorTextColor(ColorStateList.valueOf(salmon));
+                    binding.passwordLayout.setError(e.getMessage());
+                    binding.passwordLayout.setErrorEnabled(true);
+
+                    binding.usernameLayout.setErrorTextColor(ColorStateList.valueOf(salmon));
+                    binding.usernameLayout.setError(e.getMessage());
+                    binding.usernameLayout.setErrorEnabled(true);
+
+                    binding.transitionBtnLogin.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
                     Log.e(TAG, "Issue with login", e);
                     return;
                 }

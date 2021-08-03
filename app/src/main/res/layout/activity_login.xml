@@ -50,6 +50,20 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.royrodriguez.transitionbutton.TransitionButton
+        android:id="@+id/transitionBtnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="32dp"
+        android:text="@string/log_in"
+        app:defaultColor="@color/green"
+        app:loaderColor="@android:color/white"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_layout" />
+
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
@@ -59,7 +73,8 @@
         android:text="@string/log_in"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/password_layout"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/btnSignup"
@@ -68,9 +83,11 @@
         android:layout_marginTop="16dp"
         android:layout_marginHorizontal="32dp"
         android:text="@string/no_acc_signup"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin"
+        app:layout_constraintTop_toBottomOf="@id/transitionBtnLogin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="?attr/materialButtonOutlinedStyle"
+        />
 
 
     <com.facebook.login.widget.LoginButton

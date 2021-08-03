@@ -114,6 +114,7 @@
         android:text="@string/alr_acc_login"
         app:layout_constraintTop_toBottomOf="@id/btnSignup"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="?attr/materialButtonOutlinedStyle"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

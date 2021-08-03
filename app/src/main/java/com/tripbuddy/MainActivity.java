@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.skydoves.transformationlayout.TransformationCompat;
 import com.tripbuddy.fragments.ProfileFragment;
 import com.tripbuddy.fragments.TripsFragment;
 import com.tripbuddy.receivers.AlarmReceiver;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        TransformationCompat.onTransformationStartContainer(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

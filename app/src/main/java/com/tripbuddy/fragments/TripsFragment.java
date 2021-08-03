@@ -66,7 +66,6 @@ public class TripsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        TransformationCompat.onTransformationStartContainer(this);
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
