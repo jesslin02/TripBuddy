@@ -140,8 +140,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.View
 
                         // name match condition. we are looking for title or location match
                         if (event.getTitle().toLowerCase().contains(charString)
-                                || event.getLocation().toLowerCase().contains(charString)
-                                || event.getStart().toLowerCase().contains(charString)) {
+                                || event.getLocation().toLowerCase().contains(charString)) {
                             filteredList.add(event);
                         }
                     }

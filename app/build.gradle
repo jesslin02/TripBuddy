@@ -58,6 +58,5 @@ dependencies {
     implementation 'com.github.parse-community:ParseFacebookUtils-Android:1.14.0'
     implementation 'com.facebook.android:facebook-android-sdk:11.1.1'
 
-    implementation 'com.github.skydoves:transformationlayout:1.1.0'
     implementation 'com.royrodriguez:transitionbutton:0.2.0'
 }

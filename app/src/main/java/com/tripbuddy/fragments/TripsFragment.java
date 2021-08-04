@@ -4,6 +4,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,13 +20,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -29,8 +28,8 @@ import com.tripbuddy.CreateTripActivity;
 import com.tripbuddy.MainActivity;
 import com.tripbuddy.R;
 import com.tripbuddy.Utils;
-import com.tripbuddy.callbacks.SwipeToDeleteCallback;
 import com.tripbuddy.adapters.TripsAdapter;
+import com.tripbuddy.callbacks.SwipeToDeleteCallback;
 import com.tripbuddy.callbacks.SwipeToEditCallback;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;

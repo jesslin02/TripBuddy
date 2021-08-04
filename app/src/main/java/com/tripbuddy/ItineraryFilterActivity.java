@@ -101,7 +101,7 @@ public class ItineraryFilterActivity extends AppCompatActivity {
         });
     }
 
-    /* checks if user has chosen to filter events by date */ 
+    /* checks if user has chosen to filter events by date */
     private boolean filtered() {
         Calendar tripStart = Calendar.getInstance();
         tripStart.setTime(trip.getStartDate());

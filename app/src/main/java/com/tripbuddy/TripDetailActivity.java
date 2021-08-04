@@ -1,9 +1,5 @@
 package com.tripbuddy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,17 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.skydoves.transformationlayout.TransformationAppCompatActivity;
-import com.skydoves.transformationlayout.TransformationCompat;
-import com.skydoves.transformationlayout.TransformationLayout;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.tripbuddy.databinding.ActivityTripDetailBinding;
 import com.tripbuddy.models.Trip;
 
 import org.parceler.Parcels;
 
-import java.text.SimpleDateFormat;
-
-public class TripDetailActivity extends TransformationAppCompatActivity {
+public class TripDetailActivity extends AppCompatActivity {
     public static final String TAG = "TripDetailActivity";
     ActivityTripDetailBinding binding;
     Trip trip;

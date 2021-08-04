@@ -18,8 +18,6 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.DeleteCallback;
 import com.parse.ParseException;
-import com.skydoves.transformationlayout.TransformationCompat;
-import com.skydoves.transformationlayout.TransformationLayout;
 import com.tripbuddy.Adapter;
 import com.tripbuddy.CreateTripActivity;
 import com.tripbuddy.MainActivity;
@@ -168,14 +166,12 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         TextView tvTitle;
         TextView tvDestination;
         TextView tvDate;
-        TransformationLayout transLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDestination = itemView.findViewById(R.id.tvDestination);
             tvDate = itemView.findViewById(R.id.tvDate);
-            transLayout = itemView.findViewById(R.id.transLayout);
 
             itemView.setOnClickListener(this);
         }
@@ -195,7 +191,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
                 Trip selected = tripsFiltered.get(position);
                 Intent i = new Intent(context, TripDetailActivity.class);
                 i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(selected));
-                TransformationCompat.startActivity(transLayout, i);
+                context.startActivity(i);
             }
         }
     }
