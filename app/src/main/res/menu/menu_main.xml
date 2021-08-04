@@ -14,4 +14,10 @@
         android:title="New Trip"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/filter"
+        android:icon="@drawable/filter_active"
+        android:title="Filter"
+        app:showAsAction="ifRoom"/>
+
 </menu>

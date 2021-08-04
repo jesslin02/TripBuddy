@@ -38,6 +38,8 @@ public class ItineraryActivity extends AppCompatActivity {
     Trip trip;
     MenuItem addEvent;
     MenuItem search;
+    MenuItem filter;
+    boolean ascending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class ItineraryActivity extends AppCompatActivity {
         rvEvents = findViewById(R.id.rvEvents);
         allEvents = new ArrayList<>();
         adapter = new ItineraryAdapter(this, allEvents, trip);
+        ascending = true;
 
         rvEvents.setAdapter(adapter);
         llManager = new LinearLayoutManager(this);
@@ -121,7 +124,13 @@ public class ItineraryActivity extends AppCompatActivity {
         while (i < front.size() && j < back.size()) {
             Event frontEvent = front.get(i);
             Event backEvent = back.get(j);
-            if (frontEvent.compareTo(backEvent) < 0) {
+            boolean compare;
+            if (ascending) {
+                compare = frontEvent.compareTo(backEvent) < 0;
+            } else {
+                compare = frontEvent.compareTo(backEvent) >= 0;
+            }
+            if (compare) {
                 events.set(k, frontEvent);
                 i++;
             } else {
@@ -130,9 +139,7 @@ public class ItineraryActivity extends AppCompatActivity {
             }
             k++;
         }
-
         // in case front and back lists are not the same size
-
         while (i < front.size()) {
             events.set(k, front.get(i));
             i++;
@@ -174,6 +181,9 @@ public class ItineraryActivity extends AppCompatActivity {
             }
         });
 
+        filter = menu.findItem(R.id.filter);
+        filter.getIcon().setTint(Color.WHITE);
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -183,6 +193,10 @@ public class ItineraryActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.add) {
             onAddButton();
+            return true;
+        } else if (id == R.id.filter) {
+            ascending = !ascending;
+            getEvents();
             return true;
         }
         return super.onOptionsItemSelected(item);

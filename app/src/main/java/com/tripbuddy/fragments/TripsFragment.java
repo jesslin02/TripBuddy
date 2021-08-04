@@ -54,9 +54,11 @@ public class TripsFragment extends Fragment {
     List<Trip> allTrips;
     MenuItem addTrip;
     MenuItem search;
+    MenuItem filter;
     MainActivity mainActivity;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
+    boolean ascending;
 
     public TripsFragment() {
         // Required empty public constructor
@@ -84,6 +86,7 @@ public class TripsFragment extends Fragment {
         rvTrips = view.findViewById(R.id.rvTrips);
         allTrips = new ArrayList<>();
         adapter = new TripsAdapter(getContext(), allTrips);
+        ascending = true;
 
         rvTrips.setAdapter(adapter);
         llManager = new LinearLayoutManager(getContext());
@@ -153,7 +156,13 @@ public class TripsFragment extends Fragment {
         while (i < front.size() && j < back.size()) {
             Trip frontTrip = front.get(i);
             Trip backTrip = back.get(j);
-            if (frontTrip.compareTo(backTrip) < 0) {
+            boolean compare;
+            if (ascending) {
+                compare = frontTrip.compareTo(backTrip) < 0;
+            } else {
+                compare = frontTrip.compareTo(backTrip) >= 0;
+            }
+            if (compare) {
                 trips.set(k, frontTrip);
                 i++;
             } else {
@@ -232,6 +241,9 @@ public class TripsFragment extends Fragment {
                 return false;
             }
         });
+
+        filter = menu.findItem(R.id.filter);
+        filter.getIcon().setTint(Color.WHITE);
     }
 
     @Override
@@ -240,6 +252,10 @@ public class TripsFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.add) {
             onAddButton();
+            return true;
+        } else if (id == R.id.filter) {
+            ascending = !ascending;
+            getTrips();
             return true;
         }
         return super.onOptionsItemSelected(item);
