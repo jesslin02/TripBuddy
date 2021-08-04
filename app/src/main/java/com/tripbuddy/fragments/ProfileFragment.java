@@ -3,6 +3,8 @@ package com.tripbuddy.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,6 +20,8 @@ import com.tripbuddy.LoginActivity;
 import com.tripbuddy.R;
 import com.tripbuddy.SettingsActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ProfileFragment#//newInstance} factory method to
@@ -31,6 +35,12 @@ public class ProfileFragment extends Fragment {
 
     public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -73,5 +83,12 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         tvName.setText(ParseUser.getCurrentUser().getString(KEY_NAME));
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull @NotNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem progress = menu.findItem(R.id.action_progress);
+        progress.setVisible(false);
     }
 }

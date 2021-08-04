@@ -42,6 +42,7 @@ public class ItineraryActivity extends AppCompatActivity {
     MenuItem addEvent;
     MenuItem search;
     MenuItem filter;
+    MenuItem progress;
     /* indicates if items should be displayed in ascending order */
     boolean ascending;
     /* used to display only events that occur between filterStart and filterEnd */
@@ -114,6 +115,7 @@ public class ItineraryActivity extends AppCompatActivity {
                 // save received posts to list and notify adapter of new data
                 allEvents.clear();
                 allEvents.addAll(events);
+                progress.setVisible(false);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -215,6 +217,8 @@ public class ItineraryActivity extends AppCompatActivity {
 
         filter = menu.findItem(R.id.filter);
         filter.getIcon().setTint(Color.WHITE);
+
+        progress = menu.findItem(R.id.action_progress);
 
         return super.onPrepareOptionsMenu(menu);
     }

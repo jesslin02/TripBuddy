@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
     MenuItem addTrip;
     MenuItem search;
+    MenuItem progress;
+    MenuItem filter;
     NotificationChannel channel;
     NotificationManager notifManager;
 
@@ -75,17 +77,12 @@ public class MainActivity extends AppCompatActivity {
         addTrip.setVisible(false);
         search = menu.findItem(R.id.action_search);
         search.setVisible(false);
+        progress = menu.findItem(R.id.action_progress);
+        progress.setVisible(true);
+        filter = menu.findItem(R.id.filter);
+        filter.setVisible(false);
         return super.onPrepareOptionsMenu(menu);
     }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.add) {
-//            return false;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     private void setupNotifs() {
         // Configure the channel

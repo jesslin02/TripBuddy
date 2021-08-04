@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_progress"
+        android:title="Loading ..."
+        android:visible="true"
+        app:showAsAction="always"
+        app:actionLayout="@layout/action_view_progress"/>
+
+    <item
         android:id="@+id/action_search"
         android:icon="@drawable/magnify"
         android:title="@string/action_search"
@@ -18,6 +25,6 @@
         android:id="@+id/filter"
         android:icon="@drawable/filter_active"
         android:title="Filter"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
 </menu>

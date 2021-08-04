@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -36,6 +39,9 @@ import com.tripbuddy.models.Trip;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -46,7 +52,6 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class TripsFragment extends Fragment {
     public static final String TAG = "TripsFragment";
-
     RecyclerView rvTrips;
     LinearLayoutManager llManager;
     TripsAdapter adapter;
@@ -54,9 +59,11 @@ public class TripsFragment extends Fragment {
     MenuItem addTrip;
     MenuItem search;
     MenuItem filter;
+    MenuItem progress;
     MainActivity mainActivity;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
+    ThreadPoolExecutor executor;
     boolean ascending;
 
     public TripsFragment() {
@@ -95,6 +102,21 @@ public class TripsFragment extends Fragment {
         ItemTouchHelper editHelper = new ItemTouchHelper(new SwipeToEditCallback(adapter));
         editHelper.attachToRecyclerView(rvTrips);
 
+        // Determine the number of cores on the device
+        int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
+        // Construct thread pool passing in configuration options
+        // int minPoolSize, int maxPoolSize, long keepAliveTime, TimeUnit unit,
+        // BlockingQueue<Runnable> workQueue
+        executor = new ThreadPoolExecutor(
+                NUMBER_OF_CORES*2,
+                NUMBER_OF_CORES*2,
+                60L,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(),
+                new ThreadPoolExecutor.CallerRunsPolicy()
+        );
+
+
         getTrips();
     }
 
@@ -124,12 +146,14 @@ public class TripsFragment extends Fragment {
                     Log.i(TAG, "Trip: " + trip.getTitle() + ", location: " + trip.getDestination());
                     addNotifs(trip);
                 }
+                executor.shutdown();
 
                 sortTrips(trips);
 
                 // save received posts to list and notify adapter of new data
                 allTrips.clear();
                 allTrips.addAll(trips);
+                progress.setVisible(false);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -185,33 +209,38 @@ public class TripsFragment extends Fragment {
     }
 
     private void addNotifs(Trip trip) {
-        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
-        // include data referred by user key
-        query.include(Event.KEY_USER);
-        query.include(Event.KEY_TRIP);
-        query.whereEqualTo(Event.KEY_USER, ParseUser.getCurrentUser());
-        query.whereEqualTo(Event.KEY_TRIP, trip);
-        query.orderByAscending(Event.KEY_START);
-        query.setLimit(10);
-        query.findInBackground(new FindCallback<Event>() {
+        executor.execute(new Runnable() {
             @Override
-            public void done(List<Event> events, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with retrieving events for setting alarms", e);
-                    return;
-                }
+            public void run() {
+                ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+                // include data referred by user key
+                query.include(Event.KEY_USER);
+                query.include(Event.KEY_TRIP);
+                query.whereEqualTo(Event.KEY_USER, ParseUser.getCurrentUser());
+                query.whereEqualTo(Event.KEY_TRIP, trip);
+                query.orderByAscending(Event.KEY_START);
+                query.setLimit(10);
+                query.findInBackground(new FindCallback<Event>() {
+                    @Override
+                    public void done(List<Event> events, ParseException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Issue with retrieving events for setting alarms", e);
+                            return;
+                        }
 
-                // for debugging purposes let's print every trip title to logcat
-                for (Event event : events) {
-                    String id = event.getId();
-                    if (sharedPref.getBoolean(id, false)) {
-                        Utils.createNotif(mainActivity, event);
-                        editor.putBoolean(id, true);
+                        // for debugging purposes let's print every trip title to logcat
+                        for (Event event : events) {
+                            String id = event.getId();
+                            if (sharedPref.getBoolean(id, false)) {
+                                Utils.createNotif(mainActivity, event);
+                                editor.putBoolean(id, true);
+                            }
+                            Log.i(TAG, "set notif for event: " + event.getTitle()
+                                    + ", location: " + event.getLocation());
+                        }
+                        editor.commit();
                     }
-                    Log.i(TAG, "set notif for event: " + event.getTitle()
-                            + ", location: " + event.getLocation());
-                }
-                editor.commit();
+                });
             }
         });
     }
@@ -242,7 +271,11 @@ public class TripsFragment extends Fragment {
         });
 
         filter = menu.findItem(R.id.filter);
+        filter.setVisible(true);
         filter.getIcon().setTint(Color.WHITE);
+
+        progress = menu.findItem(R.id.action_progress);
+        progress.setVisible(true);
     }
 
     @Override
