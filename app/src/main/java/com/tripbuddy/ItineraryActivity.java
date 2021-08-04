@@ -134,8 +134,9 @@ public class ItineraryActivity extends AppCompatActivity {
         long filterStartTime = filterStart.getTimeInMillis();
         long filterEndTime = filterEnd.getTimeInMillis();
 
-        return evStartTime > filterStartTime && evStartTime < filterEndTime
-                || evEndTime > filterStartTime && evEndTime < filterEndTime;
+        return evStartTime >= filterStartTime && evStartTime <= filterEndTime
+                || evEndTime >= filterStartTime && evEndTime <= filterEndTime
+                || evStartTime <= filterStartTime && evEndTime >= filterEndTime;
     }
 
     private void sortEvents(List<Event> events) {

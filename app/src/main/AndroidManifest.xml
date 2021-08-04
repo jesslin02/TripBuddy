@@ -16,16 +16,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TripBuddy"
         android:usesCleartextTraffic="true">
+        <activity android:name=".TripFilterActivity"></activity>
 
         <receiver
             android:name=".receivers.AlarmReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="false" />
 
         <service
             android:name=".NotificationService"
             android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity android:name=".SettingsActivity" />
         <activity android:name=".CreateEventActivity" />
@@ -40,7 +41,7 @@
         </activity>
         <activity android:name=".EventDetailActivity" />
         <activity android:name=".ItineraryActivity" />
-        <activity android:name=".ItineraryFilterActivity"/>
+        <activity android:name=".ItineraryFilterActivity" />
         <activity android:name=".TripDetailActivity" />
         <activity android:name=".MainActivity" />
 

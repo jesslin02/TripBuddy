@@ -1,23 +1,19 @@
 package com.tripbuddy;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.tripbuddy.databinding.ActivityItineraryFilterBinding;
+import com.tripbuddy.databinding.ActivityTripFilterBinding;
 import com.tripbuddy.listeners.DateRangeTouchListener;
-import com.tripbuddy.models.Trip;
-
-import org.parceler.Parcels;
 
 import java.util.Calendar;
 
-public class ItineraryFilterActivity extends AppCompatActivity {
-    ActivityItineraryFilterBinding binding;
-    Trip trip;
+public class TripFilterActivity extends AppCompatActivity {
+    ActivityTripFilterBinding binding;
     boolean ascending;
     Calendar startCal;
     Calendar endCal;
@@ -26,17 +22,17 @@ public class ItineraryFilterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityItineraryFilterBinding.inflate(getLayoutInflater());
+        binding = ActivityTripFilterBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-        trip = Parcels.unwrap(getIntent().getParcelableExtra(Trip.class.getSimpleName()));
         ascending = getIntent().getBooleanExtra("ascending", true);
         if (ascending) {
             binding.radioAscending.setChecked(true);
         } else {
             binding.radioDescending.setChecked(true);
         }
+
         Calendar filterStart = (Calendar) getIntent().getSerializableExtra("filterStart");
         Calendar filterEnd = (Calendar) getIntent().getSerializableExtra("filterEnd");
         if (filterStart != null) {
@@ -46,14 +42,12 @@ public class ItineraryFilterActivity extends AppCompatActivity {
                     + Utils.DATE_FORMAT.format(endCal.getTime()));
         } else {
             startCal = Calendar.getInstance();
-            startCal.setTime(trip.getStartDate());
             endCal = Calendar.getInstance();
-            endCal.setTime(trip.getEndDate());
         }
 
         setListeners();
 
-        getSupportActionBar().setTitle("Filter events in " + trip.getTitle());
+        getSupportActionBar().setTitle("Filter trips");
     }
 
     private void setListeners() {
@@ -71,7 +65,7 @@ public class ItineraryFilterActivity extends AppCompatActivity {
         });
 
         binding.etDates.setOnTouchListener(new DateRangeTouchListener(binding.etDates, this,
-                startCal, endCal, trip, getSupportFragmentManager()));
+                startCal, endCal, getSupportFragmentManager()));
 
         binding.btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,18 +73,17 @@ public class ItineraryFilterActivity extends AppCompatActivity {
                 binding.radioAscending.setChecked(true);
                 binding.radioDescending.setChecked(false);
                 binding.etDates.setText("");
-                startCal.setTime(trip.getStartDate());
-                endCal.setTime(trip.getEndDate());
+                startCal = Calendar.getInstance();
+                endCal = Calendar.getInstance();
             }
         });
 
         binding.btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ItineraryFilterActivity.this, ItineraryActivity.class);
+                Intent i = new Intent(TripFilterActivity.this, MainActivity.class);
                 i.putExtra("ascending", ascending);
-                i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
-                if (filtered()) {
+                if (startCal.getTimeInMillis() != endCal.getTimeInMillis()) {
                     i.putExtra("filterStart", startCal);
                     i.putExtra("filterEnd", endCal);
                 }
@@ -98,16 +91,5 @@ public class ItineraryFilterActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    /* checks if user has chosen to filter events by date */
-    private boolean filtered() {
-        Calendar tripStart = Calendar.getInstance();
-        tripStart.setTime(trip.getStartDate());
-        Calendar tripEnd = Calendar.getInstance();
-        tripEnd.setTime(trip.getEndDate());
-
-        return startCal.getTimeInMillis() != tripStart.getTimeInMillis()
-                || endCal.getTimeInMillis() != tripEnd.getTimeInMillis();
     }
 }

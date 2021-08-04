@@ -28,8 +28,10 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.tripbuddy.CreateTripActivity;
+import com.tripbuddy.ItineraryFilterActivity;
 import com.tripbuddy.MainActivity;
 import com.tripbuddy.R;
+import com.tripbuddy.TripFilterActivity;
 import com.tripbuddy.Utils;
 import com.tripbuddy.adapters.TripsAdapter;
 import com.tripbuddy.callbacks.SwipeToDeleteCallback;
@@ -37,7 +39,10 @@ import com.tripbuddy.callbacks.SwipeToEditCallback;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -65,6 +70,8 @@ public class TripsFragment extends Fragment {
     SharedPreferences.Editor editor;
     ThreadPoolExecutor executor;
     boolean ascending;
+    Calendar filterStart;
+    Calendar filterEnd;
 
     public TripsFragment() {
         // Required empty public constructor
@@ -92,7 +99,9 @@ public class TripsFragment extends Fragment {
         rvTrips = view.findViewById(R.id.rvTrips);
         allTrips = new ArrayList<>();
         adapter = new TripsAdapter(getContext(), allTrips);
-        ascending = true;
+        ascending = mainActivity.getIntent().getBooleanExtra("ascending", true);
+        filterStart = (Calendar) mainActivity.getIntent().getSerializableExtra("filterStart");
+        filterEnd = (Calendar) mainActivity.getIntent().getSerializableExtra("filterEnd");
 
         rvTrips.setAdapter(adapter);
         llManager = new LinearLayoutManager(getContext());
@@ -115,9 +124,6 @@ public class TripsFragment extends Fragment {
                 new LinkedBlockingQueue<>(),
                 new ThreadPoolExecutor.CallerRunsPolicy()
         );
-
-
-        getTrips();
     }
 
     @Override
@@ -141,10 +147,18 @@ public class TripsFragment extends Fragment {
                     return;
                 }
 
+                List<Trip> tripsWithinDates = new ArrayList<>();
                 // for debugging purposes let's print every trip title to logcat
                 for (Trip trip : trips) {
                     Log.i(TAG, "Trip: " + trip.getTitle() + ", location: " + trip.getDestination());
                     addNotifs(trip);
+                    if (filterStart != null && withinDates(trip)) {
+                        Log.d(TAG, "Trip " + trip.getTitle() + " is within filter dates");
+                        tripsWithinDates.add(trip);
+                    }
+                }
+                if (filterStart != null) {
+                    trips = tripsWithinDates;
                 }
                 executor.shutdown();
 
@@ -157,6 +171,24 @@ public class TripsFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private boolean withinDates(Trip tr) {
+        Calendar trStart = Calendar.getInstance();
+        trStart.setTime(tr.getStartDate());
+        long trStartTime = trStart.getTimeInMillis();
+
+        Calendar trEnd = Calendar.getInstance();
+        trEnd.setTime(tr.getEndDate());
+        long trEndTime = trEnd.getTimeInMillis();
+
+
+        long filterStartTime = filterStart.getTimeInMillis();
+        long filterEndTime = filterEnd.getTimeInMillis();
+
+        return trStartTime >= filterStartTime && trStartTime <= filterEndTime // start date inside filter bounds
+                || trEndTime >= filterStartTime && trEndTime <= filterEndTime // end date inside filter bounds
+                || trStartTime <= filterStartTime && trEndTime >= filterEndTime; // filter bounds inside start & end date
     }
 
     private void sortTrips(List<Trip> trips) {
@@ -286,11 +318,19 @@ public class TripsFragment extends Fragment {
             onAddButton();
             return true;
         } else if (id == R.id.filter) {
-            ascending = !ascending;
-            getTrips();
+            onFilterButton();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onFilterButton() {
+        Intent i = new Intent(mainActivity, TripFilterActivity.class);
+        i.putExtra("ascending",  ascending);
+        i.putExtra("filterStart", filterStart);
+        i.putExtra("filterEnd", filterEnd);
+        startActivity(i);
+        mainActivity.finish();
     }
 
     private void onAddButton() {
