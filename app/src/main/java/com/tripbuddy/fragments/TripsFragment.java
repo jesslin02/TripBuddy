@@ -30,7 +30,7 @@ import com.tripbuddy.MainActivity;
 import com.tripbuddy.R;
 import com.tripbuddy.Utils;
 import com.tripbuddy.callbacks.SwipeToDeleteCallback;
-import com.tripbuddy.TripsAdapter;
+import com.tripbuddy.adapters.TripsAdapter;
 import com.tripbuddy.callbacks.SwipeToEditCallback;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;

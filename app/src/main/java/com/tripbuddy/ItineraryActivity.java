@@ -19,6 +19,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.tripbuddy.adapters.ItineraryAdapter;
 import com.tripbuddy.callbacks.SwipeToDeleteCallback;
 import com.tripbuddy.callbacks.SwipeToEditCallback;
 import com.tripbuddy.models.Event;
@@ -27,6 +28,8 @@ import com.tripbuddy.models.Trip;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 public class ItineraryActivity extends AppCompatActivity {
@@ -41,6 +44,9 @@ public class ItineraryActivity extends AppCompatActivity {
     MenuItem filter;
     /* indicates if items should be displayed in ascending order */
     boolean ascending;
+    /* used to display only events that occur between filterStart and filterEnd */
+    Calendar filterStart;
+    Calendar filterEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +54,10 @@ public class ItineraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_itinerary);
 
         trip = Parcels.unwrap(getIntent().getParcelableExtra(Trip.class.getSimpleName()));
+        Log.i(TAG, String.format("Showing itinerary for '%s'", trip.getTitle()));
         ascending = getIntent().getBooleanExtra("ascending", true);
-        Log.d(TAG, String.format("Showing itinerary for '%s'", trip.getTitle()));
+        filterStart = (Calendar) getIntent().getSerializableExtra("filterStart");
+        filterEnd = (Calendar) getIntent().getSerializableExtra("filterEnd");
 
         rvEvents = findViewById(R.id.rvEvents);
         allEvents = new ArrayList<>();
@@ -90,9 +98,15 @@ public class ItineraryActivity extends AppCompatActivity {
                     return;
                 }
 
-                // for debugging purposes let's print every trip title to logcat
-                for (Event event : events) {
-                    Log.i(TAG, "Event: " + event.getTitle() + ", Location: " + event.getLocation());
+                if (filterStart != null) {
+                    List<Event> eventsWithinDates = new ArrayList<>();
+                    for (Event event : events) {
+                        if (withinDates(event)) {
+                            Log.d(TAG, "Event " + event.getTitle() + " is within filter dates");
+                            eventsWithinDates.add(event);
+                        }
+                    }
+                    events = eventsWithinDates;
                 }
 
                 sortEvents(events);
@@ -103,6 +117,23 @@ public class ItineraryActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private boolean withinDates(Event ev) {
+        Calendar evStart = Calendar.getInstance();
+        evStart.setTime(ev.getStartDate());
+        long evStartTime = evStart.getTimeInMillis();
+
+        Calendar evEnd = Calendar.getInstance();
+        evEnd.setTime(ev.getEndDate());
+        long evEndTime = evEnd.getTimeInMillis();
+
+
+        long filterStartTime = filterStart.getTimeInMillis();
+        long filterEndTime = filterEnd.getTimeInMillis();
+
+        return evStartTime > filterStartTime && evStartTime < filterEndTime
+                || evEndTime > filterStartTime && evEndTime < filterEndTime;
     }
 
     private void sortEvents(List<Event> events) {
@@ -206,6 +237,8 @@ public class ItineraryActivity extends AppCompatActivity {
         Intent i = new Intent(this, ItineraryFilterActivity.class);
         i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
         i.putExtra("ascending",  ascending);
+        i.putExtra("filterStart", filterStart);
+        i.putExtra("filterEnd", filterEnd);
         startActivity(i);
         finish();
     }

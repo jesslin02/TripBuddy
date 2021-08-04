@@ -25,7 +25,9 @@ import java.util.Calendar;
  * CreateEventActivity
  */
 public class DateTouchListener implements View.OnTouchListener {
-    static final long DAY_MILLIS = 86400000;
+    static final long HOUR_MILLIS = 3600000;
+    /* 7 hours from UTC to PDT */
+    static final long TIMEZONE_OFFSET = HOUR_MILLIS * 7;
     EditText etDate;
     Activity activity;
     /* calendar object representing date (start or end) being chosen for event */
@@ -46,10 +48,10 @@ public class DateTouchListener implements View.OnTouchListener {
 
         Calendar tripStart = Calendar.getInstance();
         tripStart.setTime(trip.getStartDate());
-        tripStartMillis = tripStart.getTimeInMillis() - DAY_MILLIS;
+        tripStartMillis = tripStart.getTimeInMillis() - TIMEZONE_OFFSET;
         Calendar tripEnd = Calendar.getInstance();
         tripEnd.setTime(trip.getEndDate());
-        tripEndMillis = tripEnd.getTimeInMillis() - DAY_MILLIS;
+        tripEndMillis = tripEnd.getTimeInMillis() - TIMEZONE_OFFSET;
     }
 
     @Override
@@ -82,7 +84,7 @@ public class DateTouchListener implements View.OnTouchListener {
 
             MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select date")
-                    .setSelection(cal.getTimeInMillis() - DAY_MILLIS)
+                    .setSelection(cal.getTimeInMillis() - TIMEZONE_OFFSET)
                     .setCalendarConstraints(constraints)
                     .build();
 
@@ -90,7 +92,7 @@ public class DateTouchListener implements View.OnTouchListener {
                 @Override
                 public void onPositiveButtonClick(Long selection) {
                     Calendar selected = Calendar.getInstance();
-                    selected.setTimeInMillis(selection + DAY_MILLIS);
+                    selected.setTimeInMillis(selection + TIMEZONE_OFFSET);
                     cal.set(selected.get(Calendar.YEAR), selected.get(Calendar.MONTH),
                             selected.get(Calendar.DAY_OF_MONTH));
                     etDate.setText(Utils.DATE_FORMAT.format(cal.getTime()));

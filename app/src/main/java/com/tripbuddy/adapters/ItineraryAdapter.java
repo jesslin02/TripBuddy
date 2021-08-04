@@ -1,9 +1,7 @@
-package com.tripbuddy;
+package com.tripbuddy.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +18,12 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.DeleteCallback;
 import com.parse.ParseException;
-import com.skydoves.transformationlayout.TransformationCompat;
-import com.skydoves.transformationlayout.TransformationLayout;
+import com.tripbuddy.Adapter;
+import com.tripbuddy.CreateEventActivity;
+import com.tripbuddy.EventDetailActivity;
+import com.tripbuddy.ItineraryActivity;
+import com.tripbuddy.R;
+import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
 import org.parceler.Parcels;
@@ -29,60 +31,50 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> implements Adapter, Filterable {
-    public static final String TAG = "TripsAdapter";
+public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.ViewHolder> implements Adapter, Filterable {
+    public static final String TAG = "ItineraryAdapter";
+    Trip trip;
     Context context;
-    List<Trip> trips;
-    List<Trip> tripsFiltered;
+    List<Event> events;
+    List<Event> eventsFiltered;
 
-    public TripsAdapter(Context c, List<Trip> t) {
+    public ItineraryAdapter(Context c, List<Event> e, Trip trip) {
         this.context = c;
-        this.trips = t;
-        this.tripsFiltered = t;
+        this.events = e;
+        this.eventsFiltered = e;
+        this.trip = trip;
     }
-
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_trip, parent, false);
-        return new ViewHolder(view);
+    public ItineraryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_event, parent, false);
+        return new ItineraryAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TripsAdapter.ViewHolder holder, int position) {
-        Trip trip = tripsFiltered.get(position);
-        holder.bind(trip);
+    public void onBindViewHolder(@NonNull ItineraryAdapter.ViewHolder holder, int position) {
+        Event event = eventsFiltered.get(position);
+        holder.bind(event);
     }
 
     @Override
     public int getItemCount() {
-        return this.tripsFiltered.size();
-    }
-
-    @Override
-    public void editItem(int position) {
-        Intent i = new Intent(context, CreateTripActivity.class);
-        Trip trip = tripsFiltered.get(position);
-        i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
-        i.putExtra("edit", true);
-        context.startActivity(i);
+        return eventsFiltered.size();
     }
 
     @Override
     public void deleteItem(int position) {
-        Log.i(TAG, "deleteItem at position " + String.valueOf(position));
-        Trip recentlyDeletedTrip = tripsFiltered.get(position);
-        tripsFiltered.remove(position);
+        Event recentlyDeletedEvent = eventsFiltered.get(position);
+        eventsFiltered.remove(position);
         notifyItemRemoved(position);
-        showUndoSnackbar(recentlyDeletedTrip, position);
+        showUndoSnackbar(recentlyDeletedEvent, position);
     }
 
-    private void showUndoSnackbar(Trip deleted, int deletedPos) {
-        View view = ((MainActivity) context).findViewById(R.id.coordinator_layout);
+    private void showUndoSnackbar(Event deleted, int deletedPos) {
+        View view = ((ItineraryActivity) context).findViewById(R.id.coordinator_layout);
         String sbMessage = deleted.getTitle() + " was removed";
         Snackbar sb = Snackbar.make(view, sbMessage, Snackbar.LENGTH_LONG);
-        sb.setAnchorView(((MainActivity) context).findViewById(R.id.bottom_navigation));
         sb.setAction(R.string.undo, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,8 +104,8 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         });
     }
 
-    private void undoDelete(Trip deleted, int deletedPos) {
-        tripsFiltered.add(deletedPos, deleted);
+    private void undoDelete(Event deleted, int deletedPos) {
+        eventsFiltered.add(deletedPos, deleted);
         notifyItemInserted(deletedPos);
     }
 
@@ -123,78 +115,87 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
     }
 
     @Override
+    public void editItem(int position) {
+        Intent i = new Intent(context, CreateEventActivity.class);
+        Event event = eventsFiltered.get(position);
+        i.putExtra("edit", true);
+        i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+        i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
+        context.startActivity(i);
+    }
+
+    @Override
     public Filter getFilter() {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString().toLowerCase();
                 if (charString.isEmpty()) {
-                    tripsFiltered = trips;
+                    eventsFiltered = events;
                 } else {
-                    List<Trip> filteredList = new ArrayList<>();
-                    for (Trip trip : trips) {
-                        Log.i(TAG, "performFiltering on event " + trip.getTitle()
+                    List<Event> filteredList = new ArrayList<>();
+                    for (Event event : events) {
+                        Log.i(TAG, "performFiltering on event at " + event.getLocation()
                                 + " with query " + constraint);
 
                         // name match condition. we are looking for title or location match
-                        if (trip.getTitle().toLowerCase().contains(charString)
-                                || trip.getDestination().toLowerCase().contains(charString)
-                                || trip.getStart().toLowerCase().contains(charString)) {
-                            filteredList.add(trip);
+                        if (event.getTitle().toLowerCase().contains(charString)
+                                || event.getLocation().toLowerCase().contains(charString)
+                                || event.getStart().toLowerCase().contains(charString)) {
+                            filteredList.add(event);
                         }
                     }
 
-                    tripsFiltered = filteredList;
+                    eventsFiltered = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = tripsFiltered;
+                filterResults.values = eventsFiltered;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                tripsFiltered = (ArrayList<Trip>) results.values;
+                eventsFiltered = (ArrayList<Event>) results.values;
                 notifyDataSetChanged();
             }
         };
     }
 
-
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvTitle;
-        TextView tvDestination;
-        TextView tvDate;
-        TransformationLayout transLayout;
+        TextView tvLocation;
+        TextView tvStart;
+        TextView tvEnd;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDestination = itemView.findViewById(R.id.tvDestination);
-            tvDate = itemView.findViewById(R.id.tvDate);
-            transLayout = itemView.findViewById(R.id.transLayout);
+            tvLocation = itemView.findViewById(R.id.tvLocation);
+            tvStart = itemView.findViewById(R.id.tvStart);
+            tvEnd = itemView.findViewById(R.id.tvEnd);
 
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Trip trip) {
-            tvTitle.setText(trip.getTitle());
-            tvDestination.setText(trip.getDestination());
-            String fullDate = trip.getStart() + " - " + trip.getEnd();
-            tvDate.setText(fullDate);
+        public void bind(Event event) {
+            tvTitle.setText(event.getTitle());
+            tvLocation.setText(event.getLocation());
+            tvStart.setText(event.getStart());
+            tvEnd.setText(event.getEnd());
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            Log.i(TAG, "item clicked at position " + position);
+            Log.i(TAG, "item clicked at position " + Integer.toString(position));
             if (position != RecyclerView.NO_POSITION) {
-                Trip selected = tripsFiltered.get(position);
-                Intent i = new Intent(context, TripDetailActivity.class);
-                i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(selected));
-                TransformationCompat.startActivity(transLayout, i);
+                Event selected = eventsFiltered.get(position);
+                Intent i = new Intent(context, EventDetailActivity.class);
+                i.putExtra("edit", false);
+                i.putExtra(Event.class.getSimpleName(), Parcels.wrap(selected));
+                context.startActivity(i);
             }
         }
     }
-
 }
