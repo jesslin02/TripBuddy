@@ -39,6 +39,7 @@ public class ItineraryActivity extends AppCompatActivity {
     MenuItem addEvent;
     MenuItem search;
     MenuItem filter;
+    /* indicates if items should be displayed in ascending order */
     boolean ascending;
 
     @Override
@@ -47,12 +48,12 @@ public class ItineraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_itinerary);
 
         trip = Parcels.unwrap(getIntent().getParcelableExtra(Trip.class.getSimpleName()));
+        ascending = getIntent().getBooleanExtra("ascending", true);
         Log.d(TAG, String.format("Showing itinerary for '%s'", trip.getTitle()));
 
         rvEvents = findViewById(R.id.rvEvents);
         allEvents = new ArrayList<>();
         adapter = new ItineraryAdapter(this, allEvents, trip);
-        ascending = true;
 
         rvEvents.setAdapter(adapter);
         llManager = new LinearLayoutManager(this);
@@ -195,11 +196,18 @@ public class ItineraryActivity extends AppCompatActivity {
             onAddButton();
             return true;
         } else if (id == R.id.filter) {
-            ascending = !ascending;
-            getEvents();
+            onFilterButton();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onFilterButton() {
+        Intent i = new Intent(this, ItineraryFilterActivity.class);
+        i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
+        i.putExtra("ascending",  ascending);
+        startActivity(i);
+        finish();
     }
 
     private void onAddButton() {
