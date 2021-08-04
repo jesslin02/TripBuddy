@@ -13,7 +13,7 @@ import java.util.List;
 
 @Parcel(analyze = {Event.class})
 @ParseClassName("Event")
-public class Event extends ParseObject {
+public class Event extends ParseObject implements Comparable<Event> {
     public static final String KEY_TITLE = "title";
     public static final String KEY_TRIP = "trip";
     public static final String KEY_USER = "user";
@@ -136,5 +136,18 @@ public class Event extends ParseObject {
 
     public String getId() {
         return getObjectId();
+    }
+
+    @Override
+    public int compareTo(Event o) {
+        Calendar thisCal = Calendar.getInstance();
+        thisCal.setTime(this.getStartDate());
+        long thisTime = thisCal.getTimeInMillis();
+
+        Calendar oCal = Calendar.getInstance();
+        oCal.setTime(o.getStartDate());
+        long oTime = oCal.getTimeInMillis();
+
+        return Long.compare(thisTime, oTime);
     }
 }

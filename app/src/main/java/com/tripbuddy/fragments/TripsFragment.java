@@ -25,9 +25,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.skydoves.transformationlayout.TransformationCompat;
 import com.tripbuddy.CreateTripActivity;
-import com.tripbuddy.ItineraryActivity;
 import com.tripbuddy.MainActivity;
 import com.tripbuddy.R;
 import com.tripbuddy.Utils;
@@ -109,7 +107,7 @@ public class TripsFragment extends Fragment {
         // include data referred by user key
         query.include(Trip.KEY_USER);
         query.whereEqualTo(Trip.KEY_USER, ParseUser.getCurrentUser());
-        query.orderByAscending(Trip.KEY_START);
+        // query.orderByAscending(Trip.KEY_START);
         query.setLimit(10);
         query.findInBackground(new FindCallback<Trip>() {
             @Override
@@ -125,12 +123,57 @@ public class TripsFragment extends Fragment {
                     addNotifs(trip);
                 }
 
+                sortTrips(trips);
+
                 // save received posts to list and notify adapter of new data
                 allTrips.clear();
                 allTrips.addAll(trips);
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private void sortTrips(List<Trip> trips) {
+        if (trips.size() <= 1) {
+            return;
+        }
+        int midpoint = trips.size() / 2;
+        List<Trip> front = new ArrayList<>(trips.subList(0, midpoint));
+        List<Trip> back = new ArrayList<>(trips.subList(midpoint, trips.size()));
+
+        sortTrips(front);
+        sortTrips(back);
+        mergeTrips(front, back, trips);
+    }
+
+    private void mergeTrips(List<Trip> front, List<Trip> back, List<Trip> trips) {
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        while (i < front.size() && j < back.size()) {
+            Trip frontTrip = front.get(i);
+            Trip backTrip = back.get(j);
+            if (frontTrip.compareTo(backTrip) < 0) {
+                trips.set(k, frontTrip);
+                i++;
+            } else {
+                trips.set(k, backTrip);
+                j++;
+            }
+            k++;
+        }
+
+        while (i < front.size()) {
+            trips.set(k, front.get(i));
+            i++;
+            k++;
+        }
+
+        while (j < back.size()) {
+            trips.set(k, back.get(j));
+            j++;
+            k++;
+        }
     }
 
     private void addNotifs(Trip trip) {

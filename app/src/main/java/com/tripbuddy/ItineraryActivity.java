@@ -59,6 +59,7 @@ public class ItineraryActivity extends AppCompatActivity {
         ItemTouchHelper editHelper = new ItemTouchHelper(new SwipeToEditCallback(adapter));
         editHelper.attachToRecyclerView(rvEvents);
 
+        getSupportActionBar().setTitle(trip.getTitle());
         getEvents();
     }
 
@@ -75,7 +76,7 @@ public class ItineraryActivity extends AppCompatActivity {
         query.include(Event.KEY_TRIP);
         query.whereEqualTo(Event.KEY_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(Event.KEY_TRIP, trip);
-        query.orderByAscending(Event.KEY_START);
+        // query.orderByAscending(Event.KEY_START);
         query.setLimit(10);
         query.findInBackground(new FindCallback<Event>() {
             @Override
@@ -90,12 +91,59 @@ public class ItineraryActivity extends AppCompatActivity {
                     Log.i(TAG, "Event: " + event.getTitle() + ", Location: " + event.getLocation());
                 }
 
+                sortEvents(events);
+
                 // save received posts to list and notify adapter of new data
                 allEvents.clear();
                 allEvents.addAll(events);
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private void sortEvents(List<Event> events) {
+        if (events.size() <= 1) {
+            return;
+        }
+        int midpoint = events.size() / 2;
+        List<Event> front = new ArrayList<>(events.subList(0, midpoint));
+        List<Event> back = new ArrayList<>(events.subList(midpoint, events.size()));
+
+        sortEvents(front);
+        sortEvents(back);
+        mergeEvents(front, back, events);
+    }
+
+    private void mergeEvents(List<Event> front, List<Event> back, List<Event> events) {
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        while (i < front.size() && j < back.size()) {
+            Event frontEvent = front.get(i);
+            Event backEvent = back.get(j);
+            if (frontEvent.compareTo(backEvent) < 0) {
+                events.set(k, frontEvent);
+                i++;
+            } else {
+                events.set(k, backEvent);
+                j++;
+            }
+            k++;
+        }
+
+        // in case front and back lists are not the same size
+
+        while (i < front.size()) {
+            events.set(k, front.get(i));
+            i++;
+            k++;
+        }
+
+        while (j < back.size()) {
+            events.set(k, back.get(j));
+            j++;
+            k++;
+        }
     }
 
     @Override

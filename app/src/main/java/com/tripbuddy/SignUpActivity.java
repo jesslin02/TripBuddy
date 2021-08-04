@@ -12,12 +12,14 @@ import android.widget.Toast;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+import com.royrodriguez.transitionbutton.TransitionButton;
 import com.tripbuddy.databinding.ActivitySignUpBinding;
 
 public class SignUpActivity extends AppCompatActivity {
     public static final String TAG = "SignUpActivity";
     public static final String KEY_NAME = "name";
     ActivitySignUpBinding binding;
+    int salmon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,29 +29,23 @@ public class SignUpActivity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        salmon = getResources().getColor(R.color.salmon);
 
-        binding.btnSignup.setOnClickListener(new View.OnClickListener() {
+        binding.transitionBtnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick signup button");
+                binding.transitionBtnSignup.startAnimation();
+                Log.i(TAG, "onClick transition signup button");
                 String name = binding.etName.getText().toString();
                 String username = binding.etUsername.getText().toString();
                 String password = binding.etPassword.getText().toString();
                 String passwordConfirm = binding.etPasswordConfirm.getText().toString();
-                int salmon = getResources().getColor(R.color.salmon);
                 if (Utils.checkRequiredInput(salmon, binding.nameLayout, binding.usernameLayout,
-                        binding.passwordLayout, binding.passwordConfirmLayout)) {
-                    if (!password.equals(passwordConfirm)) {
-                        binding.passwordLayout.setErrorTextColor(ColorStateList.valueOf(salmon));
-                        binding.passwordLayout.setError("Passwords must match");
-                        binding.passwordLayout.setErrorEnabled(true);
-
-                        binding.passwordConfirmLayout.setErrorTextColor(ColorStateList.valueOf(salmon));
-                        binding.passwordConfirmLayout.setError("Passwords must match");
-                        binding.passwordConfirmLayout.setErrorEnabled(true);
-                        return;
-                    }
+                        binding.passwordLayout, binding.passwordConfirmLayout)
+                        && checkPasswords(password, passwordConfirm)) {
                     signUpUser(name, username, password);
+                } else {
+                    binding.transitionBtnSignup.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
                 }
             }
         });
@@ -75,6 +71,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e != null) {
+                    binding.transitionBtnSignup.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
                     Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Issue with signup", e);
                     return;
@@ -83,5 +80,19 @@ public class SignUpActivity extends AppCompatActivity {
                 Utils.goMainActivity(SignUpActivity.this);
             }
         });
+    }
+
+    private boolean checkPasswords(String pass, String conf) {
+        if (!pass.equals(conf)) {
+            binding.passwordLayout.setErrorTextColor(ColorStateList.valueOf(salmon));
+            binding.passwordLayout.setError("Passwords must match");
+            binding.passwordLayout.setErrorEnabled(true);
+
+            binding.passwordConfirmLayout.setErrorTextColor(ColorStateList.valueOf(salmon));
+            binding.passwordConfirmLayout.setError("Passwords must match");
+            binding.passwordConfirmLayout.setErrorEnabled(true);
+            return false;
+        }
+        return true;
     }
 }

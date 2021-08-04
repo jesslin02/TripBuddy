@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.skydoves.transformationlayout.TransformationAppCompatActivity;
+import com.skydoves.transformationlayout.TransformationCompat;
+import com.skydoves.transformationlayout.TransformationLayout;
 import com.tripbuddy.databinding.ActivityTripDetailBinding;
 import com.tripbuddy.models.Trip;
 
@@ -38,6 +40,7 @@ public class TripDetailActivity extends TransformationAppCompatActivity {
         trip = Parcels.unwrap(getIntent().getParcelableExtra(Trip.class.getSimpleName()));
         Log.d(TAG, String.format("Showing details for '%s'", trip.getTitle()));
 
+        getSupportActionBar().setTitle(trip.getTitle());
         displayDetails();
     }
 

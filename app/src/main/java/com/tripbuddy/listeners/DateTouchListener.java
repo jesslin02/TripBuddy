@@ -82,14 +82,17 @@ public class DateTouchListener implements View.OnTouchListener {
 
             MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select date")
-                    .setSelection(cal.getTimeInMillis())
+                    .setSelection(cal.getTimeInMillis() - DAY_MILLIS)
                     .setCalendarConstraints(constraints)
                     .build();
 
             datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
                 @Override
                 public void onPositiveButtonClick(Long selection) {
-                    cal.setTimeInMillis(selection + DAY_MILLIS);
+                    Calendar selected = Calendar.getInstance();
+                    selected.setTimeInMillis(selection + DAY_MILLIS);
+                    cal.set(selected.get(Calendar.YEAR), selected.get(Calendar.MONTH),
+                            selected.get(Calendar.DAY_OF_MONTH));
                     etDate.setText(Utils.DATE_FORMAT.format(cal.getTime()));
                 }
             });

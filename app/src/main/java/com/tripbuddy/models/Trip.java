@@ -13,7 +13,7 @@ import java.util.List;
 
 @Parcel(analyze = {Trip.class})
 @ParseClassName("Trip")
-public class Trip extends ParseObject {
+public class Trip extends ParseObject implements Comparable<Trip> {
     public static final String KEY_TITLE = "title";
     public static final String KEY_USER = "user";
     public static final String KEY_DEST = "destination";
@@ -89,5 +89,18 @@ public class Trip extends ParseObject {
 
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
+    }
+
+    @Override
+    public int compareTo(Trip o) {
+        Calendar thisCal = Calendar.getInstance();
+        thisCal.setTime(this.getStartDate());
+        long thisTime = thisCal.getTimeInMillis();
+
+        Calendar oCal = Calendar.getInstance();
+        oCal.setTime(o.getStartDate());
+        long oTime = oCal.getTimeInMillis();
+
+        return Long.compare(thisTime, oTime);
     }
 }

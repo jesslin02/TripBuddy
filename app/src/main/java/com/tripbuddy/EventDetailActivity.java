@@ -38,6 +38,7 @@ public class EventDetailActivity extends AppCompatActivity {
         event = Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
         Log.d(TAG, String.format("Showing details for '%s'", event.getTitle()));
 
+        getSupportActionBar().setTitle(event.getTitle());
         displayDetails();
     }
 
