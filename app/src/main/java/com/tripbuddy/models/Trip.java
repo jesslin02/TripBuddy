@@ -9,7 +9,6 @@ import org.parceler.Parcel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 @Parcel(analyze = {Trip.class})
 @ParseClassName("Trip")

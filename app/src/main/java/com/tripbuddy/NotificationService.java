@@ -3,18 +3,15 @@ package com.tripbuddy;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.core.app.JobIntentService;
 import androidx.core.app.NotificationCompat;
 
-import com.tripbuddy.models.Event;
-
 import org.jetbrains.annotations.NotNull;
-import org.parceler.Parcels;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in

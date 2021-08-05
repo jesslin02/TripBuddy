@@ -1,11 +1,11 @@
 package com.tripbuddy;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.tripbuddy.databinding.ActivityTripFilterBinding;
 import com.tripbuddy.listeners.DateRangeTouchListener;

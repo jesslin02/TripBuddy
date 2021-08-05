@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,14 +20,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.progressindicator.CircularProgressIndicator;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.tripbuddy.CreateTripActivity;
-import com.tripbuddy.ItineraryFilterActivity;
 import com.tripbuddy.MainActivity;
 import com.tripbuddy.R;
 import com.tripbuddy.TripFilterActivity;
@@ -38,8 +34,6 @@ import com.tripbuddy.callbacks.SwipeToDeleteCallback;
 import com.tripbuddy.callbacks.SwipeToEditCallback;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;

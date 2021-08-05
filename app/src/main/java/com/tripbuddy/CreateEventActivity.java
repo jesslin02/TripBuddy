@@ -55,7 +55,6 @@ public class CreateEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_create_event);
 
         SALMON = getResources().getColor(R.color.salmon);
         GREEN = getResources().getColor(R.color.green);

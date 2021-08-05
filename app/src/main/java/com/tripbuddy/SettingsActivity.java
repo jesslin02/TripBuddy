@@ -1,12 +1,12 @@
 package com.tripbuddy;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -26,7 +26,6 @@ public class SettingsActivity extends AppCompatActivity implements EditNameDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_settings);
 
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();

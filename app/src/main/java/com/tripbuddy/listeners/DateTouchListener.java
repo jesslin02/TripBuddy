@@ -12,10 +12,8 @@ import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.tripbuddy.Utils;
-import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**

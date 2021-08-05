@@ -1,20 +1,17 @@
 package com.tripbuddy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.tripbuddy.databinding.ActivityEventDetailBinding;
-import com.tripbuddy.databinding.ActivityTripDetailBinding;
 import com.tripbuddy.models.Event;
 import com.tripbuddy.models.Trip;
 
@@ -29,7 +26,6 @@ public class EventDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_event_detail);
 
         binding = ActivityEventDetailBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();

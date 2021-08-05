@@ -29,8 +29,6 @@ public class ParseApplication extends Application {
                 .build()
         );
 
-        // ParseFacebookUtils.initialize(this);
-
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
     }

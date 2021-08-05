@@ -15,7 +15,6 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.tripbuddy.Utils;
 import com.tripbuddy.models.Trip;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class DateRangeTouchListener implements View.OnTouchListener{
