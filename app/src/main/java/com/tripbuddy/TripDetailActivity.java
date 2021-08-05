@@ -56,9 +56,8 @@ public class TripDetailActivity extends AppCompatActivity {
 
         String notes = trip.getNotes();
         if (notes != null && !notes.isEmpty()) {
-            binding.tvNoteTitle.setVisibility(View.VISIBLE);
+            binding.notesLayout.setVisibility(View.VISIBLE);
             binding.tvNotes.setText(trip.getNotes());
-            binding.tvNotes.setVisibility(View.VISIBLE);
         }
 
         binding.btnItinerary.setOnClickListener(new View.OnClickListener() {

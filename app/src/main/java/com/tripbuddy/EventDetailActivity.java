@@ -60,9 +60,8 @@ public class EventDetailActivity extends AppCompatActivity {
 
         String notes = event.getNotes();
         if (notes != null && !notes.isEmpty()) {
-            binding.tvNoteTitle.setVisibility(View.VISIBLE);
+            binding.notesLayout.setVisibility(View.VISIBLE);
             binding.tvNotes.setText(notes);
-            binding.tvNotes.setVisibility(View.VISIBLE);
         }
     }
 
