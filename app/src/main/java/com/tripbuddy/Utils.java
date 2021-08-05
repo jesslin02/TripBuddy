@@ -55,19 +55,6 @@ public class Utils {
         return cal;
     }
 
-    /**
-     * clears text input fields after creating a trip or an event
-     * CreateTripActivity, CreateEventActivity
-     * @param items array of EditText objects to be cleared
-     */
-    public static void resetInput(TextInputLayout ... items) {
-        for (TextInputLayout layout : items) {
-            TextInputEditText editText = (TextInputEditText) layout.getEditText();
-            editText.setText("");
-            layout.setErrorEnabled(false);
-        }
-    }
-
     public static void setDateError(boolean valid, int color, TextInputLayout ... items) {
         for (TextInputLayout layout : items) {
             if (!valid) {

@@ -193,10 +193,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     return;
                 }
                 Log.i(TAG, "Event creation was successful!");
-                // Utils.createNotif(CreateEventActivity.this, event);
-                resetInput();
                 updateNotif();
-                // Utils.goItineraryActivity(CreateEventActivity.this, trip);
                 Intent i = new Intent(CreateEventActivity.this, EventDetailActivity.class);
                 i.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
                 startActivity(i);
@@ -236,13 +233,5 @@ public class CreateEventActivity extends AppCompatActivity {
         }
         return Utils.checkRequiredInput(SALMON, binding.titleLayout, binding.startLayout,
                 binding.startTimeLayout, binding.endLayout, binding.endTimeLayout) && locationFilled;
-    }
-
-    private void resetInput() {
-        autocompleteFragment.onResume();
-        binding.tvLocation.setTextColor(GREEN);
-        Utils.resetInput(binding.titleLayout, binding.startLayout, binding.startTimeLayout,
-                binding.endLayout, binding.endTimeLayout, binding.phoneLayout, binding.websiteLayout,
-                binding.notesLayout);
     }
 }

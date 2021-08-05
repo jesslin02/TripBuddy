@@ -159,22 +159,12 @@ public class CreateTripActivity extends AppCompatActivity {
                     return;
                 }
                 Log.i(TAG, "Trip creation was successful!");
-                resetInput();
+                // resetInput();
                 Intent i = new Intent(CreateTripActivity.this, TripDetailActivity.class);
                 i.putExtra(Trip.class.getSimpleName(), Parcels.wrap(trip));
                 startActivity(i);
                 finish();
             }
         });
-    }
-
-    /**
-     * changes all input fields to blank and restores original colors
-     * after trip has been created
-     */
-    private void resetInput() {
-        autocompleteFragment.onResume();
-        binding.tvLocation.setTextColor(GREEN);
-        Utils.resetInput(binding.titleLayout, binding.notesLayout);
     }
 }
