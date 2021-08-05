@@ -18,113 +18,144 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
-    <TableLayout
+    <View
+        android:id="@+id/divAboveName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginHorizontal="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:layout_height="1dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginHorizontal="24dp"
+        android:background="?android:attr/listDivider"
         app:layout_constraintStart_toStartOf="parent"
-        android:stretchColumns="2">
+        app:layout_constraintBottom_toTopOf="@id/tvNameTitle" />
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+    <TextView
+        android:id="@+id/tvNameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:layout_marginStart="32dp"
+        android:text="@string/name"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-            <TextView
-                android:id="@+id/tvNameTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:text="@string/name"
-                android:textSize="20sp" />
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        tools:text="jessica lin"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintTop_toTopOf="@id/tvNameTitle"
+        app:layout_constraintEnd_toStartOf="@id/ivEditName" />
 
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                tools:text="jessica lin"
-                android:layout_marginStart="16dp"/>
+    <ImageView
+        android:id="@+id/ivEditName"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="32dp"
+        app:srcCompat="@drawable/ic_pencil"
+        app:tint="@color/green"
+        app:layout_constraintTop_toTopOf="@id/tvNameTitle"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-            <ImageView
-                android:id="@+id/ivEditName"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_pencil"
-                app:tint="@color/green"
-                android:layout_column="2"
-                android:layout_marginStart="16dp"/>
+    <View
+        android:id="@+id/divUnderName"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="24dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNameTitle" />
 
-        </TableRow>
+    <TextView
+        android:id="@+id/tvUsernameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:text="@string/username"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/tvNameTitle"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        tools:text="jessica"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintTop_toTopOf="@id/tvUsernameTitle"
+        app:layout_constraintEnd_toStartOf="@id/ivEditUsername" />
 
-            <TextView
-                android:id="@+id/tvUsernameTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/username"
-                android:textSize="20sp"
-                android:layout_column="0" />
+    <ImageView
+        android:id="@+id/ivEditUsername"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="32dp"
+        app:srcCompat="@drawable/ic_pencil"
+        app:tint="@color/green"
+        app:layout_constraintTop_toTopOf="@id/tvUsernameTitle"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TextView
-                android:id="@+id/tvUsername"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:layout_column="1"
-                tools:text="jessica"
-                android:layout_marginStart="16dp"/>
+    <View
+        android:id="@+id/divUnderUsername"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="24dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvUsernameTitle" />
 
-            <ImageView
-                android:id="@+id/ivEditUsername"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_pencil"
-                app:tint="@color/green"
-                android:layout_column="2"
-                android:layout_marginStart="16dp"/>
-        </TableRow>
+    <TextView
+        android:id="@+id/tvPasswordTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:text="@string/password"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/tvUsernameTitle"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
+    <TextView
+        android:id="@+id/tvPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:text="@string/hidden_password"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintTop_toTopOf="@id/tvPasswordTitle"
+        app:layout_constraintEnd_toStartOf="@id/ivEditPassword" />
 
-            <TextView
-                android:id="@+id/tvPasswordTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/password"
-                android:textSize="20sp"
-                android:layout_column="0" />
+    <ImageView
+        android:id="@+id/ivEditPassword"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="32dp"
+        app:srcCompat="@drawable/ic_pencil"
+        app:tint="@color/green"
+        app:layout_constraintTop_toTopOf="@id/tvPasswordTitle"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TextView
-                android:id="@+id/tvPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:text="@string/hidden_password"
-                android:layout_marginStart="16dp"/>
+    <View
+        android:id="@+id/divUnderPassword"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="24dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvPasswordTitle" />
 
-            <ImageView
-                android:id="@+id/ivEditPassword"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_pencil"
-                app:tint="@color/green"
-                android:layout_column="2"
-                android:layout_marginStart="16dp"/>
-        </TableRow>
-    </TableLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
