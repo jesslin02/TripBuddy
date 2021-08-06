@@ -49,16 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         salmon = getResources().getColor(R.color.salmon);
 
-        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick login button");
-                String username = binding.etUsername.getText().toString();
-                String password = binding.etPassword.getText().toString();
-                loginUser(username, password);
-            }
-        });
-
         binding.transitionBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
