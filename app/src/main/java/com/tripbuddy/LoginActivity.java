@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i(TAG, "onClick go to signup button");
                 Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -163,6 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 // navigate to the main activity if the user has signed in properly
                 Utils.goMainActivity(LoginActivity.this);
+                finish();
             }
         });
     }

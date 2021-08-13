@@ -43,6 +43,7 @@ public class TripFilterActivity extends AppCompatActivity {
         } else {
             startCal = Calendar.getInstance();
             endCal = Calendar.getInstance();
+            endCal.setTime(startCal.getTime());
         }
 
         setListeners();

@@ -55,6 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Log.i(TAG, "onClick return to login button");
                 Intent i = new Intent(SignUpActivity.this, LoginActivity.class);
                 startActivity(i);
+                finish();
             }
         });
     }
